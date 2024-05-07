@@ -12,6 +12,16 @@
 
     <modules>
         <module>Core</module>
+        <module>Common</module>
+        <module>Player</module>
+        <module>Enemy</module>
+        <module>Character</module>
+        <module>CommonBullet</module>
+        <module>Bullet</module>
+        <module>CommonWeapon</module>
+        <module>Weapon</module>
+        <module>CommonMap</module>
+        <module>Map</module>
     </modules>
 
     <properties>
