@@ -11,9 +11,9 @@ public class MapPlugin {
         map = new Map();
     }
 
-    public void render(SpriteBatch batch, int  screenWidth, int screenHeight) {
+    public void render(SpriteBatch batch) {
         // Render the standard map
-        map.render(batch, screenWidth, screenHeight);
+        map.render(batch);
     }
 
     public void dispose() {
