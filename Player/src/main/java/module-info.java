@@ -1,4 +1,4 @@
 module Player {
-    exports dk.sdu.sesp.geight.playersystem;
+    requires Character;
     uses Character;
 }
