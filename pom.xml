@@ -37,16 +37,6 @@
         <dependencies>
             <dependency>
                 <groupId>com.badlogicgames.gdx</groupId>
-                <artifactId>gdx-box2d-platform</artifactId>
-                <version>${gdx.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.badlogicgames.gdx</groupId>
-                <artifactId>gdx-platform</artifactId>
-                <version>${gdx.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.badlogicgames.gdx</groupId>
                 <artifactId>gdx</artifactId>
                 <version>${gdx.version}</version>
             </dependency>
@@ -114,10 +104,29 @@
                         in "java.lang.module.FindException: Module monitor.observer.zero not found";
                         strange... -->
                         <!--                        <argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=127.0.0.1:8000</argument>                        -->
-                        <argument>--module=Core/dk.sdu.sesp.geight.main.Main</argument>
-                        <!--argument>-add-modules javafx.graphics</argument-->
+                        <argument>--module=Core/dk.sdu.sesp.geight.main.Core.DesktopLauncher.main</argument>
                     </arguments>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.2</version> <!-- Use the latest version available -->
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/libs</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
