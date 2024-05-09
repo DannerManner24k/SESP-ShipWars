@@ -22,6 +22,7 @@
         <module>Weapon</module>
         <module>CommonMap</module>
         <module>Map</module>
+        <module>Collision</module>
     </modules>
 
     <properties>
