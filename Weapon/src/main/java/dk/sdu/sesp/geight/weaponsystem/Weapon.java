@@ -29,6 +29,10 @@ public abstract class Weapon extends Entity {
         return name;
     }
 
+    public void setCanFire(boolean canFire) {
+        this.canFire = canFire;
+    }
+
     public boolean getCanFire() {
         return canFire;
     }

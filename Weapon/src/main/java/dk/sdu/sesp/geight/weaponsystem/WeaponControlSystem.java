@@ -20,7 +20,7 @@ public class WeaponControlSystem {
     public void fireWeapon(String weaponName) {
         if (!hasFiredThisTurn) {
             Weapon weapon = weaponTypes.get(weaponName);
-            if (weapon != null) {
+            if (weapon != null && weapon.getCanFire()) {
                 weapon.fire();
                 hasFiredThisTurn = true;
                 System.out.println((isPlayerTurn ? "Player" : "Enemy") + " fired a " + weaponName);

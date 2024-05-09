@@ -2,6 +2,7 @@ package dk.sdu.sesp.geight.bulletsystem;
 
 
 import du.sdu.sesp.geight.common.bullet.Bullet;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +10,10 @@ import java.util.List;
 public class BulletPlugin {
     private static List<Bullet> activeBullets = new ArrayList<>();
 
-    public void initialize() {
-        System.out.println("Bullet system initialized.");
+    public void render(SpriteBatch batch) {
+        Bullet bullet = new Bullet(0, 0, 5, 1, 10, 5);
+        bullet.render(batch);
+        activeBullets.add(bullet);
     }
 
     public static void spawnBullet(Bullet bullet) {

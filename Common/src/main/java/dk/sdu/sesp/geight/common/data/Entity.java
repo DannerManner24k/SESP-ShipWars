@@ -26,7 +26,31 @@ public abstract class Entity {
         return position;
     }
 
+    public void setPosition(float x, float y) {
+        this.position.set(x, y);
+    }
+
+    public Vector2 getVelocity() {
+        return velocity;
+    }
+
     public void setVelocity(float x, float y) {
         this.velocity.set(x, y);
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
     }
 }
