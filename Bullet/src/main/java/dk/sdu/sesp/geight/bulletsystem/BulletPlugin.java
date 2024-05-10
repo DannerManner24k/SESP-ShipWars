@@ -1,34 +1,43 @@
 package dk.sdu.sesp.geight.bulletsystem;
 
 
+import com.badlogic.gdx.graphics.Texture;
+import dk.sdu.sesp.geight.common.data.Entity;
+import dk.sdu.sesp.geight.common.data.GameData;
+import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.services.IGamePluginService;
 import du.sdu.sesp.geight.common.bullet.Bullet;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BulletPlugin {
+public class BulletPlugin implements IGamePluginService {
+
     private static List<Bullet> activeBullets = new ArrayList<>();
 
-    public void render(SpriteBatch batch) {
-        Bullet bullet = new Bullet(0, 0, 5, 1, 10, 5);
-        bullet.render(batch);
-        activeBullets.add(bullet);
+    @Override
+    public void start(GameData gameData, World world, SpriteBatch batch) {
+
     }
 
-    public static void spawnBullet(Bullet bullet) {
-        activeBullets.add(bullet);
-        System.out.println("Bullet spawned:");
+    private Entity createBullet(GameData gameData, World world, SpriteBatch batch) {
+        Bullet bullet = new Bullet();
+        bullet.setTexture(new Texture("assets/images/bullet.png"));
+
+        bullet.setHeight(bullet.getTexture().getHeight());
+        bullet.setWidth(bullet.getTexture().getWidth());
+
+        bullet.setRadius((bullet.getHeight()+bullet.getWidth())/4);
+
+        bullet.setPosition(100, 100);
+        world.addEntity(bullet);
+
+        return bullet;
     }
 
-    public static void updateBullets() {
-        List<Bullet> toRemove = new ArrayList<>();
-        for (Bullet bullet : activeBullets) {
-            bullet.update();
-            if (!bullet.isActive()) {
-                toRemove.add(bullet);
-            }
-        }
-        activeBullets.removeAll(toRemove);
+    @Override
+    public void stop(GameData gameData, World world, SpriteBatch batch) {
+
     }
 }

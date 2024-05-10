@@ -1,5 +1,6 @@
 package dk.sdu.sesp.geight.common.data;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -12,13 +13,9 @@ public abstract class Entity {
     protected float width;
     protected float height;
     protected float radius;
+    protected Texture texture;
 
-    public Entity(float x, float y, float width, float height) {
-        this.position = new Vector2(x, y);
-        this.velocity = new Vector2(0, 0);
-        this.width = width;
-        this.height = height;
-    }
+
     public String getID() {
         return ID.toString();
     }
@@ -27,7 +24,6 @@ public abstract class Entity {
         position.add(velocity.x * deltaTime, velocity.y * deltaTime);
     }
 
-    public abstract void render(SpriteBatch batch);
 
     public Vector2 getPosition() {
         return position;
@@ -67,5 +63,12 @@ public abstract class Entity {
 
     public void setRadius(float radius) {
         this.radius = radius;
+    }
+
+    public Texture getTexture() {
+        return texture;
+    }
+    public void setTexture(Texture texture) {
+        this.texture = texture;
     }
 }

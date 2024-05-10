@@ -8,27 +8,27 @@ public class Bullet extends Entity {
     private float speed;
     private boolean isActive;
 
-    public Bullet(float x, float y, float width, float height, int damage, float speed) {
-        super(x, y, width, height);
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
         this.speed = speed;
-    }
-
-    @Override
-    public void render(SpriteBatch batch) {
-
-    }
-
-    public void update() {
-        // Example movement logic, assuming simple horizontal movement
-        super.position.x += speed;
     }
 
     public boolean isActive() {
         return isActive;
     }
 
-    public void deactivate() {
-        isActive = false;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

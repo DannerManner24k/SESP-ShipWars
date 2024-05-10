@@ -1,10 +1,20 @@
 package dk.sdu.sesp.geight.weaponsystem;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import dk.sdu.sesp.geight.common.data.Entity;
+import dk.sdu.sesp.geight.common.data.GameData;
+import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.services.IGamePluginService;
 
-public class WeaponPlugin {
+public class WeaponPlugin implements IGamePluginService {
 
-    public void render(SpriteBatch batch) {
+    @Override
+    public void start(GameData gameData, World world, SpriteBatch batch) {
+
+    }
+
+    @Override
+    public void stop(GameData gameData, World world, SpriteBatch batch) {
 
     }
 }

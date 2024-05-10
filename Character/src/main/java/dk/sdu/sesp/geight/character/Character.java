@@ -3,39 +3,25 @@ package dk.sdu.sesp.geight.character;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.sdu.sesp.geight.common.data.Entity;
+import dk.sdu.sesp.geight.common.weapon.Weapon;
 
 public abstract class Character extends Entity{
-
-    protected Texture texture;
     protected int health;
+    protected Weapon weapon;
 
-    public Character(float x, float y, float width, float height, String texturePath, int health) {
-        super(x, y, width, height);
-        this.texture = new Texture(texturePath);
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
         this.health = health;
     }
 
-    @Override
-    public void update(float deltaTime) {
-        super.update(deltaTime);
-        // Common update logic for all characters
+    public Weapon getWeapon() {
+        return weapon;
     }
 
-    @Override
-    public void render(SpriteBatch batch) {
-        batch.draw(texture, position.x, position.y, width, height);
-    }
-
-    public void takeDamage(int amount) {
-        health -= amount;
-        if (health <= 0) {
-            onDeath();
-        }
-    }
-
-    protected abstract void onDeath();
-
-    public void dispose() {
-        texture.dispose();
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
     }
 }
