@@ -19,7 +19,6 @@ public class BulletControlSystem {
     public static void updateBullets() {
         List<Bullet> toRemove = new ArrayList<>();
         for (Bullet bullet : activeBullets) {
-            bullet.update();
             if (!bullet.isActive()) {
                 toRemove.add(bullet);
             }
@@ -39,7 +38,6 @@ public class BulletControlSystem {
                 // Example collision detection logic
                 if (bullet.getPosition().dst(entity.getPosition()) < bullet.getWidth()) {
                     System.out.println("Bullet hit an entity!");
-                    bullet.deactivate();
                 }
             }
         }

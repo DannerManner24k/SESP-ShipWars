@@ -61,7 +61,6 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1); // Set the clear color
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
 
-        mapPlugin.render(batch);
 
         int screenWidth = Gdx.graphics.getWidth();
         int screenHeight = Gdx.graphics.getHeight();
@@ -79,7 +78,6 @@ public class GameScreen extends ScreenAdapter {
         // Dispose of resources
         batch.dispose();
         world.dispose();
-        mapPlugin.dispose();
         box2DDebugRenderer.dispose();
     }
 

@@ -1,5 +1,7 @@
 package dk.sdu.sesp.geight.weaponsystem;
 
+import dk.sdu.sesp.geight.common.weapon.Weapon;
+
 import java.util.HashMap;
 import java.util.Map;
 
