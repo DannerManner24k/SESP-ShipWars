@@ -14,7 +14,7 @@ public class MapPlugin implements IGamePluginService {
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
         map = createMap(gameData, world, batch);
-        batch.draw(map.getTexture(), map.getPosition().x, map.getPosition().y);
+        batch.draw(map.getTexture(), map.getX(), map.getY());
     }
 
     public Entity createMap(GameData gameData, World world, SpriteBatch batch) {
@@ -25,7 +25,8 @@ public class MapPlugin implements IGamePluginService {
         map.setWidth(map.getTexture().getWidth());
 
 
-        map.setPosition(0, 0);
+        map.setX(0);
+        map.setY(0);
 
         world.addEntity(map);
         return map;

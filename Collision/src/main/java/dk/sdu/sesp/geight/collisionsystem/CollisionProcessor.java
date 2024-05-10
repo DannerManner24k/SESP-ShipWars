@@ -19,8 +19,8 @@ public class CollisionProcessor {
     // Check if two entities are colliding
     private boolean checkCollision(Entity entity1, Entity entity2) {
         //return firstEntity.getBounds().overlaps(secondEntity.getBounds());
-        double dx = entity1.getPosition().x - entity2.getPosition().x;
-        double dy = entity1.getPosition().y - entity2.getPosition().y;
+        double dx = entity1.getX() - entity2.getX();
+        double dy = entity1.getY() - entity2.getY();
         double distance = Math.sqrt(dx * dx + dy * dy);
         return distance < (entity1.getRadius() + entity2.getRadius());
     }

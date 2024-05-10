@@ -1,6 +1,6 @@
 module Player {
     requires Character;
-    requires gdx;
+    requires com.badlogic.gdx;
     requires Common;
     uses Character;
 }

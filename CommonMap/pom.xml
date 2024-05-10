@@ -6,7 +6,7 @@
     <parent>
         <groupId>dk.sdu.sesp.geight</groupId>
         <artifactId>SESP-ShipWars</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>CommonMap</artifactId>
@@ -16,28 +16,24 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub sweat-tek Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/sweat-tek/ShadedLibGDX</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>com.badlogicgames.gdx</groupId>
-            <artifactId>gdx</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.badlogicgames.gdx</groupId>
-            <artifactId>gdx-backend-lwjgl3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.badlogicgames.box2dlights</groupId>
-            <artifactId>box2dlights</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.badlogicgames.gdx</groupId>
-            <artifactId>gdx-openal</artifactId>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>shadedlibgdx</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>dk.sdu.sesp.geight</groupId>
             <artifactId>Common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

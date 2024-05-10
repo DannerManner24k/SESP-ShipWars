@@ -3,8 +3,7 @@ package dk.sdu.sesp.geight.main.GameEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector3;
-
+/*
 public class CameraMovement {
     //Creating a singleton and camera setup
     private static CameraMovement instance;
@@ -18,7 +17,6 @@ public class CameraMovement {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, widthScreen, heightScreen);
-        this.targetPosition = new Vector3();
         setInitialPosition(initialX);
     }
 
@@ -59,7 +57,6 @@ public class CameraMovement {
 
         camera.position.x = Math.max(camera.position.x, widthScreen / 2);
         camera.position.x = Math.min(camera.position.x, 7680 - widthScreen / 2);
-        handlePanning();
         camera.update();
 
     }
@@ -73,48 +70,13 @@ public class CameraMovement {
 
     private float panSpeed = 0.01f;
     private boolean isPanning = false;
-    private Vector3 targetPosition;
+
 
 
     private void setInitialPosition(float x){
         camera.position.set(x, 1080/2, 0);
         camera.update();
     }
-
-
-
-    private void handlePanning() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            setTargetPosition(fixedPosition1);
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-            setTargetPosition(fixedPosition2);
-        }
-
-        if (isPanning) {
-            performPanning();
-        }
-    }
-
-    private void setTargetPosition(float targetX) {
-        if (!isPanning || targetPosition.x != targetX) {
-            targetPosition.set(targetX, camera.position.y, camera.position.z);
-            isPanning = true;
-        }
-    }
-
-    private void performPanning() {
-        if (camera.position.epsilonEquals(targetPosition, 0.1f)) {
-            isPanning = false; // Stop panning if close to the target
-        } else {
-            camera.position.lerp(targetPosition, panSpeed); // Smoothly interpolate to target position
-        }
-    }
-
-    private void setPanSpeed(float panSpeed) {
-        this.panSpeed = panSpeed;
-    }
-
-
-
-
 }
+
+ */

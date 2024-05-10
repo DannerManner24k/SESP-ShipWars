@@ -35,10 +35,13 @@ public class BulletControlSystem {
     public static void checkCollisions(List<Entity> entities) {
         for (Bullet bullet : activeBullets) {
             for (Entity entity : entities) {
+                /*
                 // Example collision detection logic
                 if (bullet.getPosition().dst(entity.getPosition()) < bullet.getWidth()) {
                     System.out.println("Bullet hit an entity!");
                 }
+
+                 */
             }
         }
     }

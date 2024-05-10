@@ -2,18 +2,19 @@ package dk.sdu.sesp.geight.common.data;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 
 import java.util.UUID;
 
 public abstract class Entity {
     private final UUID ID = UUID.randomUUID();
-    protected Vector2 position;
-    protected Vector2 velocity;
     protected float width;
     protected float height;
     protected float radius;
     protected Texture texture;
+    protected float x;
+    protected float y;
+    protected float velocityX;
+    protected float velocityY;
 
 
     public String getID() {
@@ -21,24 +22,8 @@ public abstract class Entity {
     }
 
     public void update(float deltaTime) {
-        position.add(velocity.x * deltaTime, velocity.y * deltaTime);
-    }
-
-
-    public Vector2 getPosition() {
-        return position;
-    }
-
-    public void setPosition(float x, float y) {
-        this.position.set(x, y);
-    }
-
-    public Vector2 getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(float x, float y) {
-        this.velocity.set(x, y);
+        x = velocityX * deltaTime;
+        y = velocityY * deltaTime;
     }
 
     public float getWidth() {
@@ -68,7 +53,41 @@ public abstract class Entity {
     public Texture getTexture() {
         return texture;
     }
+
     public void setTexture(Texture texture) {
         this.texture = texture;
     }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public float getVelocityX() {
+        return velocityX;
+    }
+
+    public void setVelocityX(float velocityX) {
+        this.velocityX = velocityX;
+    }
+
+    public float getVelocityY() {
+        return velocityY;
+    }
+
+    public void setVelocityY(float velocityY) {
+        this.velocityY = velocityY;
+    }
+
 }

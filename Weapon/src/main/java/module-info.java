@@ -1,6 +1,6 @@
 module Weapon {
     requires Common;
-    requires gdx;
+    requires com.badlogic.gdx;
     requires CommonBullet;
     requires CommonWeapon;
 }

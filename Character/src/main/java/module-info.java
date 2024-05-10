@@ -1,6 +1,6 @@
 module Character {
     exports dk.sdu.sesp.geight.character;
     requires Common;
-    requires gdx;
+    requires com.badlogic.gdx;
     requires CommonWeapon;
 }

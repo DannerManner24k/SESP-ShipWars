@@ -30,7 +30,8 @@ public class BulletPlugin implements IGamePluginService {
 
         bullet.setRadius((bullet.getHeight()+bullet.getWidth())/4);
 
-        bullet.setPosition(100, 100);
+        bullet.setX(100);
+        bullet.setY(100);
         world.addEntity(bullet);
 
         return bullet;

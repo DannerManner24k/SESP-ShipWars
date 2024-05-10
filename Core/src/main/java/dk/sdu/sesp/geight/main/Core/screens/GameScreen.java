@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
-public class GameScreen
-        implements ApplicationListener {
+public class GameScreen implements ApplicationListener {
 
     private static OrthographicCamera cam;
     private ShapeRenderer sr;

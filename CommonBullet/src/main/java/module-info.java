@@ -1,5 +1,5 @@
 module CommonBullet {
     requires Common;
-    requires gdx;
+    requires com.badlogic.gdx;
     exports du.sdu.sesp.geight.common.bullet;
 }

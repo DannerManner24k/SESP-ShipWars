@@ -12,7 +12,7 @@ public class EnemyPlugin implements IGamePluginService {
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
         enemy = createEnemy(gameData, world, batch);
-        batch.draw(enemy.getTexture(), enemy.getPosition().x, enemy.getPosition().y);
+        batch.draw(enemy.getTexture(), enemy.getX(), enemy.getY());
     }
 
     private Entity createEnemy(GameData gameData, World world, SpriteBatch batch) {
@@ -24,7 +24,8 @@ public class EnemyPlugin implements IGamePluginService {
 
         enemy.setRadius((enemy.getHeight()+enemy.getWidth())/4);
 
-        enemy.setPosition(100, 100);
+        enemy.setX(100);
+        enemy.setY(100);
         world.addEntity(enemy);
 
         return enemy;
