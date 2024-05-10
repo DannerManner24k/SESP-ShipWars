@@ -1,84 +1,133 @@
 package dk.sdu.sesp.geight.main.Core.screens;
 
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
-import org.lwjgl.opengl.GL20;
+import dk.sdu.sesp.geight.common.data.Entity;
+import dk.sdu.sesp.geight.common.data.GameData;
+import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
+import dk.sdu.sesp.geight.common.services.IGamePluginService;
+import dk.sdu.sesp.geight.common.services.IPostEntityProcessingService;
 
-import dk.sdu.sesp.geight.main.GameEngine.CameraMovement;
-import dk.sdu.sesp.geight.mapsystem.MapPlugin;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import dk.sdu.sesp.geight.main.managers.GameInputProcessor;
 
-import static dk.sdu.sesp.geight.main.Helper.Constants.PPM;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.ServiceLoader;
+import static java.util.stream.Collectors.toList;
 
+public class GameScreen
+        implements ApplicationListener {
 
-public class GameScreen extends ScreenAdapter {
+    private static OrthographicCamera cam;
+    private ShapeRenderer sr;
 
-    private SpriteBatch batch; // Batch to render the game
-    private World world; // Box2D world
-    private Box2DDebugRenderer box2DDebugRenderer; // Box2D debug renderer
+    private final GameData gameData = new GameData();
+    private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
+    private List<IPostEntityProcessingService> postEntityProcessors = new ArrayList<>();
+    private World world = new World();
+    private SpriteBatch batch;
 
-    private MapPlugin mapPlugin; // Map plugin
+    @Override
+    public void create() {
 
-    //Camera instance
-    private final CameraMovement cameraMovement;
-    private final OrthographicCamera camera; // Camera to render the game
+        gameData.setDisplayWidth(Gdx.graphics.getWidth());
+        gameData.setDisplayHeight(Gdx.graphics.getHeight());
 
+        cam = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
+        cam.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
+        cam.update();
 
-    public GameScreen() {
-        this.batch = new SpriteBatch();// Set the batch
-        this.world = new World(new Vector2(0,0), false); // Set the world
-        this.box2DDebugRenderer = new Box2DDebugRenderer(); // Set the debug renderer
-        this.mapPlugin = new MapPlugin(); // Set the map plugin
+        sr = new ShapeRenderer();
 
-        // Initialize the components
-        this.cameraMovement = CameraMovement.getInstance();
-        this.camera = cameraMovement.getCamera();
-    }
+        Gdx.input.setInputProcessor(
+                new GameInputProcessor(gameData)
+        );
 
-
-
-    private void update() {
-        world.step(1/60f, 6, 2); // Update the world
-        cameraMovement.updateCamera(); // Updated line
-
-        batch.setProjectionMatrix(camera.combined); // Set the batch projection matrix
-
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) { // If the escape key is pressed
-            Gdx.app.exit(); // Exit the game
+        // Lookup all Game Plugins using ServiceLoader
+        for (IGamePluginService iGamePlugin : getPluginServices()) {
+            iGamePlugin.start(gameData, world, batch);
         }
     }
 
+    @Override
+    public void render() {
+
+        // clear screen to black
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        gameData.setDelta(Gdx.graphics.getDeltaTime());
+
+        update();
+
+        draw();
+
+        gameData.getKeys().update();
+    }
+
+    private void update() {
+        // Update
+        for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
+            entityProcessorService.process(gameData, world);
+        }
+        for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
+            postEntityProcessorService.process(gameData, world);
+        }
+    }
+
+    private void draw() {
+        for (Entity entity : world.getEntities()) {
+
+            sr.setColor(1, 1, 1, 1);
+
+            sr.begin(ShapeRenderer.ShapeType.Line);
+
+            /*
+            float[] shapex = entity.getShapeX();
+            float[] shapey = entity.getShapeY();
+
+            for (int i = 0, j = shapex.length - 1;
+                 i < shapex.length;
+                 j = i++) {
+
+                sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+            }*/
+
+            sr.end();
+        }
+    }
 
     @Override
-    public void render(float delta) {
-        this.update();// Update the game
-        Gdx.gl.glClearColor(0, 0, 0, 1); // Set the clear color
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
+    public void resize(int width, int height) {
+    }
 
+    @Override
+    public void pause() {
+    }
 
-        int screenWidth = Gdx.graphics.getWidth();
-        int screenHeight = Gdx.graphics.getHeight();
-
-        batch.begin(); // Begin the batch
-
-
-
-        batch.end();// End the batch
-        box2DDebugRenderer.render(world, camera.combined.scl(PPM));// Render the Box2D world
+    @Override
+    public void resume() {
     }
 
     @Override
     public void dispose() {
-        // Dispose of resources
-        batch.dispose();
-        world.dispose();
-        box2DDebugRenderer.dispose();
     }
 
+    private Collection<? extends IGamePluginService> getPluginServices() {
+        return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
+        return ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private Collection<? extends IPostEntityProcessingService> getPostEntityProcessingServices() {
+        return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
 }

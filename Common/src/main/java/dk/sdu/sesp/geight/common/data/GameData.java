@@ -1,10 +1,13 @@
 package dk.sdu.sesp.geight.common.data;
 
 public class GameData {
+    private float delta;
     private int displayWidth  = 800 ;
     private int displayHeight = 800;
     //private final GameKeys keys = new GameKeys();
     private long lastUpdateTime;
+
+    private final GameKeys keys = new GameKeys();
 
 
     /*public GameKeys getKeys() {
@@ -17,6 +20,13 @@ public class GameData {
         return delta;
     }*/
 
+    public void setDelta(float delta) {
+        this.delta = delta;
+    }
+
+    public float getDelta() {
+        return delta;
+    }
     public void setDisplayWidth(int width) {
         this.displayWidth = width;
     }
@@ -32,6 +42,10 @@ public class GameData {
     public int getDisplayHeight() {
         return displayHeight;
     }
+    public GameKeys getKeys() {
+        return keys;
+    }
+
 
 
 }

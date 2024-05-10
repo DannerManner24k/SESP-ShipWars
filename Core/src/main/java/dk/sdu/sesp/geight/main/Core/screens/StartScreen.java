@@ -2,6 +2,7 @@ package dk.sdu.sesp.geight.main.Core.screens;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -33,7 +34,7 @@ public class StartScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // Change to the game screen when the button is pressed
-                Boot.INSTANCE.setScreen(new GameScreen());
+                Boot.INSTANCE.setScreen((Screen) new GameScreen());
             }
         });
 
