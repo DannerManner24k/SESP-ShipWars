@@ -1,6 +1,63 @@
 package dk.sdu.sesp.geight.main.GameEngine;
 
+import dk.sdu.sesp.geight.main.managers.*;
+
 public class GameLogic {
+    private int currentLevel;
+    private int playerScore;
+    private DifficultyManager difficultyManager;
+    private TurnManager turnManager;
+
+
+    public GameLogic() {
+        this.difficultyManager = new DifficultyManager(1,2);
+        this.turnManager = new TurnManager();
+        // Initialize other components as necessary
+    }
+
+    public void startGame() {
+        loadLevel(1); // Start with the first level
+    }
+
+    private void loadLevel(int level) {
+        this.currentLevel = level;
+        // Load the level data (map, entities, etc.)
+        //this.currentMap = loadMapForLevel(level);
+        //this.entities = loadEntitiesForLevel(level);
+        //initializeEntities();
+        playerScore = 0; // Reset or update score depending on game design
+    }
+
+    public void updateGame() {
+        if (isPlayerTurn()) {
+            handlePlayerTurn();
+        } else {
+            handleEnemyTurns();
+        }
+        updateDifficulty();
+    }
+
+    private void handlePlayerTurn() {
+        // Player turn logic
+    }
+
+    private void handleEnemyTurns() {
+        // Enemy turn logic
+    }
+
+    private boolean isPlayerTurn() {
+        // Determine if it is the player's turn
+        return turnManager.isPlayerTurn();
+    }
+
+    private void updateDifficulty() {
+        difficultyManager.adjustDifficulty(playerScore);
+    }
+
+
+    public void playerScored(int points) {
+        playerScore += points;
+    }
 
     //Start game
 
@@ -13,7 +70,5 @@ public class GameLogic {
     //Scoring
 
     //Map and entity initialization
-
-
-
 }
+
