@@ -6,6 +6,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import dk.sdu.sesp.geight.main.Core.screens.GameScreen;
+import dk.sdu.sesp.geight.main.GameEngine.CameraMovement;
 
 public class Boot extends Game {
 
@@ -21,6 +22,7 @@ public class Boot extends Game {
         // Screen dimensions
         int widthScreen = Gdx.graphics.getWidth();
         int heightScreen = Gdx.graphics.getHeight();
-        setScreen((Screen) new GameScreen());
+        CameraMovement.initialize(widthScreen, heightScreen);
+        setScreen( new GameScreen());
     }
 }

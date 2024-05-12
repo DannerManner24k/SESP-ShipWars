@@ -3,7 +3,7 @@ package dk.sdu.sesp.geight.main.GameEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-/*
+
 public class CameraMovement {
     //Creating a singleton and camera setup
     private static CameraMovement instance;
@@ -64,19 +64,9 @@ public class CameraMovement {
 
 
 
-    //Fixed positions and pan
-    private float fixedPosition1 = 5000;
-    private float fixedPosition2 = 960;
-
-    private float panSpeed = 0.01f;
-    private boolean isPanning = false;
-
-
-
     private void setInitialPosition(float x){
         camera.position.set(x, 1080/2, 0);
         camera.update();
     }
 }
 
- */

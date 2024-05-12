@@ -1,6 +1,8 @@
 package dk.sdu.sesp.geight.main.Core.screens;
 
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
@@ -21,7 +23,7 @@ import java.util.List;
 import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
-public class GameScreen implements ApplicationListener {
+public class GameScreen extends ScreenAdapter implements ApplicationListener {
 
     private static OrthographicCamera cam;
     private ShapeRenderer sr;
@@ -31,10 +33,12 @@ public class GameScreen implements ApplicationListener {
     private List<IPostEntityProcessingService> postEntityProcessors = new ArrayList<>();
     private World world = new World();
     private SpriteBatch batch;
+    private Stage stage;
 
     @Override
     public void create() {
-
+        this.batch = new SpriteBatch();// Set the batch
+        this.stage = new Stage();
         gameData.setDisplayWidth(Gdx.graphics.getWidth());
         gameData.setDisplayHeight(Gdx.graphics.getHeight());
 
