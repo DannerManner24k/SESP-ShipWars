@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.ServiceLoader;
 import static java.util.stream.Collectors.toList;
 
-public class GameScreen extends ScreenAdapter implements ApplicationListener {
+public class GameScreen implements ApplicationListener {
 
     private static OrthographicCamera cam;
     private ShapeRenderer sr;
@@ -37,8 +37,11 @@ public class GameScreen extends ScreenAdapter implements ApplicationListener {
     private SpriteBatch batch;
     private Stage stage;
 
+
+
     @Override
     public void create() {
+        System.out.println("hej");
         this.batch = new SpriteBatch();// Set the batch
         this.stage = new Stage();
         gameData.setDisplayWidth(Gdx.graphics.getWidth());

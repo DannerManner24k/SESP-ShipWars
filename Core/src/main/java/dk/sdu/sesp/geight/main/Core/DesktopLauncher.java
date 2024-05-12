@@ -14,9 +14,11 @@ public class DesktopLauncher {
         config.setTitle("ShipWars"); // Set the title
 
         config.setWindowedMode(Constants.screenWidth, Constants.screenHeight);
+        System.out.println("before boot");
         try{
             // Set the windowed mode
-            new Lwjgl3Application(new Boot(), config); // Create a new Lwjgl3 application
+
+            new Lwjgl3Application(new GameScreen(), config); // Create a new Lwjgl3 application
         } catch (Exception e){
             e.printStackTrace();
         }

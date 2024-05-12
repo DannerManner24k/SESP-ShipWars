@@ -12,6 +12,7 @@ public class GameLogic {
     public GameLogic() {
         this.difficultyManager = new DifficultyManager(1,2);
         this.turnManager = new TurnManager();
+        System.out.println("ganmelogic");
         // Initialize other components as necessary
     }
 
