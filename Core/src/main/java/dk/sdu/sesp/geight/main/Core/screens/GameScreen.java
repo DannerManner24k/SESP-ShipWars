@@ -29,6 +29,7 @@ public class GameScreen implements ApplicationListener {
     private final GameData gameData = new GameData();
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     private List<IPostEntityProcessingService> postEntityProcessors = new ArrayList<>();
+    private List<IGamePluginService> gamePluginEntityProcessors = new ArrayList<>();
     private World world = new World();
     private SpriteBatch batch;
 
