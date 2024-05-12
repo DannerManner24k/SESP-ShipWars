@@ -15,6 +15,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import dk.sdu.sesp.geight.main.GameEngine.GameLogic;
 import dk.sdu.sesp.geight.main.managers.GameInputProcessor;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class GameScreen extends ScreenAdapter implements ApplicationListener {
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     private List<IPostEntityProcessingService> postEntityProcessors = new ArrayList<>();
     private World world = new World();
+    private GameLogic gameLogic;
     private SpriteBatch batch;
     private Stage stage;
 
@@ -41,6 +43,8 @@ public class GameScreen extends ScreenAdapter implements ApplicationListener {
         this.stage = new Stage();
         gameData.setDisplayWidth(Gdx.graphics.getWidth());
         gameData.setDisplayHeight(Gdx.graphics.getHeight());
+
+        gameLogic = new GameLogic();
 
         cam = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         cam.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
@@ -76,6 +80,8 @@ public class GameScreen extends ScreenAdapter implements ApplicationListener {
 
     private void update() {
         // Update
+        gameLogic.updateGame();
+
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             entityProcessorService.process(gameData, world);
         }
