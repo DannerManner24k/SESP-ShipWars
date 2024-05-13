@@ -22,8 +22,6 @@ public class PlayerPlugin implements IGamePluginService {
 
         player.setRadius((player.getHeight()+player.getWidth())/4);
 
-        player.setX(100);
-        player.setY(100);
 
         player.setHealth(100);
         world.addEntity(player);

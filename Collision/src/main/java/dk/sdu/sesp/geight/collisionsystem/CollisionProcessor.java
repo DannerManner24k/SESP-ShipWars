@@ -2,6 +2,7 @@ package dk.sdu.sesp.geight.collisionsystem;
 
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 
 import java.util.List;
 public class CollisionProcessor {
@@ -18,9 +19,10 @@ public class CollisionProcessor {
 
     // Check if two entities are colliding
     private boolean checkCollision(Entity entity1, Entity entity2) {
-        //return firstEntity.getBounds().overlaps(secondEntity.getBounds());
-        double dx = entity1.getX() - entity2.getX();
-        double dy = entity1.getY() - entity2.getY();
+        PositionPart positionPart1 = entity1.getPart(PositionPart.class);
+        PositionPart positionPart2 = entity2.getPart(PositionPart.class);
+        double dx = positionPart1.getX() - positionPart2.getX();
+        double dy = positionPart1.getY() - positionPart2.getY();
         double distance = Math.sqrt(dx * dx + dy * dy);
         return distance < (entity1.getRadius() + entity2.getRadius());
     }
