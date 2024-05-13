@@ -18,6 +18,10 @@ public abstract class Entity {
 
     private Map<Class, EntityPart> parts;
 
+    public Entity() {
+        parts = new ConcurrentHashMap<>();
+    }
+
     public void add(EntityPart part) {
         parts.put(part.getClass(), part);
     }
