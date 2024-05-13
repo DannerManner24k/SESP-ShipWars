@@ -8,6 +8,7 @@ import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 import du.sdu.sesp.geight.common.bullet.Bullet;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import du.sdu.sesp.geight.common.bullet.Vector2D;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,18 +22,22 @@ public class BulletPlugin implements IGamePluginService {
 
     }
 
-    private Entity createBullet(GameData gameData, World world, SpriteBatch batch) {
+    public Bullet createBullet(float angle, float speed, World world) {
         Bullet bullet = new Bullet();
         bullet.setTexture(new Texture("assets/images/bullet.png"));
-
         bullet.setHeight(bullet.getTexture().getHeight());
         bullet.setWidth(bullet.getTexture().getWidth());
+        bullet.setActive(true);
 
-        bullet.setRadius((bullet.getHeight()+bullet.getWidth())/4);
+        // Calculate velocity based on angle and speed
+        float radians = (float) Math.toRadians(angle);
+        Vector2D velocity = new Vector2D((float) (speed * Math.cos(radians)), (float) (speed * Math.sin(radians)));
+        bullet.setVelocity(velocity);
+//        float vx = (float) (speed * Math.cos(radians));
+//        float vy = (float) (speed * Math.sin(radians));
 
-        bullet.setX(100);
-        bullet.setY(100);
         world.addEntity(bullet);
+        BulletControlSystem.addBullet(bullet);
 
         return bullet;
     }
