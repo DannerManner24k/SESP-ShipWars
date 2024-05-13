@@ -58,11 +58,13 @@ public class GameScreen implements ApplicationListener {
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(gameData)
         );
-
+        System.out.println("Before loading entities");
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getPluginServices()) {
+            System.out.println("Loading entities");
             iGamePlugin.start(gameData, world, batch);
         }
+        System.out.println("After loading entities");
     }
 
     @Override
@@ -100,7 +102,6 @@ public class GameScreen implements ApplicationListener {
 
             sr.begin(ShapeRenderer.ShapeType.Line);
 
-            /*
             float[] shapex = entity.getShapeX();
             float[] shapey = entity.getShapeY();
 
@@ -109,7 +110,7 @@ public class GameScreen implements ApplicationListener {
                  j = i++) {
 
                 sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
-            }*/
+            }
 
             sr.end();
         }

@@ -43,15 +43,13 @@ public class MapPlugin implements IGamePluginService {
     }
 
     public void renderMap(GameData gameData, World world) {
-        if (shapeRenderer != null) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(Color.WHITE);
-            double[] heights = ((Map)map).getHeights();
-            for (int x = 1; x < heights.length; x++) {
-                shapeRenderer.line(x - 1, (float)heights[x - 1], x, (float)heights[x]);
-            }
-            shapeRenderer.end();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.WHITE);
+        double[] heights = ((Map)map).getHeights();
+        for (int x = 1; x < heights.length; x++) {
+            shapeRenderer.line(x - 1, (float)heights[x - 1], x, (float)heights[x]);
         }
+        shapeRenderer.end();
     }
 
     @Override
