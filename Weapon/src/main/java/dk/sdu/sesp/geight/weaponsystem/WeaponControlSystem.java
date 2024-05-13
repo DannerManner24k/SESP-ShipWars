@@ -20,7 +20,7 @@ public class WeaponControlSystem {
     }
 
     public void fireWeapon(String weaponName) {
-        if (!hasFiredThisTurn) {
+        /*if (!hasFiredThisTurn) {
             Weapon weapon = weaponTypes.get(weaponName);
             if (weapon != null && weapon.getCanFire()) {
                 weapon.fire();
@@ -30,6 +30,8 @@ public class WeaponControlSystem {
         } else {
             System.out.println("Already fired this turn.");
         }
+
+         */
     }
 
     public boolean isPlayerTurn() {
