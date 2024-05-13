@@ -1,8 +1,6 @@
 package dk.sdu.sesp.geight.main.managers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
 
 public class TurnManager {
     private boolean playerTurn; // true if it's the player's turn, false if it's the AI's turn

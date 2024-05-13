@@ -1,6 +1,5 @@
 package dk.sdu.sesp.geight.main.Core.screens;
 
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
