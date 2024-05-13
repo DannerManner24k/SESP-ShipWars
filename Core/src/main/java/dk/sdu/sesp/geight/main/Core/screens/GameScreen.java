@@ -110,70 +110,43 @@ public class GameScreen implements ApplicationListener {
         cam.update();
         batch.setProjectionMatrix(cam.combined);
 
-        /*batch.begin();
+        // Draw the map first
         for (Entity entity : world.getEntities()) {
-            if (entity.getTexture() != null) {
-                batch.draw(entity.getTexture(), entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight());
-            }
-
-        }
-        batch.end(); // End of batch operations
-
-         */
-
-
-
-        for (Entity entity : world.getEntities()) {
-
-/*
             if (entity instanceof Map) {
-                sr.begin(ShapeRenderer.ShapeType.Filled); // Use filled type for filling areas
-                sr.setColor(Color.BLUE); // Set to a suitable ground color
-                double[] heights = ((Map) entity).getHeights();
-                for (int x = 1; x < heights.length; x++) {
-                    // Draw a polygon from (x-1, height[x-1]) to (x, height[x]) and down to the base
-                    float baseY = 0; // Assuming the bottom of the screen or base of the terrain
-                    sr.triangle((float)x - 1, (float)heights[x - 1], (float)x, (float)heights[x], (float)x - 1, baseY);
-                    sr.triangle((float)x, (float)heights[x], (float)x, baseY, (float)x - 1, baseY);
-                }
-                sr.end();
-            }
-
- */
-
-            if (entity instanceof Enemy) {
-                sr.begin(ShapeRenderer.ShapeType.Filled);
-                sr.setColor(Color.RED);
-
-                float[] shapeX = entity.getShapeX();
-                float[] shapeY = entity.getShapeY();
-
-                for (int i = 0; i < shapeX.length - 1; i++) {
-                    sr.line(shapeX[i], shapeY[i], shapeX[i+1], shapeY[i+1]);
-                }
-                sr.line(shapeX[shapeX.length - 1], shapeY[shapeY.length - 1], shapeX[0], shapeY[0]);
-
-                sr.end();
-            }
-
-            if (entity instanceof Player) {
                 sr.begin(ShapeRenderer.ShapeType.Filled);
                 sr.setColor(Color.BLUE);
+                double[] heights = ((Map) entity).getHeights();
+                for (int x = 1; x < heights.length; x++) {
+                    float baseY = 0; // Assuming the bottom of the screen or base of the terrain
+                    sr.triangle((float) x - 1, (float) heights[x - 1], (float) x, (float) heights[x], (float) x - 1, baseY);
+                    sr.triangle((float) x, (float) heights[x], (float) x, baseY, (float) x - 1, baseY);
+                }
+                sr.end();
+            }
+        }
+
+        // Draw entities like Enemy and Player after the map
+        for (Entity entity : world.getEntities()) {
+            if (entity instanceof Enemy || entity instanceof Player) {
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                Color entityColor = entity instanceof Enemy ? Color.RED : Color.GREEN;
+                sr.setColor(entityColor);
 
                 float[] shapeX = entity.getShapeX();
                 float[] shapeY = entity.getShapeY();
 
-                for (int i = 0; i < shapeX.length - 1; i++) {
-                    sr.line(shapeX[i], shapeY[i], shapeX[i+1], shapeY[i+1]);
+                for (int i = 1; i < shapeX.length - 1; i++) {
+                    float x1 = shapeX[0], y1 = shapeY[0]; // always the first vertex
+                    float x2 = shapeX[i], y2 = shapeY[i]; // current vertex
+                    float x3 = shapeX[i + 1], y3 = shapeY[i + 1]; // next vertex
+
+                    sr.triangle(x1, y1, x2, y2, x3, y3);
                 }
-                sr.line(shapeX[shapeX.length - 1], shapeY[shapeY.length - 1], shapeX[0], shapeY[0]);
 
                 sr.end();
             }
         }
     }
-
-
 
     @Override
     public void resize(int width, int height) {
