@@ -11,6 +11,7 @@ import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 import dk.sdu.sesp.geight.common.services.IPostEntityProcessingService;
 import dk.sdu.sesp.geight.common.map.Map;
+import dk.sdu.sesp.geight.enemysystem.Enemy;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -131,6 +132,21 @@ public class GameScreen implements ApplicationListener {
                     sr.triangle((float)x - 1, (float)heights[x - 1], (float)x, (float)heights[x], (float)x - 1, baseY);
                     sr.triangle((float)x, (float)heights[x], (float)x, baseY, (float)x - 1, baseY);
                 }
+                sr.end();
+            }
+
+            if (entity instanceof Enemy) {
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                sr.setColor(Color.RED);
+
+                float[] shapeX = entity.getShapeX();
+                float[] shapeY = entity.getShapeY();
+
+                for (int i = 0; i < shapeX.length - 1; i++) {
+                    sr.line(shapeX[i], shapeY[i], shapeX[i+1], shapeY[i+1]);
+                }
+                sr.line(shapeX[shapeX.length - 1], shapeY[shapeY.length - 1], shapeX[0], shapeY[0]);
+
                 sr.end();
             }
         }

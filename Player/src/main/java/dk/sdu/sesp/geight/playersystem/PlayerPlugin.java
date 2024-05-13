@@ -13,16 +13,12 @@ public class PlayerPlugin implements IGamePluginService {
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
         player = createPlayer(gameData, world, batch);
-        batch.draw(player.getTexture(), player.getX(), player.getY());
+        //batch.draw(player.getTexture(), player.getX(), player.getY());
     }
 
     public Character createPlayer(GameData gameData, World world, SpriteBatch batch) {
 
         Character player = new Player();
-        player.setTexture(new Texture("assets/images/player.png"));
-
-        player.setHeight(player.getTexture().getHeight());
-        player.setWidth(player.getTexture().getWidth());
 
         player.setRadius((player.getHeight()+player.getWidth())/4);
 

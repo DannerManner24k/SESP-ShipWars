@@ -23,10 +23,7 @@ public class BulletPlugin implements IGamePluginService {
 
     private Entity createBullet(GameData gameData, World world, SpriteBatch batch) {
         Bullet bullet = new Bullet();
-        bullet.setTexture(new Texture("assets/images/bullet.png"));
 
-        bullet.setHeight(bullet.getTexture().getHeight());
-        bullet.setWidth(bullet.getTexture().getWidth());
 
         bullet.setRadius((bullet.getHeight()+bullet.getWidth())/4);
 
