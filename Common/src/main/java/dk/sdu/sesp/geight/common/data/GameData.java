@@ -2,8 +2,8 @@ package dk.sdu.sesp.geight.common.data;
 
 public class GameData {
     private float delta;
-    private int displayWidth  = 800 ;
-    private int displayHeight = 800;
+    private int displayWidth;
+    private int displayHeight;
     //private final GameKeys keys = new GameKeys();
     private long lastUpdateTime;
 

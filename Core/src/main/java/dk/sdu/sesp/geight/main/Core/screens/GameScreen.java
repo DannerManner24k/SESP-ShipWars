@@ -1,6 +1,7 @@
 package dk.sdu.sesp.geight.main.Core.screens;
 
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import dk.sdu.sesp.geight.common.data.Entity;
@@ -9,6 +10,7 @@ import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 import dk.sdu.sesp.geight.common.services.IPostEntityProcessingService;
+import dk.sdu.sesp.geight.common.map.Map;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -27,7 +29,6 @@ import static java.util.stream.Collectors.toList;
 public class GameScreen implements ApplicationListener {
 
     private static OrthographicCamera cam;
-    private ShapeRenderer sr;
 
     private final GameData gameData = new GameData();
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
@@ -36,6 +37,7 @@ public class GameScreen implements ApplicationListener {
     private GameLogic gameLogic;
     private SpriteBatch batch;
     private Stage stage;
+    private ShapeRenderer sr;
 
 
 
@@ -46,6 +48,7 @@ public class GameScreen implements ApplicationListener {
         this.stage = new Stage();
         gameData.setDisplayWidth(Gdx.graphics.getWidth());
         gameData.setDisplayHeight(Gdx.graphics.getHeight());
+        System.out.println(gameData.getDisplayWidth() + " " + gameData.getDisplayHeight());
 
         gameLogic = new GameLogic();
 
@@ -61,8 +64,11 @@ public class GameScreen implements ApplicationListener {
         System.out.println("Before loading entities");
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getPluginServices()) {
-            System.out.println("Loading entities");
-            iGamePlugin.start(gameData, world, batch);
+            if(iGamePlugin != null) {
+                iGamePlugin.start(gameData, world, batch);
+            } else if (iGamePlugin == null) {
+                System.out.println("Plugin is null");
+            }
         }
         System.out.println("After loading entities");
     }
@@ -71,7 +77,7 @@ public class GameScreen implements ApplicationListener {
     public void render() {
 
         // clear screen to black
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(255,255,255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         gameData.setDelta(Gdx.graphics.getDeltaTime());
@@ -96,25 +102,41 @@ public class GameScreen implements ApplicationListener {
     }
 
     private void draw() {
+        cam.update();
+        batch.setProjectionMatrix(cam.combined);
+
+        /*batch.begin();
         for (Entity entity : world.getEntities()) {
-
-            sr.setColor(1, 1, 1, 1);
-
-            sr.begin(ShapeRenderer.ShapeType.Line);
-
-            float[] shapex = entity.getShapeX();
-            float[] shapey = entity.getShapeY();
-
-            for (int i = 0, j = shapex.length - 1;
-                 i < shapex.length;
-                 j = i++) {
-
-                sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+            if (entity.getTexture() != null) {
+                batch.draw(entity.getTexture(), entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight());
             }
 
-            sr.end();
+        }
+        batch.end(); // End of batch operations
+
+         */
+
+
+
+        for (Entity entity : world.getEntities()) {
+
+
+            if (entity instanceof Map) {
+                sr.begin(ShapeRenderer.ShapeType.Filled); // Use filled type for filling areas
+                sr.setColor(Color.BLUE); // Set to a suitable ground color
+                double[] heights = ((Map) entity).getHeights();
+                for (int x = 1; x < heights.length; x++) {
+                    // Draw a polygon from (x-1, height[x-1]) to (x, height[x]) and down to the base
+                    float baseY = 0; // Assuming the bottom of the screen or base of the terrain
+                    sr.triangle((float)x - 1, (float)heights[x - 1], (float)x, (float)heights[x], (float)x - 1, baseY);
+                    sr.triangle((float)x, (float)heights[x], (float)x, baseY, (float)x - 1, baseY);
+                }
+                sr.end();
+            }
         }
     }
+
+
 
     @Override
     public void resize(int width, int height) {

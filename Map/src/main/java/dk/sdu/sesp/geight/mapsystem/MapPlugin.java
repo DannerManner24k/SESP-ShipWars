@@ -1,5 +1,6 @@
 package dk.sdu.sesp.geight.mapsystem;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,38 +19,38 @@ public class MapPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
-        System.out.println("MapPlugin starting");
         this.shapeRenderer = new ShapeRenderer();
-        this.map = createMap(gameData, world);
+        this.map = createMap(gameData, world);  // Create the map when the plugin starts
     }
 
     private Entity createMap(GameData gameData, World world) {
-        Map map = new Map(1.0, -0.01, 100);  // Example coefficients for the polynomial
-        generateMap(map, gameData.getDisplayWidth());
-        renderMap(gameData, world);
+        // Define points through which the polynomial should pass
+        double[][] points = {
+                {0, 100}, // Start at bottom
+                {200, 500}, // Peak
+                {400, 300}, // Valley
+                {600, 500}, // Peak
+                {800, 100} // End at bottom
+        };
+
+        double[] coefficients = PolynomialInterpolator.interpolate(points);
+        Map map = new Map(coefficients);
+        generateMap(gameData, map, gameData.getDisplayWidth());
         world.addEntity(map);
         return map;
     }
 
-    private void generateMap(Map map, int width) {
+    private void generateMap(GameData gameData, Map map, int width) {
+        double[] coefficients = map.getCoefficients();
         double[] heights = new double[width];
-        double a = map.getA();
-        double b = map.getB();
-        double c = map.getC();
         for (int x = 0; x < width; x++) {
-            heights[x] = a * Math.pow(x, 2) + b * x + c;
+            double height = 0;
+            for (int d = 0; d < coefficients.length; d++) {
+                height += coefficients[d] * Math.pow(x, coefficients.length - 1 - d);
+            }
+            heights[x] = height;
         }
         map.setHeights(heights);
-    }
-
-    public void renderMap(GameData gameData, World world) {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.WHITE);
-        double[] heights = ((Map)map).getHeights();
-        for (int x = 1; x < heights.length; x++) {
-            shapeRenderer.line(x - 1, (float)heights[x - 1], x, (float)heights[x]);
-        }
-        shapeRenderer.end();
     }
 
     @Override

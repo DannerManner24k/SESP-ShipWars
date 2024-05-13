@@ -6,12 +6,10 @@ import dk.sdu.sesp.geight.common.data.Entity;
 
 public class Map extends Entity {
     private double[] heights;  // Array of heights for the map
-    private double a, b, c;    // Coefficients for the polynomial
+    private double[] coefficients;  // Array to store polynomial coefficients
 
-    public Map(double a, double b, double c) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
+    public Map(double[] coefficients) {
+        this.coefficients = coefficients;  // Store the entire array of coefficients
     }
 
     public double[] getHeights() {
@@ -22,15 +20,7 @@ public class Map extends Entity {
         this.heights = heights;
     }
 
-    public double getA() {
-        return a;
-    }
-
-    public double getB() {
-        return b;
-    }
-
-    public double getC() {
-        return c;
+    public double[] getCoefficients() {
+        return coefficients;
     }
 }
