@@ -3,18 +3,24 @@ package dk.sdu.sesp.geight.main.managers;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import dk.sdu.sesp.geight.common.data.GameData;
-
 import dk.sdu.sesp.geight.common.data.GameKeys;
 
 public class GameInputProcessor extends InputAdapter {
 
     private final GameData gameData;
+    private final TurnManager turnManager;
 
-    public GameInputProcessor(GameData gameData) {
+    public GameInputProcessor(GameData gameData, TurnManager turnManager) {
         this.gameData = gameData;
+        this.turnManager = turnManager;
     }
 
+
     public boolean keyDown(int k) {
+        if (!turnManager.isPlayerTurn()){
+            return false;
+        }
+
         if(k == Keys.UP) {
             gameData.getKeys().setKey(GameKeys.UP, true);
         }
@@ -43,6 +49,10 @@ public class GameInputProcessor extends InputAdapter {
     }
 
     public boolean keyUp(int k) {
+        if (!turnManager.isPlayerTurn()) {
+            return false;
+        }
+
         if(k == Keys.UP) {
             gameData.getKeys().setKey(GameKeys.UP, false);
         }
