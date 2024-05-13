@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.sesp.geight.main.GameEngine.GameLogic;
 import dk.sdu.sesp.geight.main.managers.GameInputProcessor;
+import dk.sdu.sesp.geight.main.managers.TurnManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +36,7 @@ public class GameScreen implements ApplicationListener {
     private List<IPostEntityProcessingService> postEntityProcessors = new ArrayList<>();
     private World world = new World();
     private GameLogic gameLogic;
+    private TurnManager turnManager;
     private SpriteBatch batch;
     private Stage stage;
     private ShapeRenderer sr;
@@ -51,6 +53,7 @@ public class GameScreen implements ApplicationListener {
         System.out.println(gameData.getDisplayWidth() + " " + gameData.getDisplayHeight());
 
         gameLogic = new GameLogic();
+        turnManager = new TurnManager();
 
         cam = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         cam.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
@@ -59,7 +62,7 @@ public class GameScreen implements ApplicationListener {
         sr = new ShapeRenderer();
 
         Gdx.input.setInputProcessor(
-                new GameInputProcessor(gameData)
+                new GameInputProcessor(gameData, turnManager)
         );
         System.out.println("Before loading entities");
         // Lookup all Game Plugins using ServiceLoader
