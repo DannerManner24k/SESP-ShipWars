@@ -4,16 +4,8 @@ import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.weapon.Weapon;
 
 public abstract class Character extends Entity{
-    protected int health;
     protected Weapon weapon;
 
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
 
     public Weapon getWeapon() {
         return weapon;
@@ -22,4 +14,6 @@ public abstract class Character extends Entity{
     public void setWeapon(Weapon weapon) {
         this.weapon = weapon;
     }
+
+
 }

@@ -3,6 +3,7 @@ package dk.sdu.sesp.geight.playersystem;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
 import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
 import dk.sdu.sesp.geight.common.data.entityparts.MovingPart;
 import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
@@ -17,6 +18,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
             PositionPart positionPart = player.getPart(PositionPart.class);
             MovingPart movingPart = player.getPart(MovingPart.class);
             LifePart lifePart = player.getPart(LifePart.class);
+            CanonPart canonPart = player.getPart(CanonPart.class);
 
             updateShape(player);
         }
@@ -27,7 +29,11 @@ public class PlayerControlSystem implements IEntityProcessingService {
         float[] shapex = new float[9];
         float[] shapey = new float[9];
 
+        float[] shapeCanonX = new float[6];
+        float[] shapeCanonY = new float[6];
+
         PositionPart positionPart = entity.getPart(PositionPart.class);
+        CanonPart canonPart = entity.getPart(CanonPart.class);
         float x = positionPart.getX();
         float y = positionPart.getY();
         float radians = positionPart.getRadians();
@@ -62,6 +68,29 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
+
+
+        shapeCanonX[0] = x;
+        shapeCanonY[0] = y;
+
+        shapeCanonX[1] = x - 3;
+        shapeCanonY[1] = y;
+
+        shapeCanonX[2] = x - 3;
+        shapeCanonY[2] = y + 20;
+
+        shapeCanonX[3] = x + 3;
+        shapeCanonY[3] = y + 20;
+
+        shapeCanonX[4] = x + 3;
+        shapeCanonY[4] = y;
+
+        shapeCanonX[5] = x;
+        shapeCanonY[5] = y;
+
+
+        canonPart.setShapeCanonX(shapeCanonX);
+        canonPart.setShapeCanonY(shapeCanonY);
     }
 
 }
