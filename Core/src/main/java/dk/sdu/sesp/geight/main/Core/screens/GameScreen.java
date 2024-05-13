@@ -11,6 +11,7 @@ import dk.sdu.sesp.geight.common.services.IGamePluginService;
 import dk.sdu.sesp.geight.common.services.IPostEntityProcessingService;
 import dk.sdu.sesp.geight.common.map.Map;
 import dk.sdu.sesp.geight.enemysystem.Enemy;
+import dk.sdu.sesp.geight.playersystem.Player;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.sesp.geight.main.GameEngine.GameLogic;
 import dk.sdu.sesp.geight.main.managers.GameInputProcessor;
 import dk.sdu.sesp.geight.main.managers.TurnManager;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -123,7 +125,7 @@ public class GameScreen implements ApplicationListener {
 
         for (Entity entity : world.getEntities()) {
 
-
+/*
             if (entity instanceof Map) {
                 sr.begin(ShapeRenderer.ShapeType.Filled); // Use filled type for filling areas
                 sr.setColor(Color.BLUE); // Set to a suitable ground color
@@ -137,9 +139,26 @@ public class GameScreen implements ApplicationListener {
                 sr.end();
             }
 
+ */
+
             if (entity instanceof Enemy) {
                 sr.begin(ShapeRenderer.ShapeType.Filled);
                 sr.setColor(Color.RED);
+
+                float[] shapeX = entity.getShapeX();
+                float[] shapeY = entity.getShapeY();
+
+                for (int i = 0; i < shapeX.length - 1; i++) {
+                    sr.line(shapeX[i], shapeY[i], shapeX[i+1], shapeY[i+1]);
+                }
+                sr.line(shapeX[shapeX.length - 1], shapeY[shapeY.length - 1], shapeX[0], shapeY[0]);
+
+                sr.end();
+            }
+
+            if (entity instanceof Player) {
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                sr.setColor(Color.BLUE);
 
                 float[] shapeX = entity.getShapeX();
                 float[] shapeY = entity.getShapeY();

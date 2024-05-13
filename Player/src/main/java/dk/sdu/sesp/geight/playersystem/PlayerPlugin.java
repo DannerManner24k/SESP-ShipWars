@@ -6,28 +6,30 @@ import dk.sdu.sesp.geight.character.Character;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 
 public class PlayerPlugin implements IGamePluginService {
-    private Character player;
+    private Entity player;
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
         player = createPlayer(gameData, world, batch);
-        //batch.draw(player.getTexture(), player.getX(), player.getY());
+        world.addEntity(player);
     }
 
-    public Character createPlayer(GameData gameData, World world, SpriteBatch batch) {
+    public Entity createPlayer(GameData gameData, World world, SpriteBatch batch) {
+        Entity player = new Player();
+        float x = 300;
+        float y = 200;
+        float radians = 3.1415f / 2;
+        player.add(new PositionPart(x, y,radians));
+        player.setRadius(8);
 
-        Character player = new Player();
-
-        player.setRadius((player.getHeight()+player.getWidth())/4);
-
-
-        player.setHealth(100);
         world.addEntity(player);
 
         return player;
     }
+
 
     @Override
     public void stop(GameData gameData, World world, SpriteBatch batch) {
