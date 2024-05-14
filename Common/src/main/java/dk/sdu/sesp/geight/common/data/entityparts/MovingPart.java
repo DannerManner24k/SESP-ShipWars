@@ -40,6 +40,7 @@ public class MovingPart
 
     @Override
     public void process(GameData gameData, Entity entity) {
+
         CanonPart canonPart = entity.getPart(CanonPart.class);
         float radians = canonPart.getRadian();
         float dt = gameData.getDelta();
@@ -59,6 +60,8 @@ public class MovingPart
         }
 
         canonPart.setRadian(radians);
+
+
     }
 
 }

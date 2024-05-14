@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
+import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
+import dk.sdu.sesp.geight.common.data.entityparts.MovingPart;
 import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 
@@ -22,9 +25,13 @@ public class EnemyPlugin implements IGamePluginService {
 
         float x = new Random().nextFloat() * gameData.getDisplayWidth();
         float y = new Random().nextFloat() * gameData.getDisplayHeight();
+        float rotationSpeed = 2;
         float radians = 3.1415f / 2;
 
-        enemy.add(new PositionPart(x, y, radians));
+        enemy.add(new PositionPart(x, y,radians));
+        //enemy.add(new MovingPart(rotationSpeed));
+        enemy.add(new CanonPart(x,y, 0));
+        enemy.add(new LifePart(1));
         enemy.setRadius(8);
 
         world.addEntity(enemy);

@@ -26,11 +26,11 @@
     </repositories>
 
     <dependencies>
-    <dependency>
-        <groupId>dk.sdu.mmmi.cbse</groupId>
-        <artifactId>shadedlibgdx</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
-    </dependency>
+        <dependency>
+            <groupId>dk.sdu.mmmi.cbse</groupId>
+            <artifactId>shadedlibgdx</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

@@ -3,6 +3,7 @@ package dk.sdu.sesp.geight.enemysystem;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
 import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
 import dk.sdu.sesp.geight.common.data.entityparts.MovingPart;
 import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
@@ -13,8 +14,14 @@ public class EnemyControlSystem implements IEntityProcessingService {
     public void process(GameData gameData, World world) {
         for (Entity enemy : world.getEntities(Enemy.class)) {
             PositionPart positionPart = enemy.getPart(PositionPart.class);
-            MovingPart movingPart = enemy.getPart(MovingPart.class);
+            //MovingPart movingPart = enemy.getPart(MovingPart.class);
             LifePart lifePart = enemy.getPart(LifePart.class);
+            CanonPart canonPart = enemy.getPart(CanonPart.class);
+
+            //movingPart.process(gameData, enemy);
+            positionPart.process(gameData, enemy);
+            lifePart.process(gameData, enemy);
+            canonPart.process(gameData, enemy);
 
             updateShape(enemy);
         }
@@ -27,7 +34,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
         PositionPart positionPart = entity.getPart(PositionPart.class);
         float x = positionPart.getX();
         float y = positionPart.getY();
-        float radians = positionPart.getRadians();
 
         shapex[0] = x;
         shapey[0] = y;
@@ -58,5 +64,31 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
+
+        // Shape of the Canon
+        // Drawing shape of the canon to face directly to the right.
+        float[] originalX = {0, 0, 20, 20, 0, 0};
+        float[] originalY = {0, 3, 3, -3, -3, 0};
+
+
+
+        CanonPart canonPart = entity.getPart(CanonPart.class);
+        float CanonX = canonPart.getX();
+        float CanonY = canonPart.getY();
+        float radians = canonPart.getRadian(); // This starts at 0, with the cannon facing right
+
+        float[] shapeCanonX = new float[6];
+        float[] shapeCanonY = new float[6];
+
+        // Calculate rotated coordinates
+        // Calculate rotated coordinates
+        for (int i = 0; i < 6; i++) {
+            shapeCanonX[i] = (float) (CanonX + originalX[i] * Math.cos(radians) - originalY[i] * Math.sin(radians));
+            shapeCanonY[i] = (float) (CanonY + originalX[i] * Math.sin(radians) + originalY[i] * Math.cos(radians));
+        }
+
+        // Assign calculated vertices back to the cannon part
+        canonPart.setShapeX(shapeCanonX);
+        canonPart.setShapeY(shapeCanonY);
     }
 }
