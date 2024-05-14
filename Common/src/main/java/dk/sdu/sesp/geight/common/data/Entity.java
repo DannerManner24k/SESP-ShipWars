@@ -15,6 +15,9 @@ public abstract class Entity {
     protected float radius;
     protected float[] shapeX;
     protected float[] shapeY;
+    protected Texture texture;
+    protected float velocityX;
+    protected float velocityY;
 
     private Map<Class, EntityPart> parts;
 
@@ -76,5 +79,36 @@ public abstract class Entity {
     public void setShapeY(float[] shapeY) {
         this.shapeY = shapeY;
         }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
+    public float getVelocityX() {
+        return velocityX;
+    }
+
+    public void setVelocityX(float velocityX) {
+        this.velocityX = velocityX;
+    }
+
+    public float getVelocityY() {
+        return velocityY;
+    }
+
+    public void setVelocityY(float velocityY) {
+        this.velocityY = velocityY;
+    }
+
+
+    public void update(float deltaTime) {
+        for (int i = 0; i < shapeX.length; i++) {
+            shapeX[i] += velocityX * deltaTime;
+            shapeY[i] += velocityY * deltaTime;
+        }
+    }
 
 }
