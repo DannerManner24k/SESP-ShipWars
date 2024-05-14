@@ -10,7 +10,6 @@ import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 import dk.sdu.sesp.geight.common.services.IPostEntityProcessingService;
-import dk.sdu.sesp.geight.common.map.Map;
 import dk.sdu.sesp.geight.enemysystem.Enemy;
 import dk.sdu.sesp.geight.playersystem.Player;
 
@@ -156,10 +155,10 @@ public class GameScreen implements ApplicationListener {
                 }
                 sr.line(shapeX[shapeX.length - 1], shapeY[shapeY.length - 1], shapeX[0], shapeY[0]);
 
-                /*
+
                 CanonPart canonPart = entity.getPart(CanonPart.class);
-                float[] shapeCanonX = canonPart.getShapeCanonX();
-                float[] shapeCanonY = canonPart.getShapeCanonY();
+                float[] shapeCanonX = canonPart.getShapeX();
+                float[] shapeCanonY = canonPart.getShapeY();
 
                 for (int i = 1; i < shapeCanonX.length - 1; i++) {
                     float x1 = shapeCanonX[0], y1 = shapeCanonY[0]; // always the first vertex
@@ -169,7 +168,7 @@ public class GameScreen implements ApplicationListener {
                     sr.triangle(x1, y1, x2, y2, x3, y3);
                 }
 
-                 */
+
 
                 sr.end();
             }

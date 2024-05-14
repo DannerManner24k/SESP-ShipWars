@@ -4,32 +4,37 @@ import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 
 public class CanonPart implements EntityPart{
-    protected float[] shapeCanonX;
-    protected float[] shapeCanonY;
-    protected float radianCanon;
+    protected float[] shapeX;
+    protected float[] shapeY;
+    protected float radian;
 
-    public float[] getShapeCanonX() {
-        return shapeCanonX;
+    public CanonPart(float radiansCanon) {
+        this.radian = radiansCanon;
+
     }
 
-    public void setShapeCanonX(float[] shapeCanonX) {
-        this.shapeCanonX = shapeCanonX;
+    public float[] getShapeX() {
+        return shapeX;
     }
 
-    public float[] getShapeCanonY() {
-        return shapeCanonY;
+    public void setShapeX(float[] shapeX) {
+        this.shapeX = shapeX;
     }
 
-    public void setShapeCanonY(float[] shapeCanonY) {
-        this.shapeCanonY = shapeCanonY;
+    public float[] getShapeY() {
+        return shapeY;
     }
 
-    public float getRadianCanon() {
-        return radianCanon;
+    public void setShapeY(float[] shapeY) {
+        this.shapeY = shapeY;
     }
 
-    public void setRadianCanon(float radianCanon) {
-        this.radianCanon = radianCanon;
+    public float getRadian() {
+        return radian;
+    }
+
+    public void setRadian(float radian) {
+        this.radian = radian;
     }
 
 
