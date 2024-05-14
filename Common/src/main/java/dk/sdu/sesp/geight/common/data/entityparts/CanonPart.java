@@ -13,7 +13,7 @@ public class CanonPart implements EntityPart{
 
     public CanonPart(float x, float y, float radiansCanon) {
         this.radian = radiansCanon;
-        this.x = x+10;
+        this.x = x;
         this.y = y-1;
 
     }

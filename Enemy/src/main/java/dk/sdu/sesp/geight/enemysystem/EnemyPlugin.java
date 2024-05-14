@@ -30,7 +30,7 @@ public class EnemyPlugin implements IGamePluginService {
 
         enemy.add(new PositionPart(x, y,radians));
         //enemy.add(new MovingPart(rotationSpeed));
-        enemy.add(new CanonPart(x,y, 0));
+        enemy.add(new CanonPart(x-10,y, (float) Math.PI)); // -10 is to place the canon in front of the mast
         enemy.add(new LifePart(1));
         enemy.setRadius(8);
 

@@ -26,7 +26,7 @@ public class PlayerPlugin implements IGamePluginService {
 
         player.add(new PositionPart(x, y,radians));
         player.add(new MovingPart(rotationSpeed));
-        player.add(new CanonPart(x,y, 0));
+        player.add(new CanonPart(x+10,y, 0)); // +10 is to place the canon in front of the mast
         player.add(new LifePart(1));
         player.setRadius(8);
 
