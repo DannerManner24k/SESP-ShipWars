@@ -16,9 +16,10 @@ public class BulletControlSystem {
     }
 
     // Update each bullet's position and remove inactive ones
-    public static void updateBullets() {
+    public static void updateBullets(float deltaTime) {
         List<Bullet> toRemove = new ArrayList<>();
         for (Bullet bullet : activeBullets) {
+            bullet.update(deltaTime);
             if (!bullet.isActive()) {
                 toRemove.add(bullet);
             }
