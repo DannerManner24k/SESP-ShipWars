@@ -13,8 +13,8 @@ public class CanonPart implements EntityPart{
 
     public CanonPart(float x, float y, float radiansCanon) {
         this.radian = radiansCanon;
-        this.x = x;
-        this.y = y;
+        this.x = x+10;
+        this.y = y-1;
 
     }
 
@@ -55,7 +55,6 @@ public class CanonPart implements EntityPart{
     }
 
     public void setRadian(float radian) {
-        System.out.println("Canon radian updated to: " + radian);
         this.radian = radian;
     }
 
