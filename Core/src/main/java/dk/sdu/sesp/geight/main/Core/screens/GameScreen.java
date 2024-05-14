@@ -126,8 +126,6 @@ public class GameScreen implements ApplicationListener {
             }
         }
 
-
-
         for (Entity entity : world.getEntities()) {
             if (entity instanceof Map) {
                 sr.begin(ShapeRenderer.ShapeType.Filled); // Use filled type for filling areas
