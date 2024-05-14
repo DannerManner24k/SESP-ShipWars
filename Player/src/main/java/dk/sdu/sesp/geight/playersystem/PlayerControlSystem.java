@@ -9,6 +9,12 @@ import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
 import dk.sdu.sesp.geight.common.data.entityparts.MovingPart;
 import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
+import du.sdu.sesp.geight.common.bullet.BulletSPI;
+
+import java.util.Collection;
+import java.util.ServiceLoader;
+
+import static java.util.stream.Collectors.toList;
 
 public class PlayerControlSystem implements IEntityProcessingService {
 
@@ -31,6 +37,13 @@ public class PlayerControlSystem implements IEntityProcessingService {
             canonPart.process(gameData, player);
 
             updateShape(player);
+
+            if (gameData.getKeys().isPressed(GameKeys.SPACE)){
+                System.out.println("SPACE");
+                for (BulletSPI bullet : getBulletSPIs()) {
+                    world.addEntity(bullet.createBullet(player, gameData));
+                }
+            }
         }
     }
 
@@ -114,4 +127,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
         canonPart.setShapeY(shapeCanonY);
     }
 
+    private Collection<? extends BulletSPI> getBulletSPIs() {
+        return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
 }

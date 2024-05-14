@@ -11,13 +11,11 @@ public class Bullet extends Entity {
     private static final float GRAVITY = -9.81f; // Gravity effect
 
 
-    @Override
     public void update(float deltaTime) {
 
         float newVelocityY = getVelocityY() + GRAVITY * deltaTime; // Correct handling of gravity
         setVelocityY(newVelocityY);
 
-        super.update(deltaTime);
     }
 
     public int getDamage() {
@@ -43,6 +41,5 @@ public class Bullet extends Entity {
     public void setVelocity(Vector2D velocity) {
     }
     public Vector2D getVelocity() {return this.velocity;}
-
 
 }

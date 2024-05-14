@@ -6,6 +6,7 @@ import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 import dk.sdu.sesp.geight.common.weapon.BurstCanon;
+import du.sdu.sesp.geight.common.bullet.Bullet;
 
 public class WeaponPlugin implements IGamePluginService {
 
@@ -15,8 +16,10 @@ public class WeaponPlugin implements IGamePluginService {
     }
 
     public void createBurstCanon(GameData gameData, World world, Entity entity) {
-        Entity weapon = new BurstCanon();
-        world.addEntity(weapon);
+        Entity burstCanon = new BurstCanon();
+        Bullet bullet = new Bullet();
+        ((BurstCanon) burstCanon).setBullet(bullet);
+        world.addEntity(burstCanon);
     }
 
     @Override

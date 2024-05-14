@@ -22,7 +22,7 @@ public class BulletPlugin implements IGamePluginService {
 
     }
 
-    public Bullet createBullet(float angle, float speed, World world) {
+    public Entity createBullet(float angle, float speed, World world) {
         Bullet bullet = new Bullet();
         bullet.setTexture(new Texture("assets/images/bullet.png"));
         bullet.setHeight(bullet.getTexture().getHeight());

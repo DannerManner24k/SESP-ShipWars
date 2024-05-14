@@ -55,7 +55,7 @@ public class CanonPart implements EntityPart{
     }
 
     public void setRadian(float radian) {
-        System.out.println("Canon radian updated to: " + radian);
+        //System.out.println("Canon radian updated to: " + radian);
         this.radian = radian;
     }
 
