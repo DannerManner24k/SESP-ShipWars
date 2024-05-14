@@ -74,8 +74,8 @@ public class MovingPart
     public void process(GameData gameData, Entity entity) {
         PositionPart positionPart = entity.getPart(PositionPart.class);
         CanonPart canonPart = entity.getPart(CanonPart.class);
-        float x = positionPart.getX();
-        float y = positionPart.getY();
+        float x = canonPart.getX();
+        float y = canonPart.getY();
         float radians = canonPart.getRadian();
         float dt = gameData.getDelta();
 
@@ -88,7 +88,7 @@ public class MovingPart
             radians -= rotationSpeed * dt;
         }
 
-        // accelerating            
+        // accelerating
         if (up) {
             dx += cos(radians) * acceleration * dt;
             dy += sin(radians) * acceleration * dt;
@@ -120,8 +120,9 @@ public class MovingPart
             y = gameData.getDisplayHeight();
         }
 
-        positionPart.setX(x);
-        positionPart.setY(y);
+        canonPart.setX(x);
+        canonPart.setY(y);
+
 
         canonPart.setRadian(radians);
     }

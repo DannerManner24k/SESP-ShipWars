@@ -46,7 +46,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
         CanonPart canonPart = entity.getPart(CanonPart.class);
         float x = positionPart.getX();
         float y = positionPart.getY();
-        float radians = positionPart.getRadians();
 
         shapex[0] = x;
         shapey[0] = y;
@@ -80,6 +79,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
 
         // Define the offsets relative to the central point (x, y)
+        float CanonX = canonPart.getX();
+        float CanonY = canonPart.getY();
+        float radians = positionPart.getRadians();
         float halfWidth = 3;
         float height = 20;
 
@@ -88,24 +90,24 @@ public class PlayerControlSystem implements IEntityProcessingService {
         shapeCanonY[0] = y;
 
         // Top left corner
-        shapeCanonX[1] = (float) (x + (-halfWidth) * Math.cos(radians) - (0) * Math.sin(radians));
+        shapeCanonX[1] = (float) (CanonX + (-halfWidth) * Math.cos(radians) - (0) * Math.sin(radians));
         shapeCanonY[1] = (float) (y + (-halfWidth) * Math.sin(radians) + (0) * Math.cos(radians));
 
         // Bottom left corner
-        shapeCanonX[2] = (float) (x + (-halfWidth) * Math.cos(radians) - (height) * Math.sin(radians));
-        shapeCanonY[2] = (float) (y + (-halfWidth) * Math.sin(radians) + (height) * Math.cos(radians));
+        shapeCanonX[2] = (float) (CanonX + (-halfWidth) * Math.cos(radians) - (height) * Math.sin(radians));
+        shapeCanonY[2] = (float) (CanonY + (-halfWidth) * Math.sin(radians) + (height) * Math.cos(radians));
 
         // Bottom right corner
-        shapeCanonX[3] = (float) (x + (halfWidth) * Math.cos(radians) - (height) * Math.sin(radians));
-        shapeCanonY[3] = (float) (y + (halfWidth) * Math.sin(radians) + (height) * Math.cos(radians));
+        shapeCanonX[3] = (float) (CanonX + (halfWidth) * Math.cos(radians) - (height) * Math.sin(radians));
+        shapeCanonY[3] = (float) (CanonY + (halfWidth) * Math.sin(radians) + (height) * Math.cos(radians));
 
         // Top right corner
-        shapeCanonX[4] = (float) (x + (halfWidth) * Math.cos(radians) - (0) * Math.sin(radians));
-        shapeCanonY[4] = (float) (y + (halfWidth) * Math.sin(radians) + (0) * Math.cos(radians));
+        shapeCanonX[4] = (float) (CanonX + (halfWidth) * Math.cos(radians) - (0) * Math.sin(radians));
+        shapeCanonY[4] = (float) (CanonY + (halfWidth) * Math.sin(radians) + (0) * Math.cos(radians));
 
         // Bottom middle point
-        shapeCanonX[5] = (float) (x + (0) * Math.cos(radians) - (height) * Math.sin(radians));
-        shapeCanonY[5] = (float) (y + (0) * Math.sin(radians) + (height) * Math.cos(radians));
+        shapeCanonX[5] = (float) (CanonX + (0) * Math.cos(radians) - (height) * Math.sin(radians));
+        shapeCanonY[5] = (float) (CanonY + (0) * Math.sin(radians) + (height) * Math.cos(radians));
 
         // Assign calculated vertices back to the entity
         canonPart.setShapeX(shapeCanonX);

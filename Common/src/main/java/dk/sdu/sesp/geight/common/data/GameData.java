@@ -10,7 +10,7 @@ public class GameData {
     private final GameKeys keys = new GameKeys();
 
 
-    /*public GameKeys getKeys() {
+    public GameKeys getKeys() {
         return keys;
     }
     public float getDelta() {
@@ -18,15 +18,13 @@ public class GameData {
         float delta = (currentTime - lastUpdateTime) / 1_000_000_000.0f;  // Convert nanoseconds to seconds
         lastUpdateTime = currentTime;  // Update lastUpdateTime to the current time
         return delta;
-    }*/
+    }
 
     public void setDelta(float delta) {
         this.delta = delta;
     }
 
-    public float getDelta() {
-        return delta;
-    }
+
     public void setDisplayWidth(int width) {
         this.displayWidth = width;
     }
@@ -41,9 +39,6 @@ public class GameData {
 
     public int getDisplayHeight() {
         return displayHeight;
-    }
-    public GameKeys getKeys() {
-        return keys;
     }
 
 
