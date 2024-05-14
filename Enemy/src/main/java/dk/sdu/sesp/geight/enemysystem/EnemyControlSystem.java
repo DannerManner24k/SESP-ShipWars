@@ -34,7 +34,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
         PositionPart positionPart = entity.getPart(PositionPart.class);
         float x = positionPart.getX();
         float y = positionPart.getY();
-        float radians = positionPart.getRadians();
 
         shapex[0] = x;
         shapey[0] = y;
