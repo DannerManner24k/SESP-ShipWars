@@ -23,18 +23,14 @@ public class EnemyPlugin implements IGamePluginService {
     private Entity createEnemy(GameData gameData, World world, SpriteBatch batch) {
         Entity enemy = new Enemy();
 
-        float deacceleration = 10;
-        float acceleration = 200;
-        float maxSpeed = 300;
-        float rotationSpeed = 5;
-
-        float x = new Random().nextFloat(gameData.getDisplayWidth()) + (gameData.getDisplayWidth()/2);
-        float y = 300;
+        float x = new Random().nextFloat() * gameData.getDisplayWidth();
+        float y = new Random().nextFloat() * gameData.getDisplayHeight();
+        float rotationSpeed = 2;
         float radians = 3.1415f / 2;
 
         enemy.add(new PositionPart(x, y,radians));
-        enemy.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed));
-        enemy.add(new CanonPart(x,y, radians));
+        //enemy.add(new MovingPart(rotationSpeed));
+        enemy.add(new CanonPart(x-10,y, (float) Math.PI)); // -10 is to place the canon in front of the mast
         enemy.add(new LifePart(1));
         enemy.setRadius(8);
 

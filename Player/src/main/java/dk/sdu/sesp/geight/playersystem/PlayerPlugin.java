@@ -19,18 +19,14 @@ public class PlayerPlugin implements IGamePluginService {
 
     public Entity createPlayer(GameData gameData, World world, SpriteBatch batch) {
         Entity player = new Player();
-
-        float deacceleration = 10;
-        float acceleration = 200;
-        float maxSpeed = 300;
-        float rotationSpeed = 5;
+        float rotationSpeed = 2;
         float x = 300;
         float y = 200;
         float radians = 3.1415f / 2;
 
         player.add(new PositionPart(x, y,radians));
-        player.add(new MovingPart(deacceleration, acceleration, maxSpeed, rotationSpeed));
-        player.add(new CanonPart(x,y, radians));
+        player.add(new MovingPart(rotationSpeed));
+        player.add(new CanonPart(x+10,y, 0)); // +10 is to place the canon in front of the mast
         player.add(new LifePart(1));
         player.setRadius(8);
 
@@ -42,6 +38,6 @@ public class PlayerPlugin implements IGamePluginService {
 
     @Override
     public void stop(GameData gameData, World world, SpriteBatch batch) {
-
+        world.removeEntity(player);
     }
 }

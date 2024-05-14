@@ -29,7 +29,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             movingPart.setLeft(gameData.getKeys().isDown(GameKeys.LEFT));
             movingPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
-            movingPart.setUp(gameData.getKeys().isDown(GameKeys.UP));
 
             movingPart.process(gameData, player);
             positionPart.process(gameData, player);
@@ -49,14 +48,11 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
 
     private void updateShape(Entity entity) {
+        //Shape of the ship
         float[] shapex = new float[9];
         float[] shapey = new float[9];
 
-        float[] shapeCanonX = new float[6];
-        float[] shapeCanonY = new float[6];
-
         PositionPart positionPart = entity.getPart(PositionPart.class);
-        CanonPart canonPart = entity.getPart(CanonPart.class);
         float x = positionPart.getX();
         float y = positionPart.getY();
 
@@ -90,39 +86,29 @@ public class PlayerControlSystem implements IEntityProcessingService {
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
 
+        // Shape of the Canon
+        // Drawing shape of the canon to face directly to the right.
+        float[] originalX = {0, 0, 20, 20, 0, 0};
+        float[] originalY = {0, 3, 3, -3, -3, 0};
 
-        // Define the offsets relative to the central point (x, y)
+
+
+        CanonPart canonPart = entity.getPart(CanonPart.class);
         float CanonX = canonPart.getX();
         float CanonY = canonPart.getY();
-        float radians = positionPart.getRadians();
-        float halfWidth = 3;
-        float height = 20;
+        float radians = canonPart.getRadian(); // This starts at 0, with the cannon facing right
 
-        // Top central point (no change in position, just rotation)
-        shapeCanonX[0] = x;
-        shapeCanonY[0] = y;
+        float[] shapeCanonX = new float[6];
+        float[] shapeCanonY = new float[6];
 
-        // Top left corner
-        shapeCanonX[1] = (float) (CanonX + (-halfWidth) * Math.cos(radians) - (0) * Math.sin(radians));
-        shapeCanonY[1] = (float) (y + (-halfWidth) * Math.sin(radians) + (0) * Math.cos(radians));
+        // Calculate rotated coordinates
+        // Calculate rotated coordinates
+        for (int i = 0; i < 6; i++) {
+            shapeCanonX[i] = (float) (CanonX + originalX[i] * Math.cos(radians) - originalY[i] * Math.sin(radians));
+            shapeCanonY[i] = (float) (CanonY + originalX[i] * Math.sin(radians) + originalY[i] * Math.cos(radians));
+        }
 
-        // Bottom left corner
-        shapeCanonX[2] = (float) (CanonX + (-halfWidth) * Math.cos(radians) - (height) * Math.sin(radians));
-        shapeCanonY[2] = (float) (CanonY + (-halfWidth) * Math.sin(radians) + (height) * Math.cos(radians));
-
-        // Bottom right corner
-        shapeCanonX[3] = (float) (CanonX + (halfWidth) * Math.cos(radians) - (height) * Math.sin(radians));
-        shapeCanonY[3] = (float) (CanonY + (halfWidth) * Math.sin(radians) + (height) * Math.cos(radians));
-
-        // Top right corner
-        shapeCanonX[4] = (float) (CanonX + (halfWidth) * Math.cos(radians) - (0) * Math.sin(radians));
-        shapeCanonY[4] = (float) (CanonY + (halfWidth) * Math.sin(radians) + (0) * Math.cos(radians));
-
-        // Bottom middle point
-        shapeCanonX[5] = (float) (CanonX + (0) * Math.cos(radians) - (height) * Math.sin(radians));
-        shapeCanonY[5] = (float) (CanonY + (0) * Math.sin(radians) + (height) * Math.cos(radians));
-
-        // Assign calculated vertices back to the entity
+        // Assign calculated vertices back to the cannon part
         canonPart.setShapeX(shapeCanonX);
         canonPart.setShapeY(shapeCanonY);
     }

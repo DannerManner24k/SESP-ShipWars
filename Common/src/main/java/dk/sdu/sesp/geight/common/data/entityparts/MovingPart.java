@@ -17,42 +17,13 @@ import static java.lang.Math.*;
 public class MovingPart
         implements EntityPart {
 
-    private float dx, dy;
-    private float deceleration, acceleration;
-    private float maxSpeed, rotationSpeed;
-    private boolean left, right, up;
+    private float rotationSpeed;
+    private boolean left, right;
 
-    public MovingPart(float deceleration, float acceleration, float maxSpeed, float rotationSpeed) {
-        this.deceleration = deceleration;
-        this.acceleration = acceleration;
-        this.maxSpeed = maxSpeed;
+    public MovingPart(float rotationSpeed) {
         this.rotationSpeed = rotationSpeed;
     }
 
-    public float getDx() {
-        return dx;
-    }
-
-    public float getDy() {
-        return dy;
-    }
-
-    public void setDeceleration(float deceleration) {
-        this.deceleration = deceleration;
-    }
-
-    public void setAcceleration(float acceleration) {
-        this.acceleration = acceleration;
-    }
-
-    public void setMaxSpeed(float maxSpeed) {
-        this.maxSpeed = maxSpeed;
-    }
-
-    public void setSpeed(float speed) {
-        this.acceleration = speed;
-        this.maxSpeed = speed;
-    }
 
     public void setRotationSpeed(float rotationSpeed) {
         this.rotationSpeed = rotationSpeed;
@@ -66,65 +37,31 @@ public class MovingPart
         this.right = right;
     }
 
-    public void setUp(boolean up) {
-        this.up = up;
-    }
 
     @Override
     public void process(GameData gameData, Entity entity) {
-        PositionPart positionPart = entity.getPart(PositionPart.class);
+
         CanonPart canonPart = entity.getPart(CanonPart.class);
-        float x = canonPart.getX();
-        float y = canonPart.getY();
         float radians = canonPart.getRadian();
         float dt = gameData.getDelta();
 
-        // turning
-        if (left) {
-            radians += rotationSpeed * dt;
-        }
-
-        if (right) {
+        if (right && radians > 0) {  // Rotate clockwise, decrease radians but not below 0
             radians -= rotationSpeed * dt;
+            if (radians < 0) {
+                radians = 0;  // Prevent going below 0 radians
+            }
         }
 
-        // accelerating
-        if (up) {
-            dx += cos(radians) * acceleration * dt;
-            dy += sin(radians) * acceleration * dt;
+        if (left && radians < Math.PI / 2) {  // Rotate counterclockwise, increase radians but not above π/2
+            radians += rotationSpeed * dt;
+            if (radians > Math.PI / 2) {
+                radians = (float) (Math.PI / 2);  // Prevent going above π/2 radians
+            }
         }
-
-        // deccelerating
-        float vec = (float) sqrt(dx * dx + dy * dy);
-        if (vec > 0) {
-            dx -= (dx / vec) * deceleration * dt;
-            dy -= (dy / vec) * deceleration * dt;
-        }
-        if (vec > maxSpeed) {
-            dx = (dx / vec) * maxSpeed;
-            dy = (dy / vec) * maxSpeed;
-        }
-
-        // set position
-        x += dx * dt;
-        if (x > gameData.getDisplayWidth()) {
-            x = 0;
-        } else if (x < 0) {
-            x = gameData.getDisplayWidth();
-        }
-
-        y += dy * dt;
-        if (y > gameData.getDisplayHeight()) {
-            y = 0;
-        } else if (y < 0) {
-            y = gameData.getDisplayHeight();
-        }
-
-        canonPart.setX(x);
-        canonPart.setY(y);
-
 
         canonPart.setRadian(radians);
+
+
     }
 
 }
