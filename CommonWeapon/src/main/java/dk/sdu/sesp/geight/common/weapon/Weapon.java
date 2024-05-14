@@ -7,7 +7,6 @@ public abstract class Weapon extends Entity {
     private String name;
     private Bullet bullet;
 
-
     public String getName() {
         return name;
     }
