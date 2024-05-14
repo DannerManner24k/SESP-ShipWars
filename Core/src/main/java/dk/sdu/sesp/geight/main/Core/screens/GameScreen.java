@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 import dk.sdu.sesp.geight.common.services.IPostEntityProcessingService;
@@ -110,7 +111,6 @@ public class GameScreen implements ApplicationListener {
         cam.update();
         batch.setProjectionMatrix(cam.combined);
 
-        // Draw the map first
         for (Entity entity : world.getEntities()) {
             if (entity instanceof Map) {
                 sr.begin(ShapeRenderer.ShapeType.Filled);
@@ -146,7 +146,24 @@ public class GameScreen implements ApplicationListener {
                 sr.end();
             }
         }
+
+                CanonPart canonPart = entity.getPart(CanonPart.class);
+                float[] shapeCanonX = canonPart.getShapeX();
+                float[] shapeCanonY = canonPart.getShapeY();
+
+                for (int i = 1; i < shapeCanonX.length - 1; i++) {
+                    float x1 = shapeCanonX[0], y1 = shapeCanonY[0]; // always the first vertex
+                    float x2 = shapeCanonX[i], y2 = shapeCanonY[i]; // current vertex
+                    float x3 = shapeCanonX[i + 1], y3 = shapeCanonY[i + 1]; // next vertex
+
+                    sr.triangle(x1, y1, x2, y2, x3, y3);
+                }
+
+
+
     }
+
+
 
     @Override
     public void resize(int width, int height) {

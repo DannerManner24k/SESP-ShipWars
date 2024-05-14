@@ -4,11 +4,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import dk.sdu.sesp.geight.common.data.entityparts.EntityPart;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class Entity {
+public abstract class Entity implements Serializable {
     private final UUID ID = UUID.randomUUID();
     protected float width;
     protected float height;
