@@ -15,8 +15,6 @@ import java.util.List;
 
 public class BulletPlugin implements IGamePluginService {
 
-    private static List<Bullet> activeBullets = new ArrayList<>();
-
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
 
