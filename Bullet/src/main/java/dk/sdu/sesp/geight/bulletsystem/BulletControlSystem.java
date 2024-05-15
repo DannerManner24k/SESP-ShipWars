@@ -3,9 +3,7 @@ package dk.sdu.sesp.geight.bulletsystem;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
-import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
-import dk.sdu.sesp.geight.common.data.entityparts.MovingPart;
-import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
+import dk.sdu.sesp.geight.common.data.entityparts.*;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import du.sdu.sesp.geight.common.bullet.Bullet;
 import du.sdu.sesp.geight.common.bullet.BulletSPI;
@@ -18,44 +16,48 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 public class BulletControlSystem implements IEntityProcessingService, BulletSPI {
-    private static List<Bullet> activeBullets = new ArrayList<>();
 
     @Override
     public void process(GameData gameData, World world) {
         for (Entity bullet : world.getEntities(Bullet.class)) {
-            CanonPart canonPart = bullet.getPart(CanonPart.class);
-
-            //canonPart.process(gameData, bullet);
+            PositionPart positionPart = bullet.getPart(PositionPart.class);
+            MovingPart movingPart = bullet.getPart(MovingPart.class);
+            TimerPart timerPart = bullet.getPart(TimerPart.class);
+            movingPart.setUp(true);
+            if (timerPart.getExpiration() < 0) {
+                world.removeEntity(bullet);
+            }
+            timerPart.process(gameData, bullet);
+            movingPart.process(gameData, bullet);
+            positionPart.process(gameData, bullet);
 
             setShape(bullet);
-
-            updateBullets((Bullet) bullet, gameData.getDelta());
-            //System.out.println("Bullet position: " + canonPart.getX() + ", " + canonPart.getY());
         }
     }
 
     @Override
     public Entity createBullet(Entity entity, GameData gameData) {
-        System.out.println("Creating bullet");
         CanonPart canonPart = entity.getPart(CanonPart.class);
-
         float x = canonPart.getX();
         float y = canonPart.getY();
         float radians = canonPart.getRadian();
-        System.out.println("Canon radians: " + radians);
+        float speed = 350;
 
         Entity bullet = new Bullet();
 
-        bullet.add(new PositionPart(x, y, radians));
-        bullet.add(new CanonPart(x, y, radians));
-        ((Bullet) bullet).setStrength(50);
-        //bullet.add(new MovingPart(0, 5000000, speed, 5));
+        bullet.setRadius(2);
 
-        float [] shapeX = new float[2];
-        float [] shapeY = new float[2];
+        float bx = (float) cos(radians) * bullet.getRadius() * 8;
+        float by = (float) sin(radians) * bullet.getRadius() * 8;
 
-        bullet.setShapeX(shapeX);
-        bullet.setShapeY(shapeY);
+        bullet.add(new PositionPart(bx + x, by + y, radians));
+        bullet.add(new LifePart(1));
+        bullet.add(new MovingPart(0, 5000000, speed));
+        bullet.add(new TimerPart(1));
+
+
+        bullet.setShapeX(new float[2]);
+        bullet.setShapeY(new float[2]);
 
         return bullet;
     }
@@ -66,25 +68,18 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         PositionPart positionPart = entity.getPart(PositionPart.class);
         float x = positionPart.getX();
         float y = positionPart.getY();
-
-        CanonPart canonPart = entity.getPart(CanonPart.class);
-        float radians = canonPart.getRadian();
+        float radians = positionPart.getRadians();
 
         shapex[0] = x;
         shapey[0] = y;
 
-        shapex[1] = (float) (x + radians);
-        shapey[1] = (float) (y + radians);
+        shapex[1] = (float) (x + Math.cos(radians - 4 * 3.1415f / 5));
+        shapey[1] = (float) (y + Math.sin(radians - 4 * 3.1145f / 5));
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
     }
 
-    // Add a new bullet to the list
-    public static void addBullet(Bullet bullet) {
-        activeBullets.add(bullet);
-        System.out.println("Bullet added: " + bullet);
-    }
 
     // Update each bullet's position and remove inactive ones
     public static void updateBullets(Bullet bullet, float deltaTime) {
@@ -93,8 +88,7 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         float y = positionPart.getY();
 
         float initialVelocity = 10 * bullet.getStrength();
-
-        CanonPart canonPart = bullet.getPart(CanonPart.class);
+        CanonPart canonPart = bullet.getPart(Bullet.class);
         float radians = canonPart.getRadian();
 
         bullet.setVelocityX(initialVelocity * (float)Math.cos(radians));
@@ -105,13 +99,6 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         positionPart.setX(x + bullet.getVelocityX() * deltaTime);
         positionPart.setY(y + bullet.getVelocityY() * deltaTime - 0.5f * GRAVITY  * deltaTime * deltaTime);
         bullet.setVelocityY(bullet.getVelocityY() - GRAVITY * deltaTime);
-
-        System.out.println("Bullet position: " + positionPart.getX() + ", " + positionPart.getY());
-    }
-
-    // Clear all active bullets
-    public static void clearBullets() {
-        activeBullets.clear();
     }
 
 }
