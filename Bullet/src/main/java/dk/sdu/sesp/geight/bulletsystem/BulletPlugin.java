@@ -22,25 +22,6 @@ public class BulletPlugin implements IGamePluginService {
 
     }
 
-    public Entity createBullet(float angle, float speed, World world) {
-        Bullet bullet = new Bullet();
-        bullet.setHeight(bullet.getTexture().getHeight());
-        bullet.setWidth(bullet.getTexture().getWidth());
-        bullet.setActive(true);
-
-        // Calculate velocity based on angle and speed
-        float radians = (float) Math.toRadians(angle);
-        Vector2D velocity = new Vector2D((float) (speed * Math.cos(radians)), (float) (speed * Math.sin(radians)));
-        bullet.setVelocity(velocity);
-//        float vx = (float) (speed * Math.cos(radians));
-//        float vy = (float) (speed * Math.sin(radians));
-
-        world.addEntity(bullet);
-        BulletControlSystem.addBullet(bullet);
-
-        return bullet;
-    }
-
     @Override
     public void stop(GameData gameData, World world, SpriteBatch batch) {
 

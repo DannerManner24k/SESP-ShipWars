@@ -2,17 +2,17 @@ package du.sdu.sesp.geight.common.bullet;
 
 
 import dk.sdu.sesp.geight.common.data.Entity;
+import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 
 public class Bullet extends Entity {
     private int damage;
     private float speed;
-    private boolean isActive;
+    private boolean active = true;
     private float strength;
     private float velocityX;
     private float velocityY;
     private Vector2D velocity;
     private static final float GRAVITY = -9.81f; // Gravity effect
-
 
     public void update(float deltaTime) {
 
@@ -34,11 +34,11 @@ public class Bullet extends Entity {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
     public float getStrength() {
@@ -50,7 +50,10 @@ public class Bullet extends Entity {
     }
 
     public void setVelocity(Vector2D velocity) {
+        this.velocity = velocity;
     }
     public Vector2D getVelocity() {return this.velocity;}
+
+
 
 }

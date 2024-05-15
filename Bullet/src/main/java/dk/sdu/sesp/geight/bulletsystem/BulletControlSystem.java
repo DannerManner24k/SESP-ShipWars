@@ -18,41 +18,42 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 public class BulletControlSystem implements IEntityProcessingService, BulletSPI {
-    private static List<Bullet> activeBullets = new ArrayList<>();
 
+    private static final float GRAVITY = 9.81f;
+    private static final float MAX_VELOCITY = 600 / 4.0f;
+    private static final float TIME_SCALE = 1000000f;
+    private static final float dt = 1/60f;
     @Override
     public void process(GameData gameData, World world) {
-        for (Entity bullet : world.getEntities(Bullet.class)) {
-            CanonPart canonPart = bullet.getPart(CanonPart.class);
+        for (Entity entity : world.getEntities(Bullet.class)) {
+            Bullet bullet = (Bullet) entity;
+            updateBullet(bullet);
 
-            //canonPart.process(gameData, bullet);
-
-            setShape(bullet);
-
-            updateBullets((Bullet) bullet, gameData.getDelta());
-            //System.out.println("Bullet position: " + canonPart.getX() + ", " + canonPart.getY());
+            PositionPart positionPart = entity.getPart(PositionPart.class);
+            //System.out.println(gameData.getDelta());
+            //System.out.println("Bullet position: " + positionPart.getX() + ", " + positionPart.getY());
         }
     }
 
     @Override
-    public Entity createBullet(Entity entity, GameData gameData) {
-        System.out.println("Creating bullet");
-        CanonPart canonPart = entity.getPart(CanonPart.class);
+    public Entity createBullet(Entity shooter, GameData gameData) {
+        CanonPart canonPart = shooter.getPart(CanonPart.class);
 
         float x = canonPart.getX();
         float y = canonPart.getY();
         float radians = canonPart.getRadian();
-        System.out.println("Canon radians: " + radians);
 
-        Entity bullet = new Bullet();
-
+        Bullet bullet = new Bullet();
         bullet.add(new PositionPart(x, y, radians));
-        bullet.add(new CanonPart(x, y, radians));
-        ((Bullet) bullet).setStrength(50);
-        //bullet.add(new MovingPart(0, 5000000, speed, 5));
 
-        float [] shapeX = new float[2];
-        float [] shapeY = new float[2];
+        // Initialize the bullet with a strength and angle
+        int strength = 50; // Example strength value, this can be set dynamically
+        float angle = (float) Math.toDegrees(radians);
+
+        initializeBullet(bullet, strength, angle);
+
+        float[] shapeX = new float[2];
+        float[] shapeY = new float[2];
 
         bullet.setShapeX(shapeX);
         bullet.setShapeY(shapeY);
@@ -61,14 +62,16 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     }
 
     private void setShape(Entity entity) {
-        float[] shapex = entity.getShapeX();
-        float[] shapey = entity.getShapeY();
         PositionPart positionPart = entity.getPart(PositionPart.class);
         float x = positionPart.getX();
         float y = positionPart.getY();
 
         CanonPart canonPart = entity.getPart(CanonPart.class);
         float radians = canonPart.getRadian();
+
+        /*
+        float[] shapex = entity.getShapeX();
+        float[] shapey = entity.getShapeY();
 
         shapex[0] = x;
         shapey[0] = y;
@@ -78,40 +81,55 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
-    }
 
-    // Add a new bullet to the list
-    public static void addBullet(Bullet bullet) {
-        activeBullets.add(bullet);
-        System.out.println("Bullet added: " + bullet);
+         */
     }
 
     // Update each bullet's position and remove inactive ones
-    public static void updateBullets(Bullet bullet, float deltaTime) {
+    public void updateBullet(Bullet bullet) {
+        /*if (bullet == null || !bullet.isActive()) {
+            return;
+        }
+
+         */
+
         PositionPart positionPart = bullet.getPart(PositionPart.class);
-        float x = positionPart.getX();
-        float y = positionPart.getY();
+        Vector2D velocity = bullet.getVelocity();
 
-        float initialVelocity = 10 * bullet.getStrength();
+        if (positionPart == null || velocity == null) {
+            return;
+        }
 
-        CanonPart canonPart = bullet.getPart(CanonPart.class);
-        float radians = canonPart.getRadian();
+        // Update position based on velocity and deltaTime
+        positionPart.setX(positionPart.getX() + velocity.getX() * dt);
+        positionPart.setY(positionPart.getY() + velocity.getY() * dt);
 
-        bullet.setVelocityX(initialVelocity * (float)Math.cos(radians));
-        bullet.setVelocityY(initialVelocity * (float)Math.sin(radians));
+        // Update velocity based on gravity
+        velocity.setY(velocity.getY() - GRAVITY * dt);
 
-        float GRAVITY = 9.8f;
+        // Check if the bullet has hit the ground or gone out of bounds
+        /*if (positionPart.getY() <= 0 || positionPart.getX() < 0 || positionPart.getX() > 800) {
+            bullet.setActive(false); // Mark the bullet as inactive
+        }
 
-        positionPart.setX(x + bullet.getVelocityX() * deltaTime);
-        positionPart.setY(y + bullet.getVelocityY() * deltaTime - 0.5f * GRAVITY  * deltaTime * deltaTime);
-        bullet.setVelocityY(bullet.getVelocityY() - GRAVITY * deltaTime);
-
-        System.out.println("Bullet position: " + positionPart.getX() + ", " + positionPart.getY());
+         */
     }
 
-    // Clear all active bullets
-    public static void clearBullets() {
-        activeBullets.clear();
+    // Initialize the bullet with initial velocity based on strength and angle
+    public void initializeBullet(Bullet bullet, int strength, float angle) {
+        float initialVelocity = (strength / 100.0f) * MAX_VELOCITY;
+        float radianAngle = (float) Math.toRadians(angle);
+
+        float velocityX = (float) (initialVelocity * Math.cos(radianAngle));
+        float velocityY = (float) (initialVelocity * Math.sin(radianAngle));
+
+        Vector2D velocity = bullet.getVelocity();
+        if (velocity == null) {
+            velocity = new Vector2D(velocityX, velocityY);
+            bullet.setVelocity(velocity);
+        } else {
+            velocity.set(velocityX, velocityY);
+        }
     }
 
 }
