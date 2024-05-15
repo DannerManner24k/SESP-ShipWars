@@ -21,7 +21,6 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
 
     private static final float GRAVITY = 9.81f;
     private static final float MAX_VELOCITY = 600 / 4.0f;
-    private static final float TIME_SCALE = 1000000f;
     private static final float dt = 1/60f;
     @Override
     public void process(GameData gameData, World world) {
