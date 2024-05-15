@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 import dk.sdu.sesp.geight.common.map.Map;
 import dk.sdu.sesp.geight.common.map.Water;
 import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
@@ -178,8 +179,11 @@ public class GameScreen implements ApplicationListener {
         }
         for (Entity entity : world.getEntities()){
             if (entity instanceof Bullet){
+                PositionPart positionPart = entity.getPart(PositionPart.class);
                 sr.begin(ShapeRenderer.ShapeType.Filled);
                 sr.setColor(Color.BLACK);
+                sr.circle(positionPart.getX(), positionPart.getY(), 3);
+                /*
                 float[] shapeX = entity.getShapeX();
                 float[] shapeY = entity.getShapeY();
                 for (int i = 0, j = shapeX.length - 1;
@@ -188,6 +192,8 @@ public class GameScreen implements ApplicationListener {
 
                     sr.line(shapeX[i], shapeY[i], shapeX[j], shapeY[j]);
                 }
+
+                 */
                 sr.end();
             }
         }
