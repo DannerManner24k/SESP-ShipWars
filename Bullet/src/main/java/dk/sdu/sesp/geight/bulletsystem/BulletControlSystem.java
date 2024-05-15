@@ -23,54 +23,37 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     @Override
     public void process(GameData gameData, World world) {
         for (Entity bullet : world.getEntities(Bullet.class)) {
-            PositionPart positionPart = bullet.getPart(PositionPart.class);
+            CanonPart canonPart = bullet.getPart(CanonPart.class);
 
-            float x = positionPart.getX();
-            float y = positionPart.getY();
+            canonPart.process(gameData, bullet);
 
-            float speed = ((Bullet) bullet).getSpeed();
-            float radians = positionPart.getRadians();
+            setShape(bullet);
 
-            double changeX = Math.cos(radians);
-            double changeY = Math.sin(Math.toRadians(radians));
-
-            positionPart.setX(x + (float) changeX * speed);
-            positionPart.setY(y + (float) changeY * speed);
-
-            /*
-            Vector2D velocity = new Vector2D((float) (speed * Math.cos(radians)), (float) (speed * Math.sin(radians)));
-
-            ((Bullet) bullet).setVelocity(velocity);
-            positionPart.setX(x + velocity.getX());
-            positionPart.setY(y + velocity.getY());
-
-             */
+            System.out.println("Bullet position: " + canonPart.getX() + ", " + canonPart.getY());
         }
     }
 
     @Override
     public Entity createBullet(Entity entity, GameData gameData) {
         System.out.println("Creating bullet");
-        CanonPart shooterPos = entity.getPart(CanonPart.class);
+        CanonPart canonPart = entity.getPart(CanonPart.class);
 
-        float x = shooterPos.getX();
-        float y = shooterPos.getY();
-        float radians = shooterPos.getRadian();
-        float dt = gameData.getDelta();
-        float speed = 350;
+        float x = canonPart.getX();
+        float y = canonPart.getY();
+        float radians = canonPart.getRadian();
 
         Entity bullet = new Bullet();
-        bullet.setRadius(2);
 
-        float bx = (float) cos(radians) * entity.getRadius() * bullet.getRadius();
-        float by = (float) sin(radians) * entity.getRadius() * bullet.getRadius();
+        //float bx = (float) cos(radians) * entity.getRadius() * bullet.getRadius();
+        //float by = (float) sin(radians) * entity.getRadius() * bullet.getRadius();
 
-        bullet.add(new PositionPart(bx + x, by + y, radians));
+        bullet.add(new PositionPart(x, y, radians));
+        bullet.add(new CanonPart(x, y, radians));
         //bullet.add(new MovingPart(0, 5000000, speed, 5));
 
-        float [] shapeX = new float[3];
-        float [] shapeY = new float[3];
-
+        float [] shapeX = new float[2];
+        float [] shapeY = new float[2];
+        /*
         shapeX[0] = x;
         shapeY[0] = y;
 
@@ -80,10 +63,30 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         shapeX[2] = x;
         shapeY[2] = y;
 
+         */
+
         bullet.setShapeX(shapeX);
         bullet.setShapeY(shapeY);
 
         return bullet;
+    }
+
+    private void setShape(Entity entity) {
+        float[] shapex = entity.getShapeX();
+        float[] shapey = entity.getShapeY();
+        CanonPart canonPart = entity.getPart(CanonPart.class);
+        float x = canonPart.getX();
+        float y = canonPart.getY();
+        float radians = canonPart.getRadian();
+
+        shapex[0] = x;
+        shapey[0] = y;
+
+        shapex[1] = (float) (x + radians);
+        shapey[1] = (float) (y + radians);
+
+        entity.setShapeX(shapex);
+        entity.setShapeY(shapey);
     }
 
     // Add a new bullet to the list

@@ -182,12 +182,11 @@ public class GameScreen implements ApplicationListener {
                 sr.setColor(Color.BLACK);
                 float[] shapeX = entity.getShapeX();
                 float[] shapeY = entity.getShapeY();
-                for (int i = 1; i < shapeX.length - 1; i++) {
-                    float x1 = shapeX[0], y1 = shapeY[0]; // always the first vertex
-                    float x2 = shapeX[i], y2 = shapeY[i]; // current vertex
-                    float x3 = shapeX[i + 1], y3 = shapeY[i + 1]; // next vertex
+                for (int i = 0, j = shapeX.length - 1;
+                     i < shapeX.length;
+                     j = i++) {
 
-                    sr.triangle(x1, y1, x2, y2, x3, y3);
+                    sr.line(shapeX[i], shapeY[i], shapeX[j], shapeY[j]);
                 }
                 sr.end();
             }
