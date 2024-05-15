@@ -1,12 +1,15 @@
 package du.sdu.sesp.geight.common.bullet;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import dk.sdu.sesp.geight.common.data.Entity;
 
 public class Bullet extends Entity {
     private int damage;
     private float speed;
     private boolean isActive;
+    private float strength;
+    private float velocityX;
+    private float velocityY;
     private Vector2D velocity;
     private static final float GRAVITY = -9.81f; // Gravity effect
 
@@ -36,6 +39,14 @@ public class Bullet extends Entity {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public float getStrength() {
+        return strength;
+    }
+
+    public void setStrength(float strength) {
+        this.strength = strength;
     }
 
     public void setVelocity(Vector2D velocity) {
