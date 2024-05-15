@@ -81,24 +81,5 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     }
 
 
-    // Update each bullet's position and remove inactive ones
-    public static void updateBullets(Bullet bullet, float deltaTime) {
-        PositionPart positionPart = bullet.getPart(PositionPart.class);
-        float x = positionPart.getX();
-        float y = positionPart.getY();
-
-        float initialVelocity = 10 * bullet.getStrength();
-        CanonPart canonPart = bullet.getPart(Bullet.class);
-        float radians = canonPart.getRadian();
-
-        bullet.setVelocityX(initialVelocity * (float)Math.cos(radians));
-        bullet.setVelocityY(initialVelocity * (float)Math.sin(radians));
-
-        float GRAVITY = 9.8f;
-
-        positionPart.setX(x + bullet.getVelocityX() * deltaTime);
-        positionPart.setY(y + bullet.getVelocityY() * deltaTime - 0.5f * GRAVITY  * deltaTime * deltaTime);
-        bullet.setVelocityY(bullet.getVelocityY() - GRAVITY * deltaTime);
-    }
 
 }
