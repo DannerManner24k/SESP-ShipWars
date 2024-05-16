@@ -45,8 +45,9 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         Bullet bullet = new Bullet();
         bullet.add(new PositionPart(x, y, radians));
 
-        // Initialize the bullet with a strength and angle
-        int strength = 50; // Example strength value, this can be set dynamically
+        int strength = 50;
+        bullet.setStrength(strength);
+
         float angle = (float) Math.toDegrees(radians);
 
         initializeBullet(bullet, strength, angle);
@@ -115,7 +116,7 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     }
 
     // Initialize the bullet with initial velocity based on strength and angle
-    public void initializeBullet(Bullet bullet, int strength, float angle) {
+    private void initializeBullet(Bullet bullet, int strength, float angle) {
         float initialVelocity = (strength / 100.0f) * MAX_VELOCITY;
         float radianAngle = (float) Math.toRadians(angle);
 
@@ -130,5 +131,22 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
             velocity.set(velocityX, velocityY);
         }
     }
+
+    public void initializeBullet(Bullet bullet, int strength, float angle, float angleOffset) {
+        float initialVelocity = (strength / 100.0f) * MAX_VELOCITY;
+        float radianAngle = (float) Math.toRadians(angle + angleOffset);
+
+        float velocityX = (float) (initialVelocity * Math.cos(radianAngle));
+        float velocityY = (float) (initialVelocity * Math.sin(radianAngle));
+
+        Vector2D velocity = bullet.getVelocity();
+        if (velocity == null) {
+            velocity = new Vector2D(velocityX, velocityY);
+            bullet.setVelocity(velocity);
+        } else {
+            velocity.set(velocityX, velocityY);
+        }
+    }
+
 
 }

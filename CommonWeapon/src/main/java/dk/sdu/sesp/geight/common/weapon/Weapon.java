@@ -6,6 +6,7 @@ import du.sdu.sesp.geight.common.bullet.Bullet;
 public abstract class Weapon extends Entity {
     private Bullet bullet;
     private int damage;
+    private boolean active;
 
     public Bullet getBullet() {
         return bullet;
@@ -22,4 +23,21 @@ public abstract class Weapon extends Entity {
     public void setDamage(int damage) {
         this.damage = damage;
     }
+
+    public Weapon() {
+        this.active = false;
+    }
+
+    public void activate() {
+        this.active = true;
+    }
+
+    public void deactivate() {
+        this.active = false;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
 }
