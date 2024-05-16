@@ -52,6 +52,7 @@ public class World {
                 r.add(e);
             }
         }
+        return r;
     }
 
     public IWeapon[] getWeapons() {

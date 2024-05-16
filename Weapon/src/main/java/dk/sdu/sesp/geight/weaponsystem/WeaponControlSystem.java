@@ -18,7 +18,7 @@ public class WeaponControlSystem implements IEntityProcessingService {
     private boolean hasFiredThisTurn = false;
     private InventoryPart inventory;
 
-    public WeaponControlSystem(InventoryPart inventory) {
+    public WeaponControlSystem() {
         this.inventory = inventory;
     }
 
