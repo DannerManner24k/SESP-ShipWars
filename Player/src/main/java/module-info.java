@@ -7,8 +7,8 @@ module Player {
     requires com.badlogic.gdx;
     requires Common;
     requires CommonBullet;
+    requires CommonWeapon;
     uses Character;
-    uses du.sdu.sesp.geight.common.bullet.BulletSPI;
     provides IGamePluginService with dk.sdu.sesp.geight.playersystem.PlayerPlugin;
     provides IEntityProcessingService with dk.sdu.sesp.geight.playersystem.PlayerControlSystem;
 }

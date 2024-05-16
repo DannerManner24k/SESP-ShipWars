@@ -1,8 +1,5 @@
 package dk.sdu.sesp.geight.common.data;
 
-import dk.sdu.sesp.geight.common.data.entityparts.IWeapon;
-import dk.sdu.sesp.geight.common.data.entityparts.InventoryPart;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -45,17 +42,4 @@ public class World {
         return entityMap.get(ID);
     }
 
-    public List<Entity> getEntities(Class<InventoryPart> inventoryPartClass){
-        List<Entity> r = new ArrayList<>();
-        for (Entity e : getEntities()) {
-            if (inventoryPartClass.equals(e.getClass())) {
-                r.add(e);
-            }
-        }
-        return r;
-    }
-
-    public IWeapon[] getWeapons() {
-        return new IWeapon[0];
-    }
 }

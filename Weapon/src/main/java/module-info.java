@@ -7,5 +7,7 @@ module Weapon {
     requires com.badlogic.gdx;
     requires CommonBullet;
     requires CommonWeapon;
+    requires Character;
+    requires Player;
     provides IGamePluginService with dk.sdu.sesp.geight.weaponsystem.WeaponPlugin;
 }

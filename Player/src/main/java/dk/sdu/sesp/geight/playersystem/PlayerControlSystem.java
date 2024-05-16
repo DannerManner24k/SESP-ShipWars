@@ -9,6 +9,11 @@ import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
 import dk.sdu.sesp.geight.common.data.entityparts.MovingPart;
 import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
+import dk.sdu.sesp.geight.common.weapon.BurstCanon;
+import dk.sdu.sesp.geight.common.weapon.DefaultCanon;
+import dk.sdu.sesp.geight.common.weapon.MissileCanon;
+import dk.sdu.sesp.geight.common.weapon.Weapon;
+import du.sdu.sesp.geight.common.bullet.Bullet;
 import du.sdu.sesp.geight.common.bullet.BulletSPI;
 
 import java.util.Collection;
@@ -18,8 +23,13 @@ import static java.util.stream.Collectors.toList;
 
 public class PlayerControlSystem implements IEntityProcessingService {
 
-    Entity player;
+    private Weapon[] weapons;
 
+    public PlayerControlSystem(){
+        weapons = new Weapon[]{new DefaultCanon(), new BurstCanon(), new MissileCanon()};
+    }
+
+    @Override
     public void process(GameData gameData, World world) {
         for (Entity player : world.getEntities(Player.class)) {
             PositionPart positionPart = player.getPart(PositionPart.class);
@@ -37,21 +47,20 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             updateShape(player);
 
-            if (gameData.getKeys().isPressed(GameKeys.SPACE)){
-                float canonRadian = canonPart.getRadian();
-                float[] lastShotX = new float[2];
-                float[] lastShotY = new float[2];
-                for (int i = 0; i < 2; i++) {
-                    int length = i * 15;
-                    lastShotX[i] = (float) (canonPart.getX() + (25 + length) * Math.cos(canonRadian));
-                    lastShotY[i] = (float) ( canonPart.getY() + (25 + length) * Math.sin(canonRadian));
-                }
-                canonPart.setLastShotX(lastShotX);
-                canonPart.setLastShotY(lastShotY);
+            if (gameData.getKeys().isPressed(GameKeys.NUM1)){
+                System.out.println("NUM1");
+                canonPart.setCurrentWeaponIndex(0);
+            } else if (gameData.getKeys().isPressed(GameKeys.NUM2)){
+                System.out.println("NUM2");
+                canonPart.setCurrentWeaponIndex(1);
+            } else if (gameData.getKeys().isPressed(GameKeys.NUM3)){
+                System.out.println("NUM3");
+                canonPart.setCurrentWeaponIndex(2);
+            }
 
-                for (BulletSPI bullet : getBulletSPIs()) {
-                    world.addEntity(bullet.createBullet(player, gameData));
-                }
+            if (gameData.getKeys().isPressed(GameKeys.SPACE)){
+                System.out.println("SPACE");
+                weapons[canonPart.getCurrentWeaponIndex()].shoot(gameData, world, player);
             }
         }
     }
@@ -134,7 +143,4 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     }
 
-    private Collection<? extends BulletSPI> getBulletSPIs() {
-        return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
-    }
 }
