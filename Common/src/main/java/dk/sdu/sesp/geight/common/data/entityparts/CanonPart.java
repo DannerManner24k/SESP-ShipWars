@@ -11,12 +11,71 @@ public class CanonPart implements EntityPart{
     protected float y;
     protected float radian;
 
+    protected float[] currentShotX;
+    protected float[] currentShotY;
+
+    protected float[] lastShotX;
+    protected float[] lastShotY;
+
+
+    public float[] getCurrentShotX() {
+        return currentShotX;
+    }
+    public float getCurrentShotX(int index) {
+        return currentShotX[index];
+    }
+
+    public void setCurrentShotX(float[] currentShotX) {
+        this.currentShotX = currentShotX;
+    }
+
+    public float[] getCurrentShotY() {
+        return currentShotY;
+    }
+
+    public float getCurrentShotY(int index) {
+        return currentShotY[index];
+    }
+
+    public void setCurrentShotY(float[] currentShotY) {
+        this.currentShotY = currentShotY;
+    }
+
+    public float[] getLastShotX() {
+        return lastShotX;
+    }
+
+    public float getLastShotX(int index) {
+        return lastShotX[index];
+    }
+
+    public void setLastShotX(float[] lastShotX) {
+        this.lastShotX = lastShotX;
+    }
+
+    public float[] getLastShotY() {
+        return lastShotY;
+    }
+
+    public float getLastShotY(int index) {
+        return lastShotY[index];
+    }
+
+    public void setLastShotY(float[] lastShotY) {
+        this.lastShotY = lastShotY;
+    }
+
     public CanonPart(float x, float y, float radiansCanon) {
         this.radian = radiansCanon;
         this.x = x;
-        this.y = y-1;
-
+        this.y = y;
+        this.currentShotX = new float[2];
+        this.currentShotY = new float[2];
+        this.lastShotX = new float[2];
+        this.lastShotY = new float[2];
     }
+
+
 
     public float getX() {
         return x;
@@ -55,6 +114,7 @@ public class CanonPart implements EntityPart{
     }
 
     public void setRadian(float radian) {
+        //System.out.println("Canon radian updated to: " + radian);
         this.radian = radian;
     }
 

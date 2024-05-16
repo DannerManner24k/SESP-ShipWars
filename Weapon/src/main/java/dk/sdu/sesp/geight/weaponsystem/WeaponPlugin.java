@@ -7,7 +7,9 @@ import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.data.entityparts.IWeapon;
 import dk.sdu.sesp.geight.common.data.entityparts.InventoryPart;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
+import dk.sdu.sesp.geight.common.weapon.BurstCanon;
 import dk.sdu.sesp.geight.common.weapon.Weapon;
+import du.sdu.sesp.geight.common.bullet.Bullet;
 
 import static dk.sdu.sesp.geight.weaponsystem.WeaponControlSystem.registerWeaponType;
 

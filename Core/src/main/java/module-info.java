@@ -4,6 +4,7 @@ module Core {
     requires CommonMap;
     requires Enemy;
     requires Player;
+    requires CommonBullet;
     uses dk.sdu.sesp.geight.common.services.IGamePluginService;
     uses dk.sdu.sesp.geight.common.services.IEntityProcessingService;
     uses dk.sdu.sesp.geight.common.services.IPostEntityProcessingService;

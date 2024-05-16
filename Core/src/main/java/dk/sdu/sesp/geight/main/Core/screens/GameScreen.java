@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 import dk.sdu.sesp.geight.common.map.Map;
 import dk.sdu.sesp.geight.common.map.Water;
 import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
@@ -24,6 +25,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.sesp.geight.main.GameEngine.GameLogic;
 import dk.sdu.sesp.geight.main.managers.GameInputProcessor;
 import dk.sdu.sesp.geight.main.managers.TurnManager;
+import du.sdu.sesp.geight.common.bullet.Bullet;
 
 
 import java.util.ArrayList;
@@ -45,6 +47,7 @@ public class GameScreen implements ApplicationListener {
     private SpriteBatch batch;
     private Stage stage;
     private ShapeRenderer sr;
+
 
 
     @Override
@@ -84,7 +87,7 @@ public class GameScreen implements ApplicationListener {
     public void render() {
 
         // clear screen to black
-        Gdx.gl.glClearColor(255, 255, 255, 1);
+        Gdx.gl.glClearColor(255,255,255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         gameData.setDelta(Gdx.graphics.getDeltaTime());
@@ -111,7 +114,6 @@ public class GameScreen implements ApplicationListener {
     private void draw() {
         cam.update();
         batch.setProjectionMatrix(cam.combined);
-
         for (Entity entity : world.getEntities()) {
             if (entity instanceof Water) {
                 sr.begin(ShapeRenderer.ShapeType.Filled);
@@ -172,15 +174,51 @@ public class GameScreen implements ApplicationListener {
                     sr.triangle(x1, y1, x2, y2, x3, y3);
                 }
 
+                sr.line(canonPart.getCurrentShotX(0), canonPart.getCurrentShotY(0), canonPart.getCurrentShotX(1), canonPart.getCurrentShotY(1));
 
+                drawDottedLine(sr, canonPart.getLastShotX(0), canonPart.getLastShotY(0), canonPart.getLastShotX(1), canonPart.getLastShotY(1), 2, 1);
 
                 sr.end();
             }
+        }
+        for (Entity entity : world.getEntities()){
+            if (entity instanceof Bullet){
+                PositionPart positionPart = entity.getPart(PositionPart.class);
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                sr.setColor(Color.BLACK);
+                sr.circle(positionPart.getX(), positionPart.getY(), 3);
+                /*
+                float[] shapeX = entity.getShapeX();
+                float[] shapeY = entity.getShapeY();
+                for (int i = 0, j = shapeX.length - 1;
+                     i < shapeX.length;
+                     j = i++) {
 
+                    sr.line(shapeX[i], shapeY[i], shapeX[j], shapeY[j]);
+                }
+
+                 */
+                sr.end();
+            }
         }
     }
 
+    private void drawDottedLine(ShapeRenderer renderer, float x1, float y1, float x2, float y2, float segmentLength, float gapLength) {
+        float totalLength = (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+        float numSegments = totalLength / (segmentLength + gapLength);
 
+        float dx = (x2 - x1) / numSegments;
+        float dy = (y2 - y1) / numSegments;
+
+        for (int i = 0; i < numSegments; i++) {
+            float startX = x1 + i * (dx + dx * gapLength / segmentLength);
+            float startY = y1 + i * (dy + dy * gapLength / segmentLength);
+            float endX = startX + dx;
+            float endY = startY + dy;
+
+            renderer.line(startX, startY, endX, endY);
+        }
+    }
 
     @Override
     public void resize(int width, int height) {

@@ -105,11 +105,13 @@ public class Entity implements Serializable {
     }
 
 
-    public void update(float deltaTime) {
+    /*public void update(float deltaTime) {
         for (int i = 0; i < shapeX.length; i++) {
             shapeX[i] += velocityX * deltaTime;
             shapeY[i] += velocityY * deltaTime;
         }
     }
+
+     */
 
 }

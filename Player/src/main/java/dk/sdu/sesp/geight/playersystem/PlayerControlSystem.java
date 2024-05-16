@@ -9,6 +9,12 @@ import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
 import dk.sdu.sesp.geight.common.data.entityparts.MovingPart;
 import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
+import du.sdu.sesp.geight.common.bullet.BulletSPI;
+
+import java.util.Collection;
+import java.util.ServiceLoader;
+
+import static java.util.stream.Collectors.toList;
 
 public class PlayerControlSystem implements IEntityProcessingService {
 
@@ -30,6 +36,23 @@ public class PlayerControlSystem implements IEntityProcessingService {
             canonPart.process(gameData, player);
 
             updateShape(player);
+
+            if (gameData.getKeys().isPressed(GameKeys.SPACE)){
+                float canonRadian = canonPart.getRadian();
+                float[] lastShotX = new float[2];
+                float[] lastShotY = new float[2];
+                for (int i = 0; i < 2; i++) {
+                    int length = i * 15;
+                    lastShotX[i] = (float) (canonPart.getX() + (25 + length) * Math.cos(canonRadian));
+                    lastShotY[i] = (float) ( canonPart.getY() + (25 + length) * Math.sin(canonRadian));
+                }
+                canonPart.setLastShotX(lastShotX);
+                canonPart.setLastShotY(lastShotY);
+
+                for (BulletSPI bullet : getBulletSPIs()) {
+                    world.addEntity(bullet.createBullet(player, gameData));
+                }
+            }
         }
     }
 
@@ -98,6 +121,20 @@ public class PlayerControlSystem implements IEntityProcessingService {
         // Assign calculated vertices back to the cannon part
         canonPart.setShapeX(shapeCanonX);
         canonPart.setShapeY(shapeCanonY);
+
+        float[] currentX = canonPart.getCurrentShotX();
+        float[] currentY = canonPart.getCurrentShotY();
+        for (int i = 0; i < 2; i++) {
+            int length = i * 25;
+            currentX[i] = (float) (canonPart.getX() + (25 + length) * Math.cos(radians));
+            currentY[i] = (float) ( canonPart.getY() + (25 + length) * Math.sin(radians));
+        }
+        canonPart.setCurrentShotX(currentX);
+        canonPart.setCurrentShotY(currentY);
+
     }
 
+    private Collection<? extends BulletSPI> getBulletSPIs() {
+        return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
 }

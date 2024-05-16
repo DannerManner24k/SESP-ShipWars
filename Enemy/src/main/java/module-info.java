@@ -3,6 +3,7 @@ import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 
 module Enemy {
     exports dk.sdu.sesp.geight.enemysystem;
+    exports dk.sdu.sesp.geight.enemysystem.ai;
     requires Common;
     requires com.badlogic.gdx;
     requires Character;

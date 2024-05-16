@@ -3,85 +3,105 @@ package dk.sdu.sesp.geight.bulletsystem;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
-import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
+import dk.sdu.sesp.geight.common.data.entityparts.*;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import du.sdu.sesp.geight.common.bullet.Bullet;
+import du.sdu.sesp.geight.common.bullet.BulletSPI;
+import du.sdu.sesp.geight.common.bullet.Vector2D;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BulletControlSystem implements IEntityProcessingService {
-    private static List<Bullet> activeBullets = new ArrayList<>();
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
+public class BulletControlSystem implements IEntityProcessingService, BulletSPI {
+    private static final float GRAVITY = 9.81f*2;
+    private static final float MAX_VELOCITY = 600 / 3.0f;
     @Override
     public void process(GameData gameData, World world) {
-        List<Entity> toRemove = new ArrayList<>();
         for (Entity entity : world.getEntities(Bullet.class)) {
-            Bullet bullet = (Bullet) entity;
-            bullet.update(gameData.getDelta());
-
-            if (!bullet.isActive()) {
-                toRemove.add(bullet);
-            } else {
-                updateBullets(bullet);
+            Bullet bullet = (Bullet) entity; // Casting Bullet entity to a Bullet
+            PositionPart positionPart = bullet.getPart(PositionPart.class);
+            /*TimerPart timerPart = bullet.getPart(TimerPart.class);
+            if (timerPart.getExpiration() < 0) {
+                world.removeEntity(bullet);
             }
-        }
-        for (Entity entity : toRemove) {
-            world.removeEntity(entity);
+            timerPart.process(gameData, bullet);
+
+             */
+            positionPart.process(gameData, bullet);
+
+            updateBullet(bullet, gameData);
         }
     }
 
-    // Add a new bullet to the list
-    public static void addBullet(Bullet bullet) {
-        activeBullets.add(bullet);
-        System.out.println("Bullet added: " + bullet);
+    @Override
+    public Entity createBullet(Entity entity, GameData gameData) {
+        CanonPart canonPart = entity.getPart(CanonPart.class);
+        float x = canonPart.getX();
+        float y = canonPart.getY();
+        float radians = canonPart.getRadian();
+
+        Bullet bullet = new Bullet();
+        bullet.setRadius(2);
+
+        float bx = (float) cos(radians) * bullet.getRadius() * 8;
+        float by = (float) sin(radians) * bullet.getRadius() * 8;
+
+        bullet.add(new PositionPart(bx + x, by + y, radians));
+        //bullet.add(new LifePart(1));
+        //bullet.add(new TimerPart(1));
+
+        float vel = 100;
+        float angle = (float) Math.toDegrees(radians);
+
+        initializeBullet(bullet, vel, angle);
+
+
+
+        bullet.setShapeX(new float[2]);
+        bullet.setShapeY(new float[2]);
+
+        return bullet;
     }
+
 
     // Update each bullet's position and remove inactive ones
-    public static void updateBullets(Entity entity) {
-        float[] shapex = new float[4];
-        float[] shapey = new float[4];
-        PositionPart positionPart = entity.getPart(PositionPart.class);
-        float x = positionPart.getX();
-        float y = positionPart.getY();
-        float radians = positionPart.getRadians();
+    public void updateBullet(Bullet bullet, GameData gameData) {
+        float dt = gameData.getDelta()*2;
+        PositionPart positionPart = bullet.getPart(PositionPart.class);
+        Vector2D velocity = bullet.getVelocity();
 
-        shapex[0] = x + (float) Math.cos(radians) * 4;
-        shapey[0] = y + (float) Math.sin(radians) * 4;
+        if (positionPart == null || velocity == null) {
+            return;
+        }
 
-        shapex[1] = x + (float) Math.cos(radians + Math.PI / 2) * 4;
-        shapey[1] = y + (float) Math.sin(radians + Math.PI / 2) * 4;
 
-        shapex[2] = x + (float) Math.cos(radians + Math.PI) * 4;
-        shapey[2] = y + (float) Math.sin(radians + Math.PI) * 4;
+        // Update position based on velocity and deltaTime
+        positionPart.setX(positionPart.getX() + velocity.getX() * dt);
+        positionPart.setY(positionPart.getY() + velocity.getY() * dt);
 
-        shapex[3] = x + (float) Math.cos(radians - Math.PI / 2) * 4;
-        shapey[3] = y + (float) Math.sin(radians - Math.PI / 2) * 4;
+        // Update velocity based on gravity
+        velocity.setY(velocity.getY() - GRAVITY * dt);
 
-        entity.setShapeX(shapex);
-        entity.setShapeY(shapey);
     }
 
+    // Initialize the bullet with initial velocity based on strength and angle
+    public void initializeBullet(Bullet bullet, float vel, float angle) {
+        float initialVelocity = (vel / 150.0f) * MAX_VELOCITY;
+        float radianAngle = (float) Math.toRadians(angle);
 
-    // Clear all active bullets
-    public static void clearBullets() {
-        activeBullets.clear();
-    }
+        float velocityX = (float) (initialVelocity * Math.cos(radianAngle));
+        float velocityY = (float) (initialVelocity * Math.sin(radianAngle));
 
-    // Check collisions between bullets and entities (e.g., players or enemies)
-    public static void checkCollisions(List<Entity> entities) {
-        for (Bullet bullet : activeBullets) {
-            for (Entity entity : entities) {
-                /*
-                // Example collision detection logic
-                if (bullet.getPosition().dst(entity.getPosition()) < bullet.getWidth()) {
-                    System.out.println("Bullet hit an entity!");
-                }
-
-                 */
-            }
+        Vector2D velocity = bullet.getVelocity();
+        if (velocity == null) {
+            velocity = new Vector2D(velocityX, velocityY);
+            bullet.setVelocity(velocity);
+        } else {
+            velocity.set(velocityX, velocityY);
         }
     }
 
 }
-

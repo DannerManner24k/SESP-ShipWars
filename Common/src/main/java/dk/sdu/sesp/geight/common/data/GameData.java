@@ -14,9 +14,6 @@ public class GameData {
         return keys;
     }
     public float getDelta() {
-        long currentTime = System.nanoTime();
-        float delta = (currentTime - lastUpdateTime) / 1_000_000_000.0f;  // Convert nanoseconds to seconds
-        lastUpdateTime = currentTime;  // Update lastUpdateTime to the current time
         return delta;
     }
 
