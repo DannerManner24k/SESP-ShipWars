@@ -24,13 +24,9 @@ import static java.util.stream.Collectors.toList;
 public class PlayerControlSystem implements IEntityProcessingService {
 
     private Weapon[] weapons;
-    private int currentWeaponIndex =0;
 
     public PlayerControlSystem(){
-        weapons = new Weapon[3];
-        weapons[0] = new DefaultCanon();
-        weapons[1] = new BurstCanon();
-        weapons[2] = new MissileCanon();
+        weapons = new Weapon[]{new DefaultCanon(), new BurstCanon(), new MissileCanon()};
     }
 
     @Override
@@ -51,20 +47,20 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             updateShape(player);
 
-            if (gameData.getKeys().isPressed(GameKeys.SPACE)){
-                System.out.println("SPACE");
-                weapons[currentWeaponIndex].shoot(gameData, world, player);
-            }
-
             if (gameData.getKeys().isPressed(GameKeys.NUM1)){
                 System.out.println("NUM1");
-                currentWeaponIndex = 0;
+                canonPart.setCurrentWeaponIndex(0);
             } else if (gameData.getKeys().isPressed(GameKeys.NUM2)){
                 System.out.println("NUM2");
-                currentWeaponIndex = 1;
+                canonPart.setCurrentWeaponIndex(1);
             } else if (gameData.getKeys().isPressed(GameKeys.NUM3)){
                 System.out.println("NUM3");
-               currentWeaponIndex = 2;
+                canonPart.setCurrentWeaponIndex(2);
+            }
+
+            if (gameData.getKeys().isPressed(GameKeys.SPACE)){
+                System.out.println("SPACE");
+                weapons[canonPart.getCurrentWeaponIndex()].shoot(gameData, world, player);
             }
         }
     }

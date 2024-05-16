@@ -8,13 +8,22 @@ import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
 import dk.sdu.sesp.geight.common.data.entityparts.MovingPart;
 import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
+import dk.sdu.sesp.geight.common.weapon.BurstCanon;
+import dk.sdu.sesp.geight.common.weapon.DefaultCanon;
+import dk.sdu.sesp.geight.common.weapon.MissileCanon;
+import dk.sdu.sesp.geight.common.weapon.Weapon;
 
 public class EnemyControlSystem implements IEntityProcessingService {
+
+    private Weapon[] weapons;
+
+    public EnemyControlSystem(){
+        weapons = new Weapon[]{new DefaultCanon(), new BurstCanon(), new MissileCanon()};
+    }
     @Override
     public void process(GameData gameData, World world) {
         for (Entity enemy : world.getEntities(Enemy.class)) {
             PositionPart positionPart = enemy.getPart(PositionPart.class);
-            //MovingPart movingPart = enemy.getPart(MovingPart.class);
             LifePart lifePart = enemy.getPart(LifePart.class);
             CanonPart canonPart = enemy.getPart(CanonPart.class);
 

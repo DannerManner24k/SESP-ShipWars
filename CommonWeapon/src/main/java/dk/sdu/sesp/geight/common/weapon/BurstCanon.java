@@ -15,6 +15,7 @@ public class BurstCanon extends Weapon{
     public void shoot(GameData gameData, World world, Entity shooter) {
         for (BulletSPI bulletSPI : getBulletSPIs()) {
             world.addEntity(bulletSPI.createBullet(shooter, gameData));
+            System.out.println("BurstCanon shoot");
         }
     }
 

@@ -17,6 +17,8 @@ public class CanonPart implements EntityPart{
     protected float[] lastShotX;
     protected float[] lastShotY;
 
+    private int currentWeaponIndex = 0;
+
 
     public float[] getCurrentShotX() {
         return currentShotX;
@@ -118,6 +120,13 @@ public class CanonPart implements EntityPart{
         this.radian = radian;
     }
 
+    public int getCurrentWeaponIndex() {
+        return currentWeaponIndex;
+    }
+
+    public void setCurrentWeaponIndex(int currentWeaponIndex) {
+        this.currentWeaponIndex = currentWeaponIndex;
+    }
 
     @Override
     public void process(GameData gameData, Entity entity) {
