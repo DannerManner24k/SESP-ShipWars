@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class Entity implements Serializable {
+public class Entity implements Serializable {
     private final UUID ID = UUID.randomUUID();
     protected float width;
     protected float height;

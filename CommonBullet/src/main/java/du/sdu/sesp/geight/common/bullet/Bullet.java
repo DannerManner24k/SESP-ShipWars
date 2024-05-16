@@ -20,6 +20,8 @@ public class Bullet extends Entity {
         super.update(deltaTime);
     }
 
+
+
     public int getDamage() {
         return damage;
     }
