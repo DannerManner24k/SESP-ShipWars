@@ -36,9 +36,6 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
             positionPart.process(gameData, bullet);
 
             setShape(bullet);
-
-            updateBullets((Bullet) bullet, gameData.getDelta());
-            //System.out.println("Bullet position: " + canonPart.getX() + ", " + canonPart.getY());
         }
     }
 
