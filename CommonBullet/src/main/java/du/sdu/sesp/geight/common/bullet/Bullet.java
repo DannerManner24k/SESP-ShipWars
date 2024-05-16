@@ -21,6 +21,8 @@ public class Bullet extends Entity {
 
     }
 
+
+
     public int getDamage() {
         return damage;
     }

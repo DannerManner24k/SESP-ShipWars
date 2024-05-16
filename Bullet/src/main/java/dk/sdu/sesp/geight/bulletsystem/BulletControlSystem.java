@@ -21,42 +21,57 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
 
     private static final float GRAVITY = 9.81f;
     private static final float MAX_VELOCITY = 600 / 4.0f;
-    private static final float dt = 1/60f;
+
     @Override
     public void process(GameData gameData, World world) {
         for (Entity entity : world.getEntities(Bullet.class)) {
-            Bullet bullet = (Bullet) entity;
-            updateBullet(bullet);
+            Bullet bullet = (Bullet) entity; // Casting Bullet entity to a Bullet
+            PositionPart positionPart = bullet.getPart(PositionPart.class);
+            /*TimerPart timerPart = bullet.getPart(TimerPart.class);
+            if (timerPart.getExpiration() < 0) {
+                world.removeEntity(bullet);
+            }
+            timerPart.process(gameData, bullet);
 
-            PositionPart positionPart = entity.getPart(PositionPart.class);
-            //System.out.println(gameData.getDelta());
-            //System.out.println("Bullet position: " + positionPart.getX() + ", " + positionPart.getY());
+             */
+
+            positionPart.process(gameData, bullet);
+
+            updateBullet(bullet, gameData);
         }
     }
 
     @Override
-    public Entity createBullet(Entity shooter, GameData gameData) {
-        CanonPart canonPart = shooter.getPart(CanonPart.class);
-
+    public Entity createBullet(Entity entity, GameData gameData) {
+        CanonPart canonPart = entity.getPart(CanonPart.class);
         float x = canonPart.getX();
         float y = canonPart.getY();
         float radians = canonPart.getRadian();
 
         Bullet bullet = new Bullet();
-        bullet.add(new PositionPart(x, y, radians));
+        bullet.setRadius(2);
 
+        float bx = (float) cos(radians) * bullet.getRadius() * 8;
+        float by = (float) sin(radians) * bullet.getRadius() * 8;
+
+        bullet.add(new PositionPart(bx + x, by + y, radians));
+        //bullet.add(new LifePart(1));
+        //bullet.add(new TimerPart(1));
+
+        float vel = 100;
         int strength = 50;
         bullet.setStrength(strength);
 
         float angle = (float) Math.toDegrees(radians);
 
-        initializeBullet(bullet, strength, angle);
+        initializeBullet(bullet, vel, angle);
 
         float[] shapeX = new float[2];
         float[] shapeY = new float[2];
 
-        bullet.setShapeX(shapeX);
-        bullet.setShapeY(shapeY);
+
+        bullet.setShapeX(new float[2]);
+        bullet.setShapeY(new float[2]);
 
         return bullet;
     }
@@ -86,13 +101,8 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     }
 
     // Update each bullet's position and remove inactive ones
-    public void updateBullet(Bullet bullet) {
-        /*if (bullet == null || !bullet.isActive()) {
-            return;
-        }
-
-         */
-
+    public void updateBullet(Bullet bullet, GameData gameData) {
+        float dt = gameData.getDelta()*2;
         PositionPart positionPart = bullet.getPart(PositionPart.class);
         Vector2D velocity = bullet.getVelocity();
 
@@ -107,17 +117,11 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         // Update velocity based on gravity
         velocity.setY(velocity.getY() - GRAVITY * dt);
 
-        // Check if the bullet has hit the ground or gone out of bounds
-        /*if (positionPart.getY() <= 0 || positionPart.getX() < 0 || positionPart.getX() > 800) {
-            bullet.setActive(false); // Mark the bullet as inactive
-        }
-
-         */
     }
 
     // Initialize the bullet with initial velocity based on strength and angle
-    private void initializeBullet(Bullet bullet, int strength, float angle) {
-        float initialVelocity = (strength / 100.0f) * MAX_VELOCITY;
+    public void initializeBullet(Bullet bullet, float vel, float angle) {
+        float initialVelocity = (vel / 150.0f) * MAX_VELOCITY;
         float radianAngle = (float) Math.toRadians(angle);
 
         float velocityX = (float) (initialVelocity * Math.cos(radianAngle));
@@ -131,22 +135,5 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
             velocity.set(velocityX, velocityY);
         }
     }
-
-    public void initializeBullet(Bullet bullet, int strength, float angle, float angleOffset) {
-        float initialVelocity = (strength / 100.0f) * MAX_VELOCITY;
-        float radianAngle = (float) Math.toRadians(angle + angleOffset);
-
-        float velocityX = (float) (initialVelocity * Math.cos(radianAngle));
-        float velocityY = (float) (initialVelocity * Math.sin(radianAngle));
-
-        Vector2D velocity = bullet.getVelocity();
-        if (velocity == null) {
-            velocity = new Vector2D(velocityX, velocityY);
-            bullet.setVelocity(velocity);
-        } else {
-            velocity.set(velocityX, velocityY);
-        }
-    }
-
 
 }

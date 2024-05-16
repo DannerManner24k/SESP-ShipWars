@@ -174,6 +174,10 @@ public class GameScreen implements ApplicationListener {
                     sr.triangle(x1, y1, x2, y2, x3, y3);
                 }
 
+                sr.line(canonPart.getCurrentShotX(0), canonPart.getCurrentShotY(0), canonPart.getCurrentShotX(1), canonPart.getCurrentShotY(1));
+
+                drawDottedLine(sr, canonPart.getLastShotX(0), canonPart.getLastShotY(0), canonPart.getLastShotX(1), canonPart.getLastShotY(1), 2, 1);
+
                 sr.end();
             }
         }
@@ -196,6 +200,23 @@ public class GameScreen implements ApplicationListener {
                  */
                 sr.end();
             }
+        }
+    }
+
+    private void drawDottedLine(ShapeRenderer renderer, float x1, float y1, float x2, float y2, float segmentLength, float gapLength) {
+        float totalLength = (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+        float numSegments = totalLength / (segmentLength + gapLength);
+
+        float dx = (x2 - x1) / numSegments;
+        float dy = (y2 - y1) / numSegments;
+
+        for (int i = 0; i < numSegments; i++) {
+            float startX = x1 + i * (dx + dx * gapLength / segmentLength);
+            float startY = y1 + i * (dy + dy * gapLength / segmentLength);
+            float endX = startX + dx;
+            float endY = startY + dy;
+
+            renderer.line(startX, startY, endX, endY);
         }
     }
 

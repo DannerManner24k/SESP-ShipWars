@@ -132,6 +132,20 @@ public class PlayerControlSystem implements IEntityProcessingService {
         // Assign calculated vertices back to the cannon part
         canonPart.setShapeX(shapeCanonX);
         canonPart.setShapeY(shapeCanonY);
+
+        float[] currentX = canonPart.getCurrentShotX();
+        float[] currentY = canonPart.getCurrentShotY();
+        for (int i = 0; i < 2; i++) {
+            int length = i * 25;
+            currentX[i] = (float) (canonPart.getX() + (25 + length) * Math.cos(radians));
+            currentY[i] = (float) ( canonPart.getY() + (25 + length) * Math.sin(radians));
+        }
+        canonPart.setCurrentShotX(currentX);
+        canonPart.setCurrentShotY(currentY);
+
     }
 
+    private Collection<? extends BulletSPI> getBulletSPIs() {
+        return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
 }

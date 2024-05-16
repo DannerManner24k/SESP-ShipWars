@@ -40,5 +40,4 @@ public abstract class Weapon extends Entity {
     public boolean isActive() {
         return active;
     }
-
 }
