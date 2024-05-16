@@ -97,6 +97,8 @@ public class MovingPart
             canonPart.setRadian(radians);
         }
 
+        /*
+
         PositionPart positionPart = entity.getPart(PositionPart.class);
         float x = positionPart.getX();
         float y = positionPart.getY();
@@ -127,6 +129,8 @@ public class MovingPart
         positionPart.setY(y);
 
         positionPart.setRadians(radians);
+
+         */
 
     }
 }

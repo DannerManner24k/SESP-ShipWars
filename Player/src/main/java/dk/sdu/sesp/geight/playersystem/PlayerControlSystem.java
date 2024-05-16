@@ -38,7 +38,17 @@ public class PlayerControlSystem implements IEntityProcessingService {
             updateShape(player);
 
             if (gameData.getKeys().isPressed(GameKeys.SPACE)){
-                System.out.println("SPACE");
+                float canonRadian = canonPart.getRadian();
+                float[] lastShotX = new float[2];
+                float[] lastShotY = new float[2];
+                for (int i = 0; i < 2; i++) {
+                    int length = i * 20;
+                    lastShotX[i] = (float) (canonPart.getX() + (25 + length) * Math.cos(canonRadian));
+                    lastShotY[i] = (float) ( canonPart.getY() + (25 + length) * Math.sin(canonRadian));
+                }
+                canonPart.setLastShotX(lastShotX);
+                canonPart.setLastShotY(lastShotY);
+
                 for (BulletSPI bullet : getBulletSPIs()) {
                     world.addEntity(bullet.createBullet(player, gameData));
                 }
