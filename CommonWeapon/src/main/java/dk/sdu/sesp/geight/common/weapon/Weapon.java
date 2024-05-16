@@ -8,6 +8,7 @@ public abstract class Weapon extends Entity {
     private int damage;
     private boolean active;
 
+
     public Bullet getBullet() {
         return bullet;
     }

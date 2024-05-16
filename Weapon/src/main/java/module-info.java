@@ -3,4 +3,6 @@ module Weapon {
     requires com.badlogic.gdx;
     requires CommonBullet;
     requires CommonWeapon;
+    requires Character;
+    requires Player;
 }

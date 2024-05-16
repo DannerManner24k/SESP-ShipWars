@@ -44,35 +44,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             if (gameData.getKeys().isPressed(GameKeys.SPACE)){
                 System.out.println("SPACE");
-                if (((Player)player).getActiveWeapon() instanceof DefaultCanon){
-                    for (BulletSPI bullet : getBulletSPIs()) {
-                        world.addEntity(bullet.createBullet(player, gameData));
-                    }
-
-                } else if (((Player)player).getActiveWeapon() instanceof BurstCanon){
-                    for (int i = 0; i < 3; i++) {
-                        int finalI = i;
-                        for (BulletSPI bullet : getBulletSPIs()) {
-
-                            CanonPart burstCanonPart = player.getPart(CanonPart.class);
-                            float radians = burstCanonPart.getRadian();
-
-                            float angleOffset = (float)((finalI - 1) * Math.cos(radians));
-                            burstCanonPart.setRadian(radians + angleOffset);
-
-                            world.addEntity(bullet.createBullet(player, gameData));
-                        }
-                    }
-
-
-                } else if (((Player)player).getActiveWeapon() instanceof MissileCanon){
-                    for (BulletSPI bullet : getBulletSPIs()) {
-                        world.addEntity(bullet.createBullet(player, gameData));
-                    }
-
-                } else {
-                    System.out.println("No weapon selected");
-                }
+                ((Player) player).setActivateShot(true);
             }
 
             if (gameData.getKeys().isPressed(GameKeys.NUM1)){
@@ -162,7 +134,4 @@ public class PlayerControlSystem implements IEntityProcessingService {
         canonPart.setShapeY(shapeCanonY);
     }
 
-    private Collection<? extends BulletSPI> getBulletSPIs() {
-        return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
-    }
 }

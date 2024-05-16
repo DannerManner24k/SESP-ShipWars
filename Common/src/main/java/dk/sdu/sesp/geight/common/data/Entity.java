@@ -104,14 +104,4 @@ public abstract class Entity implements Serializable {
         this.velocityY = velocityY;
     }
 
-
-    /*public void update(float deltaTime) {
-        for (int i = 0; i < shapeX.length; i++) {
-            shapeX[i] += velocityX * deltaTime;
-            shapeY[i] += velocityY * deltaTime;
-        }
-    }
-
-     */
-
 }

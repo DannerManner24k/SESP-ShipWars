@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class Character extends Entity{
     private List<Weapon> inventory;
     private Weapon activeWeapon;
+    boolean activateShot = false;
 
     public Character() {
         this.inventory = new ArrayList<>();
@@ -42,4 +43,11 @@ public abstract class Character extends Entity{
         return activeWeapon;
     }
 
+    public boolean getActivateShot() {
+        return activateShot;
+    }
+
+    public void setActivateShot(boolean activateShot) {
+        this.activateShot = activateShot;
+    }
 }
