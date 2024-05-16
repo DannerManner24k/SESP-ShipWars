@@ -1,33 +1,42 @@
 package dk.sdu.sesp.geight.common.weapon;
 
 import dk.sdu.sesp.geight.common.data.Entity;
-import dk.sdu.sesp.geight.common.data.GameData;
-import dk.sdu.sesp.geight.common.data.entityparts.IWeapon;
 import du.sdu.sesp.geight.common.bullet.Bullet;
 
-public class Weapon implements IWeapon {
-    private String name;
+public abstract class Weapon extends Entity {
     private Bullet bullet;
+    private int damage;
+    private boolean active;
 
-    public Weapon(String name) {
-        this.name = name;
+    public Bullet getBullet() {
+        return bullet;
     }
 
-    public String getName() {
-        return name;
+    public void setBullet(Bullet bullet) {
+        this.bullet = bullet;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getDamage() {
+        return damage;
     }
 
-    @Override
-    public boolean hasStatusEffect() {
-        return false;
+    public void setDamage(int damage) {
+        this.damage = damage;
     }
 
-    @Override
-    public void processStatusEffect(GameData gameData) {
+    public Weapon() {
+        this.active = false;
+    }
 
+    public void activate() {
+        this.active = true;
+    }
+
+    public void deactivate() {
+        this.active = false;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }

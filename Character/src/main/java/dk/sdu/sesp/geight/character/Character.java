@@ -3,17 +3,43 @@ package dk.sdu.sesp.geight.character;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.weapon.Weapon;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 public abstract class Character extends Entity{
-    protected Weapon weapon;
+    private List<Weapon> inventory;
+    private Weapon activeWeapon;
 
-
-    public Weapon getWeapon() {
-        return weapon;
+    public Character() {
+        this.inventory = new ArrayList<>();
+        this.activeWeapon = null;
     }
 
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
+    public void addWeapon(Weapon weapon) {
+        if (inventory.size() < 3) {
+            inventory.add(weapon);
+        }
     }
 
+    public void activateWeapon(Class<? extends Weapon> weaponClass) {
+        for (Weapon weapon : inventory) {
+            if (weaponClass.isInstance(weapon)) {
+                if (activeWeapon != null) {
+                    activeWeapon.deactivate();
+                }
+                activeWeapon = weapon;
+                activeWeapon.activate();
+                return;
+            }
+        }
+        System.out.println("Weapon not found in inventory: " + weaponClass.getSimpleName());
+    }
+
+    public Weapon getActiveWeapon() {
+        return activeWeapon;
+    }
 
 }

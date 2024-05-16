@@ -9,6 +9,11 @@ import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
 import dk.sdu.sesp.geight.common.data.entityparts.MovingPart;
 import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
+import dk.sdu.sesp.geight.common.weapon.BurstCanon;
+import dk.sdu.sesp.geight.common.weapon.DefaultCanon;
+import dk.sdu.sesp.geight.common.weapon.MissileCanon;
+import dk.sdu.sesp.geight.common.weapon.Weapon;
+import du.sdu.sesp.geight.common.bullet.Bullet;
 import du.sdu.sesp.geight.common.bullet.BulletSPI;
 
 import java.util.Collection;
@@ -38,6 +43,36 @@ public class PlayerControlSystem implements IEntityProcessingService {
             updateShape(player);
 
             if (gameData.getKeys().isPressed(GameKeys.SPACE)){
+                System.out.println("SPACE");
+                if (((Player)player).getActiveWeapon() instanceof DefaultCanon){
+                    for (BulletSPI bullet : getBulletSPIs()) {
+                        world.addEntity(bullet.createBullet(player, gameData));
+                    }
+
+                } else if (((Player)player).getActiveWeapon() instanceof BurstCanon){
+                    for (int i = 0; i < 3; i++) {
+                        int finalI = i;
+                        for (BulletSPI bullet : getBulletSPIs()) {
+
+                            CanonPart burstCanonPart = player.getPart(CanonPart.class);
+                            float radians = burstCanonPart.getRadian();
+
+                            float angleOffset = (float)((finalI - 1) * Math.cos(radians));
+                            burstCanonPart.setRadian(radians + angleOffset);
+
+                            world.addEntity(bullet.createBullet(player, gameData));
+                        }
+                    }
+
+
+                } else if (((Player)player).getActiveWeapon() instanceof MissileCanon){
+                    for (BulletSPI bullet : getBulletSPIs()) {
+                        world.addEntity(bullet.createBullet(player, gameData));
+                    }
+
+                } else {
+                    System.out.println("No weapon selected");
+                }
                 float canonRadian = canonPart.getRadian();
                 float[] lastShotX = new float[2];
                 float[] lastShotY = new float[2];
@@ -48,10 +83,24 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 }
                 canonPart.setLastShotX(lastShotX);
                 canonPart.setLastShotY(lastShotY);
+            }
 
-                for (BulletSPI bullet : getBulletSPIs()) {
-                    world.addEntity(bullet.createBullet(player, gameData));
-                }
+            if (gameData.getKeys().isPressed(GameKeys.NUM1)){
+                System.out.println("NUM1");
+                ((Player)player).activateWeapon(DefaultCanon.class);
+                System.out.println(((Player)player).getActiveWeapon());
+            }
+
+            if (gameData.getKeys().isPressed(GameKeys.NUM2)){
+                System.out.println("NUM2");
+                ((Player)player).activateWeapon(BurstCanon.class);
+                System.out.println(((Player)player).getActiveWeapon());
+            }
+
+            if (gameData.getKeys().isPressed(GameKeys.NUM3)){
+                System.out.println("NUM3");
+                ((Player)player).activateWeapon(MissileCanon.class);
+                System.out.println(((Player)player).getActiveWeapon());
             }
         }
     }
