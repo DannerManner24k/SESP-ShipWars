@@ -23,8 +23,17 @@ import static java.util.stream.Collectors.toList;
 
 public class PlayerControlSystem implements IEntityProcessingService {
 
-    Entity player;
+    private Weapon[] weapons;
+    private int currentWeaponIndex =0;
 
+    public PlayerControlSystem(){
+        weapons = new Weapon[3];
+        weapons[0] = new DefaultCanon();
+        weapons[1] = new BurstCanon();
+        weapons[2] = new MissileCanon();
+    }
+
+    @Override
     public void process(GameData gameData, World world) {
         for (Entity player : world.getEntities(Player.class)) {
             PositionPart positionPart = player.getPart(PositionPart.class);
@@ -41,29 +50,22 @@ public class PlayerControlSystem implements IEntityProcessingService {
             canonPart.process(gameData, player);
 
             updateShape(player);
-            /*
+
             if (gameData.getKeys().isPressed(GameKeys.SPACE)){
                 System.out.println("SPACE");
-                ((Player) player).setActivateShot(true);
+                weapons[currentWeaponIndex].shoot(gameData, world, player);
             }
 
             if (gameData.getKeys().isPressed(GameKeys.NUM1)){
                 System.out.println("NUM1");
-                ((Player)player).activateWeapon(DefaultCanon.class);
-                System.out.println(((Player)player).getActiveWeapon());
-            }
-
-            if (gameData.getKeys().isPressed(GameKeys.NUM2)){
+                currentWeaponIndex = 0;
+            } else if (gameData.getKeys().isPressed(GameKeys.NUM2)){
                 System.out.println("NUM2");
-                ((Player)player).activateWeapon(BurstCanon.class);
-                System.out.println(((Player)player).getActiveWeapon());
-            }
-
-            if (gameData.getKeys().isPressed(GameKeys.NUM3)){
+                currentWeaponIndex = 1;
+            } else if (gameData.getKeys().isPressed(GameKeys.NUM3)){
                 System.out.println("NUM3");
-                ((Player)player).activateWeapon(MissileCanon.class);
-                System.out.println(((Player)player).getActiveWeapon());
-            }*/
+               currentWeaponIndex = 2;
+            }
         }
     }
 
@@ -145,7 +147,4 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     }
 
-    private Collection<? extends BulletSPI> getBulletSPIs() {
-        return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
-    }
 }
