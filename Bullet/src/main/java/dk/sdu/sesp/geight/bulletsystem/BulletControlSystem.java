@@ -42,7 +42,7 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     }
 
     @Override
-    public Entity createBullet(Entity entity, GameData gameData) {
+    public Entity createBullet(Entity entity, GameData gameData, float strength) {
         CanonPart canonPart = entity.getPart(CanonPart.class);
         float x = canonPart.getX();
         float y = canonPart.getY();
@@ -58,13 +58,12 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         //bullet.add(new LifePart(1));
         //bullet.add(new TimerPart(1));
 
-        float vel = 100;
-        int strength = 50;
+
         bullet.setStrength(strength);
 
         float angle = (float) Math.toDegrees(radians);
 
-        initializeBullet(bullet, vel, angle);
+        initializeBullet(bullet, strength, angle);
 
         float[] shapeX = new float[2];
         float[] shapeY = new float[2];
@@ -120,8 +119,8 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     }
 
     // Initialize the bullet with initial velocity based on strength and angle
-    public void initializeBullet(Bullet bullet, float vel, float angle) {
-        float initialVelocity = (vel / 150.0f) * MAX_VELOCITY;
+    public void initializeBullet(Bullet bullet, float strength, float angle) {
+        float initialVelocity = (strength / 100.0f) * MAX_VELOCITY;
         float radianAngle = (float) Math.toRadians(angle);
 
         float velocityX = (float) (initialVelocity * Math.cos(radianAngle));
