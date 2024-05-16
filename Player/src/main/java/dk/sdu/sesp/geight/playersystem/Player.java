@@ -8,10 +8,4 @@ import dk.sdu.sesp.geight.common.weapon.DefaultCanon;
 import dk.sdu.sesp.geight.common.weapon.MissileCanon;
 
 public class Player extends Character {
-    public Player() {
-        super();
-        addWeapon(new DefaultCanon());
-        addWeapon(new MissileCanon());
-        addWeapon(new BurstCanon());
-    }
 }

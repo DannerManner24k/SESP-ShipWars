@@ -41,7 +41,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
             canonPart.process(gameData, player);
 
             updateShape(player);
-
+            /*
             if (gameData.getKeys().isPressed(GameKeys.SPACE)){
                 System.out.println("SPACE");
                 ((Player) player).setActivateShot(true);
@@ -63,7 +63,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 System.out.println("NUM3");
                 ((Player)player).activateWeapon(MissileCanon.class);
                 System.out.println(((Player)player).getActiveWeapon());
-            }
+            }*/
         }
     }
 
