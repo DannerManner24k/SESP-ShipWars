@@ -43,6 +43,4 @@ public class WeaponPlugin implements IGamePluginService {
     public void stop(GameData gameData, World world, SpriteBatch batch) {
         world.removeEntity(weapon);
     }
-
-
 }
