@@ -1,9 +1,7 @@
 package dk.sdu.sesp.geight.mapsystem;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
@@ -11,11 +9,9 @@ import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.map.Map;
 import dk.sdu.sesp.geight.common.map.Water;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import dk.sdu.sesp.geight.common.map.Water;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 
 import java.util.*;
-
 
 public class MapPlugin implements IGamePluginService {
     private ShapeRenderer shapeRenderer;
@@ -24,11 +20,15 @@ public class MapPlugin implements IGamePluginService {
     private Entity water;
     private Color mountainColor = Color.BROWN;
 
-    private static final int NUM_POINTS = 5; // Number of points to generate
     private static final int MIN_X = 0; // Minimum x coordinate
     private static final int MAX_X = 800; // Maximum x coordinate
     private static final int MIN_Y = 100; // Minimum y coordinate
     private static final int MAX_Y = 500; // Maximum y coordinate
+    private static final double WATER_LEVEL = 150; // Water level
+    private static final int POOL_WIDTH = 100; // Minimum width of the pools
+    private static final int POOL_DEPTH = 70; // Minimum depth of the pools
+    private static final int NUM_EXTREMA = 10; // Number of extrema points
+    private static final int POOL_REGION_WIDTH = 200; // Width of the region for each pool
 
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
@@ -39,76 +39,77 @@ public class MapPlugin implements IGamePluginService {
         System.out.println("X-coordinates where water is taller than the mountain: " + xCoordinates);
     }
 
-    private double[][] generateRandomPoints(){
-        double[][] points = new double[NUM_POINTS][2];
+    private double[][] generateExtremaPoints(int numExtrema, int minX, int maxX, int minY, int maxY, double waterLevel, int poolWidth, int poolDepth) {
+        double[][] extremaPoints = new double[numExtrema][2];
         Random random = new Random();
-        int maxHeight = 500;
-        int numSections = 5;
-        int sectionWidth = MAX_X / numSections;
 
+        // Ensure first and last points are high
+        extremaPoints[0][0] = minX;
+        extremaPoints[0][1] = maxY;
+        extremaPoints[numExtrema - 1][0] = maxX;
+        extremaPoints[numExtrema - 1][1] = maxY;
 
-        /*for(int i = 0; i < NUM_POINTS; i++){
-            double x = random.nextInt(MAX_X - MIN_X + 1) + MIN_X;
-            double y = random.nextInt(maxHeight - MIN_Y + 1) + MIN_Y;
-            points[i][0] = x;
-            points[i][1] = y;
-        }*/
-        for (int sectionIndex = 0; sectionIndex < numSections; sectionIndex++) {
-            // Calculate the range of x-values for the current section
-            int startX = sectionIndex * sectionWidth;
-            int endX = (sectionIndex + 1) * sectionWidth - 1;
+        // Calculate the indices for the pool regions
+        int poolRegionUnits = POOL_REGION_WIDTH / (maxX / numExtrema);
+        int poolWidthUnits = poolWidth / (maxX / numExtrema);
 
-            // Generate points within the current section
-            for (int i = sectionIndex * (NUM_POINTS / numSections); i < (sectionIndex + 1) * (NUM_POINTS / numSections); i++) {
-                double x = random.nextInt(endX - startX + 1) + startX;
-                double y = random.nextInt(maxHeight - MIN_Y + 1) + MIN_Y;
-                if (i == 0) { // Ensure first y-coordinate is lower than the next y-coordinate
-                    y = random.nextInt(maxHeight / 2 - MIN_Y) + MIN_Y;
-                } else if (i == NUM_POINTS - 1) { // Ensure last y-coordinate is lower than the second last y-coordinate
-                    y = random.nextInt((int)points[i-1][1] - MIN_Y) + MIN_Y;
-                } else {
-                    y = random.nextInt(maxHeight - MIN_Y + 1) + MIN_Y;
-                }
-                points[i][0] = x;
-                points[i][1] = y;
+        // Create the first low point pool in the first 200 units
+        int firstLowPointStartIndex = random.nextInt(poolRegionUnits - poolWidthUnits) + 1;
+        int firstLowPointEndIndex = firstLowPointStartIndex + poolWidthUnits;
+
+        // Create the second low point pool in the last 200 units
+        int secondLowPointStartIndex = numExtrema - 2 - random.nextInt(poolRegionUnits - poolWidthUnits);
+        int secondLowPointEndIndex = secondLowPointStartIndex + poolWidthUnits;
+
+        // Set low points for the first pool
+        for (int i = firstLowPointStartIndex; i <= firstLowPointEndIndex; i++) {
+            extremaPoints[i][0] = minX + (maxX - minX) * i / (numExtrema - 1);
+            extremaPoints[i][1] = waterLevel - poolDepth + random.nextDouble() * poolDepth;
+        }
+
+        // Set low points for the second pool
+        for (int i = secondLowPointStartIndex; i <= secondLowPointEndIndex; i++) {
+            extremaPoints[i][0] = minX + (maxX - minX) * i / (numExtrema - 1);
+            extremaPoints[i][1] = waterLevel - poolDepth + random.nextDouble() * poolDepth;
+        }
+
+        // Ensure mountains in the middle
+        int mountainStartIndex = firstLowPointEndIndex + 1;
+        int mountainEndIndex = secondLowPointStartIndex - 1;
+        for (int i = mountainStartIndex; i <= mountainEndIndex; i++) {
+            extremaPoints[i][0] = minX + (maxX - minX) * i / (numExtrema - 1);
+            extremaPoints[i][1] = maxY - random.nextDouble() * (maxY - waterLevel);
+        }
+
+        // Generate the rest of the points
+        for (int i = 1; i < numExtrema - 1; i++) {
+            if ((i < firstLowPointStartIndex || i > firstLowPointEndIndex) &&
+                    (i < secondLowPointStartIndex || i > secondLowPointEndIndex) &&
+                    (i < mountainStartIndex || i > mountainEndIndex)) {
+                extremaPoints[i][0] = minX + (maxX - minX) * i / (numExtrema - 1);
+                extremaPoints[i][1] = minY + random.nextDouble() * (maxY - minY);
             }
         }
-        // Sort the points based on their x-coordinates
-        Arrays.sort(points, Comparator.comparingDouble(a -> a[0]));
 
-        // Ensure the y-coordinate doesn't exceed maxHeight
-        for (int i = 0; i < NUM_POINTS; i++) {
-            points[i][1] = Math.min(points[i][1], maxHeight);
-        }
-
-        // Print the generated points
-        for (int i = 0; i < points.length; i++) {
-            System.out.println(points[i][0] + ", " + points[i][1]);
-        }
-
-        return points;
+        return extremaPoints;
     }
 
     private Entity createMap(GameData gameData, World world) {
-        double[][] points = generateRandomPoints();
+        double[][] extremaPoints = generateExtremaPoints(NUM_EXTREMA, MIN_X, MAX_X, MIN_Y, MAX_Y, WATER_LEVEL, POOL_WIDTH, POOL_DEPTH);
 
         // Convert points to the format used in createMap method
-        double[] coefficients = PolynomialInterpolator.interpolate(points);
+        double[] coefficients = PolynomialInterpolator.interpolate(extremaPoints);
         Map map = new Map(coefficients);
         generateMap(gameData, map, gameData.getDisplayWidth());
         world.addEntity(map);
         return map;
     }
 
-    private Entity createWater(GameData gameData, World world){
-        //Define the water line
-        double waterLevel = 300;
+    private Entity createWater(GameData gameData, World world) {
         double[] waterHeights = new double[gameData.getDisplayWidth()];
-        /*Arrays.fill(waterHeights, waterLevel);
-         */
 
         Water waterMap = new Water(waterHeights);
-        generateWater(gameData, waterMap, gameData.getDisplayWidth(), waterLevel);
+        generateWater(gameData, waterMap, gameData.getDisplayWidth(), WATER_LEVEL);
         world.addEntity(waterMap);
         return waterMap;
     }
@@ -116,19 +117,11 @@ public class MapPlugin implements IGamePluginService {
     private void generateMap(GameData gameData, Map map, int width) {
         double[] coefficients = map.getCoefficients();
         double[] heights = new double[width];
-        Random random = new Random();
-        double waterLevel = 300;
-
-        int lowestPointX = random.nextInt(width / 2) + width / 4; // Ensure the lowest point is not too close to the edges
-        double lowestPointHeight = waterLevel - random.nextDouble() * 50;
 
         for (int x = 0; x < width; x++) {
             double height = 0;
             for (int d = 0; d < coefficients.length; d++) {
                 height += coefficients[d] * Math.pow(x, coefficients.length - 1 - d);
-            }
-            if (x == lowestPointX) {
-                height = Math.min(height, lowestPointHeight);
             }
             heights[x] = height;
         }
@@ -145,21 +138,6 @@ public class MapPlugin implements IGamePluginService {
         water.setHeights(heights);
     }
 
-
-    /*public void render(GameData gameData, World world, SpriteBatch batch){
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        //render mountains
-        shapeRenderer.setColor(mountainColor);
-        for(Entity entity : world.getEntities(Map.class)) {
-            Map map = (Map) entity;
-            double[] heights = map.getHeights();
-            for (int x = 0; x < heights.length - 1; x++){
-                shapeRenderer.rect(x, 0, 1, (float) heights[x]);
-            }
-        }
-        shapeRenderer.end();
-    }*/
     private List<Double> findWaterTallerThanMountain(Map map, Water water) {
         List<Double> xCoordinates = new ArrayList<>();
         double[] mountainHeights = map.getHeights();
@@ -171,7 +149,7 @@ public class MapPlugin implements IGamePluginService {
             double waterHeight = waterHeights[x];
 
             if (waterHeight > mountainHeight) {
-                xCoordinates.add((double)x); // Add the x-coordinate where water is taller than the mountain
+                xCoordinates.add((double) x);
             }
         }
         return xCoordinates;

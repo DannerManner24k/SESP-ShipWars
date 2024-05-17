@@ -13,13 +13,7 @@ import dk.sdu.sesp.geight.common.weapon.BurstCanon;
 import dk.sdu.sesp.geight.common.weapon.DefaultCanon;
 import dk.sdu.sesp.geight.common.weapon.MissileCanon;
 import dk.sdu.sesp.geight.common.weapon.Weapon;
-import du.sdu.sesp.geight.common.bullet.Bullet;
-import du.sdu.sesp.geight.common.bullet.BulletSPI;
 
-import java.util.Collection;
-import java.util.ServiceLoader;
-
-import static java.util.stream.Collectors.toList;
 
 public class PlayerControlSystem implements IEntityProcessingService {
 
