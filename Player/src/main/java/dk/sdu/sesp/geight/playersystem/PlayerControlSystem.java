@@ -123,10 +123,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
         entity.setShapeY(shapey);
 
         // Shape of the Canon
-        // Drawing shape of the canon to face directly to the right.
+        // Drawing shape of the canon to face directly to the right. To apply radians.
         float[] originalX = {0, 0, 20, 20, 0, 0};
         float[] originalY = {0, 3, 3, -3, -3, 0};
-
 
 
         CanonPart canonPart = entity.getPart(CanonPart.class);
@@ -144,25 +143,41 @@ public class PlayerControlSystem implements IEntityProcessingService {
             shapeCanonY[i] = (float) (CanonY + originalX[i] * Math.sin(radians) + originalY[i] * Math.cos(radians));
         }
 
-        // Assign calculated vertices back to the cannon part
         canonPart.setShapeX(shapeCanonX);
         canonPart.setShapeY(shapeCanonY);
+
+        // Shape of charge box
+        float canonChargeLength = 20f;
+        float chargeLength = canonChargeLength * canonPart.getCharge()/100f;
+
+        float[] chargeBoxX = {0, 0, chargeLength, chargeLength};
+        float[] chargeBoxY = {5, 7, 7, 5};
+
+        // Rotated coordinates for the new box shape
+        float[] canonChargeX = new float[chargeBoxX.length];
+        float[] canonChargeY = new float[chargeBoxY.length];
+
+        // Calculate rotated coordinates for the new box
+        for (int i = 0; i < chargeBoxX.length; i++) {
+            canonChargeX[i] = (float) (CanonX + chargeBoxX[i] * Math.cos(radians) - chargeBoxY[i] * Math.sin(radians));
+            canonChargeY[i] = (float) (CanonY + chargeBoxX[i] * Math.sin(radians) + chargeBoxY[i] * Math.cos(radians));
+        }
+
+        canonPart.setChargingShapeX(canonChargeX);
+        canonPart.setChargingShapeY(canonChargeY);
+
+
 
         float[] currentX = canonPart.getCurrentShotX();
         float[] currentY = canonPart.getCurrentShotY();
         for (int i = 0; i < 2; i++) {
-            int length = i * 25;
-            currentX[i] = (float) (canonPart.getX() + (25 + length) * Math.cos(radians));
-            currentY[i] = (float) ( canonPart.getY() + (25 + length) * Math.sin(radians));
+            int lengthCanon = i * 25;
+            currentX[i] = (float) (canonPart.getX() + (25 + lengthCanon) * Math.cos(radians));
+            currentY[i] = (float) ( canonPart.getY() + (25 + lengthCanon) * Math.sin(radians));
         }
+
         canonPart.setCurrentShotX(currentX);
         canonPart.setCurrentShotY(currentY);
-
-        // Charging state
-        float[] ChargingX = {0, 0, 20 , 20, 0, 0};
-        float[] ChargingY = {4,  2, 3, -3, -3, 0};
-
-
     }
 
 }

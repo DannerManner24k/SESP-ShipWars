@@ -1,6 +1,5 @@
 package dk.sdu.sesp.geight.main.Core.screens;
 
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -175,6 +174,21 @@ public class GameScreen implements ApplicationListener {
 
                     sr.triangle(x1, y1, x2, y2, x3, y3);
                 }
+
+                float[] chargingX = canonPart.getChargingShapeX();
+                float[] chargingY = canonPart.getChargingShapeY();
+
+                if(chargingX != null) {
+                    for (int i = 1; i < chargingY.length - 1; i++) {
+                        float x1 = chargingX[0], y1 = chargingY[0]; // always the first vertex
+                        float x2 = chargingX[i], y2 = chargingY[i]; // current vertex
+                        float x3 = chargingX[i + 1], y3 = chargingY[i + 1]; // next vertex
+
+                        sr.triangle(x1, y1, x2, y2, x3, y3);
+                    }
+                }
+
+
 
                 sr.line(canonPart.getCurrentShotX(0), canonPart.getCurrentShotY(0), canonPart.getCurrentShotX(1), canonPart.getCurrentShotY(1));
 

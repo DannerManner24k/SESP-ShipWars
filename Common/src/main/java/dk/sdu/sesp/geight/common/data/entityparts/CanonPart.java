@@ -7,6 +7,10 @@ public class CanonPart implements EntityPart{
 
     protected float[] shapeX;
     protected float[] shapeY;
+
+    protected float[] chargingShapeX;
+    protected float[] chargingShapeY;
+
     protected float x;
     protected float y;
     protected float radian;
@@ -17,15 +21,13 @@ public class CanonPart implements EntityPart{
     protected float[] lastShotX;
     protected float[] lastShotY;
 
-    protected float[] chargingX;
-    protected float[] chargingtY;
 
     private int currentWeaponIndex = 0;
 
     private int charge;
     private boolean chargingUp;
     private boolean isCharging;
-    private int storedCharge;
+
 
     public CanonPart(float x, float y, float radiansCanon) {
         this.radian = radiansCanon;
@@ -120,6 +122,22 @@ public class CanonPart implements EntityPart{
         this.shapeY = shapeY;
     }
 
+    public float[] getChargingShapeX() {
+        return chargingShapeX;
+    }
+
+    public void setChargingShapeX(float[] chargingShapeX) {
+        this.chargingShapeX = chargingShapeX;
+    }
+
+    public float[] getChargingShapeY() {
+        return chargingShapeY;
+    }
+
+    public void setChargingShapeY(float[] chargingShapeY) {
+        this.chargingShapeY = chargingShapeY;
+    }
+
     public float getRadian() {
         return radian;
     }
@@ -160,6 +178,7 @@ public class CanonPart implements EntityPart{
     public void setCharging(boolean charging) {
         isCharging = charging;
     }
+
     public void updateCharge() {
         if (isCharging) {
             if (chargingUp) {
@@ -173,10 +192,10 @@ public class CanonPart implements EntityPart{
                     chargingUp = true;
                 }
             }
-            System.out.println("charge: "+charge);
         }
 
     }
+
     @Override
     public void process(GameData gameData, Entity entity) {
     }
