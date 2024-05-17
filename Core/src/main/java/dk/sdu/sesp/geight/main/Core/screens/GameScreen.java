@@ -83,6 +83,8 @@ public class GameScreen implements ApplicationListener {
         System.out.println("After loading entities");
     }
 
+
+
     @Override
     public void render() {
 
@@ -187,17 +189,6 @@ public class GameScreen implements ApplicationListener {
                 sr.begin(ShapeRenderer.ShapeType.Filled);
                 sr.setColor(Color.BLACK);
                 sr.circle(positionPart.getX(), positionPart.getY(), 3);
-                /*
-                float[] shapeX = entity.getShapeX();
-                float[] shapeY = entity.getShapeY();
-                for (int i = 0, j = shapeX.length - 1;
-                     i < shapeX.length;
-                     j = i++) {
-
-                    sr.line(shapeX[i], shapeY[i], shapeX[j], shapeY[j]);
-                }
-
-                 */
                 sr.end();
             }
         }

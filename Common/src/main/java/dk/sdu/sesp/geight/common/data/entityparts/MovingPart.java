@@ -97,40 +97,7 @@ public class MovingPart
             canonPart.setRadian(radians);
         }
 
-        /*
 
-        PositionPart positionPart = entity.getPart(PositionPart.class);
-        float x = positionPart.getX();
-        float y = positionPart.getY();
-        float radians = positionPart.getRadians();
-
-        // accelerating
-        if (up) {
-            dx += cos(radians) * acceleration * dt;
-            dy += sin(radians) * acceleration * dt;
-        }
-
-        // deccelerating
-        float vec = (float) sqrt(dx * dx + dy * dy);
-        if (vec > 0) {
-            dx -= (dx / vec) * deceleration * dt;
-            dy -= (dy / vec) * deceleration * dt;
-        }
-        if (vec > maxSpeed) {
-            dx = (dx / vec) * maxSpeed;
-            dy = (dy / vec) * maxSpeed;
-        }
-
-        // set position
-        x += dx * dt;
-        y += dy * dt;
-
-        positionPart.setX(x);
-        positionPart.setY(y);
-
-        positionPart.setRadians(radians);
-
-         */
 
     }
 }

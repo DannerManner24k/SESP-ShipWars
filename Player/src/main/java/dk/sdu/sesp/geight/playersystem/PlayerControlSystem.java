@@ -19,6 +19,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     private Weapon[] weapons;
 
+
     public PlayerControlSystem(){
         weapons = new Weapon[]{new DefaultCanon(), new BurstCanon(), new MissileCanon()};
     }
@@ -41,23 +42,44 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             updateShape(player);
 
-            if (gameData.getKeys().isPressed(GameKeys.NUM1)){
+            if (gameData.getKeys().isPressed(GameKeys.NUM1)) {
                 System.out.println("NUM1");
                 canonPart.setCurrentWeaponIndex(0);
-            } else if (gameData.getKeys().isPressed(GameKeys.NUM2)){
+            } else if (gameData.getKeys().isPressed(GameKeys.NUM2)) {
                 System.out.println("NUM2");
                 canonPart.setCurrentWeaponIndex(1);
-            } else if (gameData.getKeys().isPressed(GameKeys.NUM3)){
+            } else if (gameData.getKeys().isPressed(GameKeys.NUM3)) {
                 System.out.println("NUM3");
                 canonPart.setCurrentWeaponIndex(2);
             }
 
-            if (gameData.getKeys().isPressed(GameKeys.SPACE)){
-                float strength = 50;
-                System.out.println("SPACE");
-                weapons[canonPart.getCurrentWeaponIndex()].shoot(gameData, world, player, strength);
+
+            if (gameData.getKeys().isPressed(GameKeys.SPACE)) {
+                canonPart.setCharging(true);
+                System.out.println("SPACE pressed, isCharging: " + canonPart.isCharging());
             }
+            if (gameData.getKeys().isReleased(GameKeys.SPACE)) {
+                float canonRadian = canonPart.getRadian();
+                float[] lastShotX = new float[2];
+                float[] lastShotY = new float[2];
+                for (int i = 0; i < 2; i++) {
+                    int length = i * 15;
+                    lastShotX[i] = (float) (canonPart.getX() + (25 + length) * Math.cos(canonRadian));
+                    lastShotY[i] = (float) ( canonPart.getY() + (25 + length) * Math.sin(canonRadian));
+                }
+                canonPart.setLastShotX(lastShotX);
+                canonPart.setLastShotY(lastShotY);
+                int strength = canonPart.getCharge();
+                System.out.println("SPACE released, charge: " + strength);
+                canonPart.setCharging(false);
+                weapons[canonPart.getCurrentWeaponIndex()].shoot(gameData, world, player, (float) strength);
+                canonPart.setCharge(0); // Reset charge for next cycle
+                canonPart.setChargingUp(true); // Reset direction for next cycle
+            }
+            canonPart.updateCharge();
+
         }
+
     }
 
 
@@ -115,7 +137,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
         float[] shapeCanonX = new float[6];
         float[] shapeCanonY = new float[6];
 
-        // Calculate rotated coordinates
+
         // Calculate rotated coordinates
         for (int i = 0; i < 6; i++) {
             shapeCanonX[i] = (float) (CanonX + originalX[i] * Math.cos(radians) - originalY[i] * Math.sin(radians));
@@ -135,6 +157,11 @@ public class PlayerControlSystem implements IEntityProcessingService {
         }
         canonPart.setCurrentShotX(currentX);
         canonPart.setCurrentShotY(currentY);
+
+        // Charging state
+        float[] ChargingX = {0, 0, 20 , 20, 0, 0};
+        float[] ChargingY = {4,  2, 3, -3, -3, 0};
+
 
     }
 

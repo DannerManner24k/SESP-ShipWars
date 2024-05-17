@@ -17,7 +17,28 @@ public class CanonPart implements EntityPart{
     protected float[] lastShotX;
     protected float[] lastShotY;
 
+    protected float[] chargingX;
+    protected float[] chargingtY;
+
     private int currentWeaponIndex = 0;
+
+    private int charge;
+    private boolean chargingUp;
+    private boolean isCharging;
+    private int storedCharge;
+
+    public CanonPart(float x, float y, float radiansCanon) {
+        this.radian = radiansCanon;
+        this.x = x;
+        this.y = y;
+        this.currentShotX = new float[2];
+        this.currentShotY = new float[2];
+        this.lastShotX = new float[2];
+        this.lastShotY = new float[2];
+        this.charge = 0;
+        this.chargingUp = true;
+        this.isCharging = false;
+    }
 
 
     public float[] getCurrentShotX() {
@@ -66,18 +87,6 @@ public class CanonPart implements EntityPart{
     public void setLastShotY(float[] lastShotY) {
         this.lastShotY = lastShotY;
     }
-
-    public CanonPart(float x, float y, float radiansCanon) {
-        this.radian = radiansCanon;
-        this.x = x;
-        this.y = y;
-        this.currentShotX = new float[2];
-        this.currentShotY = new float[2];
-        this.lastShotX = new float[2];
-        this.lastShotY = new float[2];
-    }
-
-
 
     public float getX() {
         return x;
@@ -128,6 +137,46 @@ public class CanonPart implements EntityPart{
         this.currentWeaponIndex = currentWeaponIndex;
     }
 
+    public int getCharge() {
+        return charge;
+    }
+
+    public void setCharge(int charge) {
+        this.charge = charge;
+    }
+
+    public boolean isChargingUp() {
+        return chargingUp;
+    }
+
+    public void setChargingUp(boolean chargingUp) {
+        this.chargingUp = chargingUp;
+    }
+
+    public boolean isCharging() {
+        return isCharging;
+    }
+
+    public void setCharging(boolean charging) {
+        isCharging = charging;
+    }
+    public void updateCharge() {
+        if (isCharging) {
+            if (chargingUp) {
+                charge++;
+                if (charge >= 100) {
+                    chargingUp = false;
+                }
+            } else {
+                charge--;
+                if (charge <= 0) {
+                    chargingUp = true;
+                }
+            }
+            System.out.println("charge: "+charge);
+        }
+
+    }
     @Override
     public void process(GameData gameData, Entity entity) {
     }

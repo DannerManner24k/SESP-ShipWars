@@ -41,5 +41,9 @@ public class GameKeys {
         return keys[k] && !pkeys[k];
     }
 
+    public boolean isReleased(int k) {
+        return !keys[k] && pkeys[k];
+    }
+
 }
 
