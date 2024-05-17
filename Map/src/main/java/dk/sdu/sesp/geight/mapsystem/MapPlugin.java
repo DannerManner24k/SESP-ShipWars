@@ -114,7 +114,6 @@ public class MapPlugin implements IGamePluginService {
         shapeRenderer.end();
     }
 
-     */
     @Override
     public void stop(GameData gameData, World world, SpriteBatch batch) {
         if (shapeRenderer != null) {
