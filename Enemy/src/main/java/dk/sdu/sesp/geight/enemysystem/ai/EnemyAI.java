@@ -1,6 +1,5 @@
 package dk.sdu.sesp.geight.enemysystem.ai;
 
-import com.badlogic.gdx.scenes.scene2d.Action;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
@@ -10,6 +9,11 @@ import java.util.List;
 
 public class EnemyAI {
     private UtilityCalculator utilityCalculator = new UtilityCalculator();
+    private Entity player;
+
+    public EnemyAI(Entity player) {
+        this.player = player;
+    }
 
     public Action decideNextAction(Entity enemy, GameData gameData, World world) {
         List<Action> possibleActions = generatePossibleActions(enemy, gameData, world);
@@ -28,7 +32,9 @@ public class EnemyAI {
     }
 
     private List<Action> generatePossibleActions(Entity enemy, GameData gameData, World world) {
-        // Generate possible actions based on current game state
-        return new ArrayList<>();
+        List<Action> actions = new ArrayList<>();
+        actions.add(new RotateCanonAction(player));
+        actions.add(new ShootAtPlayerAction());
+        return actions;
     }
 }

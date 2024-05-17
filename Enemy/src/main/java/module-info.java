@@ -8,6 +8,7 @@ module Enemy {
     requires com.badlogic.gdx;
     requires Character;
     requires CommonWeapon;
+    requires Player;
     provides IGamePluginService with dk.sdu.sesp.geight.enemysystem.EnemyPlugin;
     provides IEntityProcessingService with dk.sdu.sesp.geight.enemysystem.EnemyControlSystem;
 }
