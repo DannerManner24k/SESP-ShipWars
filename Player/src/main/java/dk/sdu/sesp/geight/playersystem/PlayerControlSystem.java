@@ -53,8 +53,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
             }
 
             if (gameData.getKeys().isPressed(GameKeys.SPACE)){
+                float strength = 50;
                 System.out.println("SPACE");
-                weapons[canonPart.getCurrentWeaponIndex()].shoot(gameData, world, player);
+                weapons[canonPart.getCurrentWeaponIndex()].shoot(gameData, world, player, strength);
             }
         }
     }

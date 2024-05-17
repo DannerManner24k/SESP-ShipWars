@@ -12,9 +12,9 @@ import static java.util.stream.Collectors.toList;
 
 public class MissileCanon extends Weapon{
     @Override
-    public void shoot(GameData gameData, World world, Entity shooter) {
+    public void shoot(GameData gameData, World world, Entity shooter, float strength) {
         for (BulletSPI bulletSPI : getBulletSPIs()) {
-            world.addEntity(bulletSPI.createBullet(shooter, gameData));
+            world.addEntity(bulletSPI.createBullet(shooter, gameData, strength));
             System.out.println("MissileCanon shoot");
         }
     }
