@@ -26,6 +26,7 @@ public class CanonPart implements EntityPart{
     private boolean chargingUp;
     private boolean isCharging;
     private int storedCharge;
+    private long lastShotTime = 0;
 
     public CanonPart(float x, float y, float radiansCanon) {
         this.radian = radiansCanon;
@@ -74,6 +75,14 @@ public class CanonPart implements EntityPart{
 
     public void setLastShotX(float[] lastShotX) {
         this.lastShotX = lastShotX;
+    }
+
+    public long getLastShotTime() {
+        return lastShotTime;
+    }
+
+    public void setLastShotTime(long lastShotTime) {
+        this.lastShotTime = lastShotTime;
     }
 
     public float[] getLastShotY() {

@@ -4,15 +4,13 @@ public class GameData {
     private float delta;
     private int displayWidth;
     private int displayHeight;
-    //private final GameKeys keys = new GameKeys();
-    private long lastUpdateTime;
-
+    private long lastPlayerFireTime = 0;
     private final GameKeys keys = new GameKeys();
-
 
     public GameKeys getKeys() {
         return keys;
     }
+
     public float getDelta() {
         return delta;
     }
@@ -20,7 +18,6 @@ public class GameData {
     public void setDelta(float delta) {
         this.delta = delta;
     }
-
 
     public void setDisplayWidth(int width) {
         this.displayWidth = width;
@@ -38,6 +35,11 @@ public class GameData {
         return displayHeight;
     }
 
+    public long getLastPlayerFireTime() {
+        return lastPlayerFireTime;
+    }
 
-
+    public void setLastPlayerFireTime(long lastPlayerFireTime) {
+        this.lastPlayerFireTime = lastPlayerFireTime;
+    }
 }
