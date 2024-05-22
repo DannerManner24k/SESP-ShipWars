@@ -3,9 +3,7 @@ package dk.sdu.sesp.geight.bulletsystem;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
-import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
-import dk.sdu.sesp.geight.common.data.entityparts.MovingPart;
-import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
+import dk.sdu.sesp.geight.common.data.entityparts.*;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import du.sdu.sesp.geight.common.bullet.Bullet;
 import du.sdu.sesp.geight.common.bullet.BulletSPI;
@@ -27,13 +25,14 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         for (Entity entity : world.getEntities(Bullet.class)) {
             Bullet bullet = (Bullet) entity; // Casting Bullet entity to a Bullet
             PositionPart positionPart = bullet.getPart(PositionPart.class);
-            /*TimerPart timerPart = bullet.getPart(TimerPart.class);
+
+            TimerPart timerPart = bullet.getPart(TimerPart.class);
             if (timerPart.getExpiration() < 0) {
                 world.removeEntity(bullet);
             }
             timerPart.process(gameData, bullet);
 
-             */
+
 
             positionPart.process(gameData, bullet);
 
@@ -55,8 +54,8 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         float by = (float) sin(radians) * bullet.getRadius() * 8;
 
         bullet.add(new PositionPart(bx + x, by + y, radians));
-        //bullet.add(new LifePart(1));
-        //bullet.add(new TimerPart(1));
+        bullet.add(new LifePart(1));
+        bullet.add(new TimerPart(3));
 
 
         bullet.setStrength(strength);
@@ -83,20 +82,6 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         CanonPart canonPart = entity.getPart(CanonPart.class);
         float radians = canonPart.getRadian();
 
-        /*
-        float[] shapex = entity.getShapeX();
-        float[] shapey = entity.getShapeY();
-
-        shapex[0] = x;
-        shapey[0] = y;
-
-        shapex[1] = (float) (x + radians);
-        shapey[1] = (float) (y + radians);
-
-        entity.setShapeX(shapex);
-        entity.setShapeY(shapey);
-
-         */
     }
 
     // Update each bullet's position and remove inactive ones

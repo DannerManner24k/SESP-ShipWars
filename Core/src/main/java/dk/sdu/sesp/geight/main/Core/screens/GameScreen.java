@@ -206,6 +206,12 @@ public class GameScreen implements ApplicationListener {
                 sr.end();
             }
         }
+
+
+        for (Entity element: world.getEntities()) {
+
+
+        }
     }
 
     private void drawDottedLine(ShapeRenderer renderer, float x1, float y1, float x2, float y2, float segmentLength, float gapLength) {

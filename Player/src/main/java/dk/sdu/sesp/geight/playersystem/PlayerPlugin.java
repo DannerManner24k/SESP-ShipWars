@@ -11,6 +11,9 @@ import dk.sdu.sesp.geight.common.services.IGamePluginService;
 
 public class PlayerPlugin implements IGamePluginService {
     private Entity player;
+    public PlayerPlugin(){
+    }
+
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
         player = createPlayer(gameData, world, batch);

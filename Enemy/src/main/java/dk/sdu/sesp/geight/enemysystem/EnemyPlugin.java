@@ -14,6 +14,10 @@ import java.util.Random;
 
 public class EnemyPlugin implements IGamePluginService {
     private Entity enemy;
+
+    public EnemyPlugin(){
+    }
+
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
         enemy = createEnemy(gameData, world, batch);
@@ -23,8 +27,8 @@ public class EnemyPlugin implements IGamePluginService {
     private Entity createEnemy(GameData gameData, World world, SpriteBatch batch) {
         Entity enemy = new Enemy();
 
-        float x = new Random().nextFloat() * gameData.getDisplayWidth();
-        float y = new Random().nextFloat() * gameData.getDisplayHeight();
+        float x = 200; //new Random().nextFloat() * gameData.getDisplayWidth();
+        float y = 150; //new Random().nextFloat() * gameData.getDisplayHeight();
         float rotationSpeed = 2;
         float radians = 3.1415f / 2;
 
@@ -41,6 +45,6 @@ public class EnemyPlugin implements IGamePluginService {
 
     @Override
     public void stop(GameData gameData, World world, SpriteBatch batch) {
-
+        world.removeEntity(enemy);
     }
 }

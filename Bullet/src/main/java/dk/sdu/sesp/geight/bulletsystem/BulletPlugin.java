@@ -15,6 +15,7 @@ import java.util.List;
 
 public class BulletPlugin implements IGamePluginService {
 
+    private Entity bullet;
 
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
@@ -23,6 +24,10 @@ public class BulletPlugin implements IGamePluginService {
 
     @Override
     public void stop(GameData gameData, World world, SpriteBatch batch) {
-
+        for (Entity e : world.getEntities()) {
+            if (e.getClass() == Bullet.class) {
+                world.removeEntity(e);
+            }
+        }
     }
 }
