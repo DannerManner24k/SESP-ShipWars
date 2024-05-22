@@ -18,7 +18,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
     private Weapon[] weapons;
     private EnemyAI enemyAI;
     private static final long COOLDOWN_PERIOD = 5000; // 5 seconds cooldown
-    private int accuracyLevel = 0; // Default accuracy level (0: least accurate, 4: most accurate)
+    private int accuracyLevel = 4; // Default accuracy level (0: least accurate, 4: most accurate)
 
     public EnemyControlSystem() {
         weapons = new Weapon[]{new DefaultCanon(), new BurstCanon(), new MissileCanon()};
@@ -43,7 +43,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
                 // Recalculate the best shot every time before firing
                 float[] aimData = enemyAI.calculateBestShot(enemy, gameData, world, accuracyLevel);
                 if (aimData != null) {
-                    System.out.println("Enemy: recalculating shot"); // Print statement for recalculating shot
                     handleFiring(gameData, world, enemy, canonPart, aimData);
                     canonPart.setLastShotTime(currentTime); // Reset cooldown
                 }
@@ -111,12 +110,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
     }
 
     private void handleFiring(GameData gameData, World world, Entity enemy, CanonPart canonPart, float[] aimData) {
-        // Print statement for recalculating shot
-        System.out.println("Enemy: recalculating shot");
-
-        // Recalculate shot before firing
-        aimData = enemyAI.calculateBestShot(enemy, gameData, world, accuracyLevel);
-
         canonPart.setRadian(aimData[0]);
         canonPart.setCharge((int) aimData[1]); // aimData[1] now contains the calculated power
         canonPart.setCharging(false);
@@ -135,5 +128,8 @@ public class EnemyControlSystem implements IEntityProcessingService {
         weapons[canonPart.getCurrentWeaponIndex()].shoot(gameData, world, enemy, (float) strength);
         canonPart.setCharge(0); // Reset charge for next cycle
         canonPart.setChargingUp(true); // Reset direction for next cycle
+
+        // Logging firing details
+        System.out.println("EnemyControlSystem: Firing with angle=" + aimData[0] + ", power=" + aimData[1]);
     }
 }

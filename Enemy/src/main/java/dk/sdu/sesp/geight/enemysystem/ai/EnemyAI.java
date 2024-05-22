@@ -14,6 +14,9 @@ public class EnemyAI {
     private static final float MAX_VELOCITY = 600 / 4.0f;
     private final Random random = new Random();
 
+    // Define utility function weights
+    private final UtilityFunction utilityFunction = new UtilityFunction(0.4, 0.3, 0.3);
+
     public float[] calculateBestShot(Entity enemy, GameData gameData, World world, int accuracyLevel) {
         PositionPart enemyPos = enemy.getPart(PositionPart.class);
 
@@ -38,7 +41,12 @@ public class EnemyAI {
                 // Calculate power based on the initial velocity
                 float power = (adjustedVelocity / MAX_VELOCITY) * 100;
 
-                System.out.println("Enemy: recalculating shot"); // Print statement for recalculating shot
+                // Calculate utility for the shot
+                double utility = utilityFunction.calculateUtility(distance, adjustedAngle, power);
+
+                // Print statement for recalculating shot and utility
+                System.out.println("EnemyAI: recalculating shot with utility: " + utility);
+                System.out.println("EnemyAI: distance=" + distance + ", angle=" + adjustedAngle + ", power=" + power);
 
                 return new float[]{adjustedAngle, power};
             }
