@@ -2,9 +2,10 @@ package du.sdu.sesp.geight.common.bullet;
 
 
 import dk.sdu.sesp.geight.common.data.Entity;
-import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 
 public class Bullet extends Entity {
+    private Entity owner;
+    private Entity weapon;
     private int damage;
     private float speed;
     private boolean active = true;
@@ -21,7 +22,21 @@ public class Bullet extends Entity {
 
     }
 
+    public Entity getOwner() {
+        return owner;
+    }
 
+    public void setOwner(Entity owner) {
+        this.owner = owner;
+    }
+
+    public Entity getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Entity weapon) {
+        this.weapon = weapon;
+    }
 
     public int getDamage() {
         return damage;

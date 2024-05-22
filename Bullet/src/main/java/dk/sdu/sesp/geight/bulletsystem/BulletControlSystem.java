@@ -10,6 +10,7 @@ import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import du.sdu.sesp.geight.common.bullet.Bullet;
 import du.sdu.sesp.geight.common.bullet.BulletSPI;
 import du.sdu.sesp.geight.common.bullet.Vector2D;
+import dk.sdu.sesp.geight.common.weapon.BurstCanon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
             timerPart.process(gameData, bullet);
 
              */
-
+            setBurstCanonShape(bullet);
             positionPart.process(gameData, bullet);
 
             updateBullet(bullet, gameData);
@@ -64,13 +65,6 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         float angle = (float) Math.toDegrees(radians);
 
         initializeBullet(bullet, strength, angle);
-
-        float[] shapeX = new float[2];
-        float[] shapeY = new float[2];
-
-
-        bullet.setShapeX(new float[2]);
-        bullet.setShapeY(new float[2]);
 
         return bullet;
     }
@@ -135,4 +129,27 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         }
     }
 
+    public void setBurstCanonShape (Bullet bullet) {
+        if (bullet.getWeapon() instanceof BurstCanon) {
+            PositionPart positionPart = bullet.getPart(PositionPart.class);
+            float x = positionPart.getX();
+            float y = positionPart.getY();
+
+            Entity owner = ((Bullet) bullet).getOwner();
+            CanonPart canonPart = owner.getPart(CanonPart.class);
+            float radians = canonPart.getRadian();
+
+            float[] shapeX = new float[2];
+            float[] shapeY = new float[2];
+
+            shapeX[0] = x;
+            shapeY[0] = y;
+
+            shapeX[1] = (float) (x + Math.cos(radians) * 10);
+            shapeY[1] = (float) (y + Math.sin(radians) * 10);
+
+            bullet.setShapeX(shapeX);
+            bullet.setShapeY(shapeY);
+        }
+    }
 }

@@ -14,6 +14,9 @@ import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 import dk.sdu.sesp.geight.common.services.IPostEntityProcessingService;
+import dk.sdu.sesp.geight.common.weapon.BurstCanon;
+import dk.sdu.sesp.geight.common.weapon.DefaultCanon;
+import dk.sdu.sesp.geight.common.weapon.Weapon;
 import dk.sdu.sesp.geight.enemysystem.Enemy;
 import dk.sdu.sesp.geight.playersystem.Player;
 
@@ -181,25 +184,57 @@ public class GameScreen implements ApplicationListener {
                 sr.end();
             }
         }
-        for (Entity entity : world.getEntities()){
-            if (entity instanceof Bullet){
+        for (Entity entity : world.getEntities(Bullet.class)){
+            if (((Bullet) entity).getWeapon() instanceof BurstCanon) {
+                sr.begin(ShapeRenderer.ShapeType.Line);
+                sr.setColor(Color.GREEN);
+                float[] shapex = entity.getShapeX();
+                float[] shapey = entity.getShapeY();
+
+
+
+                for (int i = 0, j = shapex.length - 1; i < shapex.length; j = i++) {
+                    sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+                }
+
+                sr.end();
+            }
+            if (((Bullet) entity).getWeapon() instanceof DefaultCanon){
+                PositionPart positionPart = entity.getPart(PositionPart.class);
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                sr.setColor(Color.BLACK);
+                sr.circle(positionPart.getX(), positionPart.getY(), 2);
+                sr.end();
+            }
+
+            /*
+
+            if (((Bullet) entity).getWeapon() instanceof BurstCanon){
                 PositionPart positionPart = entity.getPart(PositionPart.class);
                 sr.begin(ShapeRenderer.ShapeType.Filled);
                 sr.setColor(Color.BLACK);
                 sr.circle(positionPart.getX(), positionPart.getY(), 3);
-                /*
-                float[] shapeX = entity.getShapeX();
-                float[] shapeY = entity.getShapeY();
-                for (int i = 0, j = shapeX.length - 1;
-                     i < shapeX.length;
-                     j = i++) {
-
-                    sr.line(shapeX[i], shapeY[i], shapeX[j], shapeY[j]);
-                }
-
-                 */
                 sr.end();
             }
+
+            if (entity instanceof Bullet && ((Bullet) entity).getOwner() instanceof BurstCanon){
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                sr.setColor(Color.GREEN);
+
+                float[] shapex = entity.getShapeX();
+                float[] shapey = entity.getShapeY();
+
+                for (int i = 0, j = shapex.length - 1;
+                     i < shapex.length;
+                     j = i++) {
+
+                    sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+                }
+
+                sr.end();
+            }
+
+             */
         }
     }
 

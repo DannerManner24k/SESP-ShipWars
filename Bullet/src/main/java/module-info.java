@@ -7,6 +7,7 @@ module Bullet {
     requires CommonBullet;
     requires Common;
     requires com.badlogic.gdx;
+    requires CommonWeapon;
     provides BulletSPI with dk.sdu.sesp.geight.bulletsystem.BulletControlSystem;
     provides IEntityProcessingService with dk.sdu.sesp.geight.bulletsystem.BulletControlSystem;
     provides IGamePluginService with dk.sdu.sesp.geight.bulletsystem.BulletPlugin;
