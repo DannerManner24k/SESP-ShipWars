@@ -11,7 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 public class CollisionProcessor implements IPostEntityProcessingService {
+    @Override
+    public void process(GameData gameData, World world) {
 
+    }
+
+    /*
     @Override
     public void process(GameData gameData, World world) {
         // two for loops for all entities in the world
@@ -78,4 +83,6 @@ public class CollisionProcessor implements IPostEntityProcessingService {
     private void handleCollision(World world, Entity firstEntity, Entity secondEntity) {
         System.out.println("Collision detected between " + firstEntity + " and " + secondEntity);
     }
+
+     */
 }
