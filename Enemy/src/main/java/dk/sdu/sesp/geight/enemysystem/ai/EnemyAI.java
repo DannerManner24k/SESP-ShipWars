@@ -38,6 +38,8 @@ public class EnemyAI {
                 // Calculate power based on the initial velocity
                 float power = (adjustedVelocity / MAX_VELOCITY) * 100;
 
+                System.out.println("Enemy: recalculating shot"); // Print statement for recalculating shot
+
                 return new float[]{adjustedAngle, power};
             }
         }
@@ -58,11 +60,26 @@ public class EnemyAI {
     }
 
     private float applyAccuracy(float value, int accuracyLevel) {
-        float variance = 0.1f; // Default variance for accuracy level 0 (least accurate)
-        if (accuracyLevel == 1) {
-            variance = 0.05f; // Moderate variance for accuracy level 1
-        } else if (accuracyLevel == 2) {
-            variance = 0.01f; // Minimal variance for accuracy level 2 (most accurate)
+        float variance;
+        switch (accuracyLevel) {
+            case 0:
+                variance = 1.0f; // Least accurate
+                break;
+            case 1:
+                variance = 0.5f; // More accurate
+                break;
+            case 2:
+                variance = 0.2f; // Even more accurate
+                break;
+            case 3:
+                variance = 0.05f; // Highly accurate
+                break;
+            case 4:
+                variance = 0.01f; // Most accurate, 99% accuracy
+                break;
+            default:
+                variance = 1.0f; // Default to least accurate
+                break;
         }
         return value + (random.nextFloat() - 0.5f) * variance;
     }
