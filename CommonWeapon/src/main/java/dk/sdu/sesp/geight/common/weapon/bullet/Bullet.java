@@ -62,7 +62,7 @@ public class Bullet extends Entity implements IBullet {
     @Override
     public void onCollision(GameData gameData, World world, ICollidable entity) {
         System.out.println("jaaaa bullet");
-        Bullet bullet = (Bullet) entity;
+        Entity bullet = (Entity) entity;
         LifePart lifePart = bullet.getPart(LifePart.class);
         lifePart.setIsHit(true);
     }
