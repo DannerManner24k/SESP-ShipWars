@@ -32,13 +32,11 @@ public class EnemyControlSystem implements IEntityProcessingService {
             LifePart lifePart = enemy.getPart(LifePart.class);
             CanonPart canonPart = enemy.getPart(CanonPart.class);
 
-            //movingPart.process(gameData, enemy);
             positionPart.process(gameData, enemy);
             lifePart.process(gameData, enemy);
             canonPart.process(gameData, enemy);
 
             updateShape(enemy);
-
 
             long currentTime = System.currentTimeMillis();
             if (currentTime - canonPart.getLastShotTime() >= COOLDOWN_PERIOD) {
@@ -91,16 +89,13 @@ public class EnemyControlSystem implements IEntityProcessingService {
         entity.setShapeY(shapey);
 
         // Shape of the Canon
-        // Drawing shape of the canon to face directly to the right.
         float[] originalX = {0, 0, 20, 20, 0, 0};
         float[] originalY = {0, 3, 3, -3, -3, 0};
-
-
 
         CanonPart canonPart = entity.getPart(CanonPart.class);
         float CanonX = canonPart.getX();
         float CanonY = canonPart.getY();
-        float radians = canonPart.getRadian(); // This starts at 0, with the cannon facing right
+        float radians = canonPart.getRadian();
 
         float[] shapeCanonX = new float[6];
         float[] shapeCanonY = new float[6];
