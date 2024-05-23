@@ -20,11 +20,16 @@ public class CanonPart implements EntityPart{
     protected float[] chargingX;
     protected float[] chargingtY;
 
+    float[] chargingShapeX;
+    float[] chargingShapeY;
+
     private int currentWeaponIndex = 0;
 
     private int charge;
     private boolean chargingUp;
     private boolean isCharging;
+
+    long lastShotTime;
     private int storedCharge;
 
     public CanonPart(float x, float y, float radiansCanon) {
@@ -197,7 +202,6 @@ public class CanonPart implements EntityPart{
                     chargingUp = true;
                 }
             }
-            System.out.println("charge: "+charge);
         }
 
     }

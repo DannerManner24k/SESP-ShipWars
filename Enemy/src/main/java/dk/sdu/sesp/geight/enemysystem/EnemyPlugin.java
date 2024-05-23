@@ -71,7 +71,6 @@ public class EnemyPlugin implements IGamePluginService {
         float[] originalY = {0, 3, 3, -3, -3, 0};
 
 
-        CanonPart canonPart = enemy.getPart(CanonPart.class);
         float CanonX = canonPart.getX();
         float CanonY = canonPart.getY();
         float radiansCanon = canonPart.getRadian(); // This starts at 0, with the cannon facing right

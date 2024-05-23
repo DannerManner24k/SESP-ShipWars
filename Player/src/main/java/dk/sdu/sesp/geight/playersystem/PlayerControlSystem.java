@@ -70,6 +70,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 canonPart.setLastShotX(lastShotX);
                 canonPart.setLastShotY(lastShotY);
                 int strength = canonPart.getCharge();
+                System.out.println("SPACE released, charge: " + strength);
                 canonPart.setCharging(false);
                 weapons[canonPart.getCurrentWeaponIndex()].shoot(gameData, world, player, (float) strength);
                 canonPart.setCharge(0); // Reset charge for next cycle
