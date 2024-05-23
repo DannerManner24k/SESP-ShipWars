@@ -1,10 +1,13 @@
 package dk.sdu.sesp.geight.common.map;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import dk.sdu.sesp.geight.common.data.Entity;
 
-public class Map extends Entity {
+import dk.sdu.sesp.geight.common.data.Entity;
+import dk.sdu.sesp.geight.common.data.GameData;
+import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.services.ICollidable;
+import dk.sdu.sesp.geight.common.services.collision.ITerrain;
+
+public class Map extends Entity implements ITerrain {
     private double[] heights;  // Array of heights for the map
     private double[] coefficients;  // Array to store polynomial coefficients
 
@@ -12,9 +15,11 @@ public class Map extends Entity {
         this.coefficients = coefficients;  // Store the entire array of coefficients
     }
 
-    public double[] getHeights() {
-        return heights;
+    public Map() {
+        // Initialize heights or any other necessary fields
     }
+
+
 
     public void setHeights(double[] heights) {
         this.heights = heights;
@@ -22,5 +27,23 @@ public class Map extends Entity {
 
     public double[] getCoefficients() {
         return coefficients;
+    }
+
+    @Override
+    public void onCollision(GameData gameData, World world, ICollidable other) {
+        System.out.println("Map collided with something");
+    }
+
+    @Override
+    public void createCrater(int x, int radius) {
+        for (int i = x - radius; i <= x + radius; i++) {
+            if (i >= 0 && i < heights.length) {
+                heights[i] -= radius - Math.abs(i - x);
+            }
+        }
+    }
+    @Override
+    public double[] getHeights() {
+        return heights;
     }
 }

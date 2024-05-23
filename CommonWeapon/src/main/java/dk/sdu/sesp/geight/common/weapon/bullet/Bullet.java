@@ -2,8 +2,12 @@ package dk.sdu.sesp.geight.common.weapon.bullet;
 
 
 import dk.sdu.sesp.geight.common.data.Entity;
+import dk.sdu.sesp.geight.common.data.GameData;
+import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.services.ICollidable;
+import dk.sdu.sesp.geight.common.services.collision.IBullet;
 
-public class Bullet extends Entity {
+public class Bullet extends Entity implements IBullet {
     private int damage;
     private float speed;
     private boolean active = true;
@@ -56,5 +60,8 @@ public class Bullet extends Entity {
     public Vector2D getVelocity() {return this.velocity;}
 
 
-
+    @Override
+    public void onCollision(GameData gameData, World world, ICollidable other) {
+        System.out.println("Bullet collided with something");
+    }
 }
