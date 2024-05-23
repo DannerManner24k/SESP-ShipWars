@@ -7,7 +7,6 @@ import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
 import dk.sdu.sesp.geight.common.services.IDrawService;
 
-import java.util.Arrays;
 
 public class PlayerDrawSystem implements IDrawService {
     @Override

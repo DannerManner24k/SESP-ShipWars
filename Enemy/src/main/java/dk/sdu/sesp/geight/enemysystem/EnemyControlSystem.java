@@ -32,7 +32,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             lifePart.process(gameData, enemy);
             canonPart.process(gameData, enemy);
 
-            updateShape(enemy);
+            //updateShape(enemy);
         }
     }
 
