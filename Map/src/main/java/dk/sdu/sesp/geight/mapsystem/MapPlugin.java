@@ -19,9 +19,10 @@ public class MapPlugin implements IGamePluginService {
     private Entity map;
     private Entity water;
     private Color mountainColor = Color.BROWN;
+    private GameData gameData;
 
     private static final int MIN_X = 0; // Minimum x coordinate
-    private static final int MAX_X = 800; // Maximum x coordinate
+    private static int MAX_X; // Maximum x coordinate
     private static final int MIN_Y = 100; // Minimum y coordinate
     private static final int MAX_Y = 500; // Maximum y coordinate
     private static final double WATER_LEVEL = 150; // Water level
@@ -32,6 +33,8 @@ public class MapPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
+        this.gameData = gameData;
+        MAX_X = gameData.getDisplayWidth(); // Maximum x coordinate
         this.shapeRenderer = new ShapeRenderer();
         this.map = createMap(gameData, world);  // Create the map when the plugin starts
         //this.water = createWater(gameData, world); // Create the water

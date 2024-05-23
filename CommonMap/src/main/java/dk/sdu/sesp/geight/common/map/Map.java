@@ -31,19 +31,25 @@ public class Map extends Entity implements ITerrain {
 
     @Override
     public void onCollision(GameData gameData, World world, ICollidable other) {
-        System.out.println("Jaaaa map");
     }
 
     @Override
-    public void createCrater(int x, int radius) {
-        /*
-        for (int i = x - radius; i <= x + radius; i++) {
-            if (i >= 0 && i < heights.length) {
-                heights[i] -= radius - Math.abs(i - x);
+    public void createCrater(int centerX, int radiusIn) {
+        int radius = radiusIn*2;
+        System.out.println("Jaaaa map");
+        System.out.println("Creating crater at x: " + centerX + " with radius: " + radius);
+        for (int x = -radius; x <= radius; x++) {
+            int craterX = centerX + x;
+            if (craterX >= 0 && craterX < heights.length) {
+                // Calculate the y depth adjustment based on the distance from the center of the crater
+                double distance = Math.abs(x); // Only considering horizontal distance for 1D height array
+                if (distance <= radius) {
+                    // Determine the height reduction using a parabolic curve for smoothness
+                    double depthReduction = (radius * radius - distance * distance) / (radius * radius) * (radius * 0.2);
+                    heights[craterX] -= depthReduction; // Apply the reduction
+                }
             }
         }
-         */
-        System.out.println("Creating crater at x: " + x + " with radius: " + radius);
     }
 
     @Override
