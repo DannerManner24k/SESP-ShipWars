@@ -1,16 +1,13 @@
-package dk.sdu.sesp.geight.bulletsystem;
+package dk.sdu.sesp.geight.weaponsystem.bulletsystem;
 
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.data.entityparts.*;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
-import du.sdu.sesp.geight.common.bullet.Bullet;
-import du.sdu.sesp.geight.common.bullet.BulletSPI;
-import du.sdu.sesp.geight.common.bullet.Vector2D;
-
-import java.util.ArrayList;
-import java.util.List;
+import dk.sdu.sesp.geight.common.weapon.bullet.Bullet;
+import dk.sdu.sesp.geight.common.weapon.bullet.BulletSPI;
+import dk.sdu.sesp.geight.common.weapon.bullet.Vector2D;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;

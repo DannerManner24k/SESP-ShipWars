@@ -3,11 +3,9 @@ package dk.sdu.sesp.geight.common.weapon;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
-import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
-import du.sdu.sesp.geight.common.bullet.BulletSPI;
+import dk.sdu.sesp.geight.common.weapon.bullet.BulletSPI;
 
 import java.util.Collection;
-import java.util.Random;
 import java.util.ServiceLoader;
 
 import static java.util.stream.Collectors.toList;

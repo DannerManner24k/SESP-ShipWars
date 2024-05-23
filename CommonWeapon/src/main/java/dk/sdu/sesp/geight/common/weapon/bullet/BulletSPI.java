@@ -1,4 +1,4 @@
-package du.sdu.sesp.geight.common.bullet;
+package dk.sdu.sesp.geight.common.weapon.bullet;
 
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;

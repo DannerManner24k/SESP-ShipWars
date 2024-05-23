@@ -16,8 +16,6 @@
         <module>Player</module>
         <module>Enemy</module>
         <module>Character</module>
-        <module>CommonBullet</module>
-        <module>Bullet</module>
         <module>CommonWeapon</module>
         <module>Weapon</module>
         <module>CommonMap</module>
@@ -77,6 +75,7 @@
                                                 On Mac Devices this line should not be commented out
                                                 <argument>-XstartOnFirstThread</argument>
                         -->
+                        <argument>-XstartOnFirstThread</argument>
                         <argument>-Dorg.lwjgl.util.Debug=true</argument>
                         <argument>-Djava.library.path=libs</argument>
                         <argument>--module-path=mods-mvn</argument>

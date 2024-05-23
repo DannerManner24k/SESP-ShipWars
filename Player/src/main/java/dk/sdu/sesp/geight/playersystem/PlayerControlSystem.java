@@ -40,7 +40,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
             lifePart.process(gameData, player);
             canonPart.process(gameData, player);
 
-            updateShape(player);
+            updateShape(player,canonPart);
 
             if (gameData.getKeys().isPressed(GameKeys.NUM1)) {
                 System.out.println("NUM1");
@@ -83,55 +83,13 @@ public class PlayerControlSystem implements IEntityProcessingService {
     }
 
 
-    private void updateShape(Entity entity) {
-        //Shape of the ship
-        float[] shapex = new float[9];
-        float[] shapey = new float[9];
-
-        PositionPart positionPart = entity.getPart(PositionPart.class);
-        float x = positionPart.getX();
-        float y = positionPart.getY();
-
-        shapex[0] = x;
-        shapey[0] = y;
-
-        shapex[1] = x + 40;
-        shapey[1] = y;
-
-        shapex[2] = x + 16;
-        shapey[2] = y - 16;
-
-        shapex[3] = x - 16;
-        shapey[3] = y - 16;
-
-        shapex[4] = x - 24;
-        shapey[4] = y;
-
-        shapex[5] = x - 16;
-        shapey[5] = y;
-
-        shapex[6] = x - 16;
-        shapey[6] = y + 16;
-
-        shapex[7] = x;
-        shapey[7] = y + 16;
-
-        shapex[8] = x;
-        shapey[8] = y;
-
-        entity.setShapeX(shapex);
-        entity.setShapeY(shapey);
-
-        // Shape of the Canon
-        // Drawing shape of the canon to face directly to the right. To apply radians.
-        float[] originalX = {0, 0, 20, 20, 0, 0};
-        float[] originalY = {0, 3, 3, -3, -3, 0};
-
-
-        CanonPart canonPart = entity.getPart(CanonPart.class);
+    private void updateShape(Entity entity, CanonPart canonPart) {
         float CanonX = canonPart.getX();
         float CanonY = canonPart.getY();
         float radians = canonPart.getRadian(); // This starts at 0, with the cannon facing right
+
+        float[] originalX = {0, 0, 20, 20, 0, 0};
+        float[] originalY = {0, 3, 3, -3, -3, 0};
 
         float[] shapeCanonX = new float[6];
         float[] shapeCanonY = new float[6];
@@ -146,7 +104,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
         canonPart.setShapeX(shapeCanonX);
         canonPart.setShapeY(shapeCanonY);
 
-        // Shape of charge box
         float canonChargeLength = 20f;
         float chargeLength = canonChargeLength * canonPart.getCharge()/100f;
 

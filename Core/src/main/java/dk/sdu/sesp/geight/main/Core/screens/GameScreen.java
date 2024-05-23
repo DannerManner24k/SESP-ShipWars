@@ -1,20 +1,14 @@
 package dk.sdu.sesp.geight.main.Core.screens;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
-import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
-import dk.sdu.sesp.geight.common.map.Map;
-import dk.sdu.sesp.geight.common.map.Water;
-import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
+import dk.sdu.sesp.geight.common.services.IDrawService;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 import dk.sdu.sesp.geight.common.services.IPostEntityProcessingService;
-import dk.sdu.sesp.geight.enemysystem.Enemy;
-import dk.sdu.sesp.geight.playersystem.Player;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -24,7 +18,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.sesp.geight.main.GameEngine.GameLogic;
 import dk.sdu.sesp.geight.main.managers.GameInputProcessor;
 import dk.sdu.sesp.geight.main.managers.TurnManager;
-import du.sdu.sesp.geight.common.bullet.Bullet;
 
 
 import java.util.ArrayList;
@@ -115,6 +108,13 @@ public class GameScreen implements ApplicationListener {
     private void draw() {
         cam.update();
         batch.setProjectionMatrix(cam.combined);
+
+            for (IDrawService drawable : getDrawServices()) {
+                drawable.draw(sr, world);
+            }
+        }
+
+        /*
         for (Entity entity : world.getEntities()) {
             if (entity instanceof Water) {
                 sr.begin(ShapeRenderer.ShapeType.Filled);
@@ -206,30 +206,9 @@ public class GameScreen implements ApplicationListener {
                 sr.end();
             }
         }
+         */
 
 
-        for (Entity element: world.getEntities()) {
-
-
-        }
-    }
-
-    private void drawDottedLine(ShapeRenderer renderer, float x1, float y1, float x2, float y2, float segmentLength, float gapLength) {
-        float totalLength = (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-        float numSegments = totalLength / (segmentLength + gapLength);
-
-        float dx = (x2 - x1) / numSegments;
-        float dy = (y2 - y1) / numSegments;
-
-        for (int i = 0; i < numSegments; i++) {
-            float startX = x1 + i * (dx + dx * gapLength / segmentLength);
-            float startY = y1 + i * (dy + dy * gapLength / segmentLength);
-            float endX = startX + dx;
-            float endY = startY + dy;
-
-            renderer.line(startX, startY, endX, endY);
-        }
-    }
 
     @Override
     public void resize(int width, int height) {
@@ -257,5 +236,9 @@ public class GameScreen implements ApplicationListener {
 
     private Collection<? extends IPostEntityProcessingService> getPostEntityProcessingServices() {
         return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    }
+
+    private Collection<? extends IDrawService> getDrawServices() {
+        return ServiceLoader.load(IDrawService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
     }
 }

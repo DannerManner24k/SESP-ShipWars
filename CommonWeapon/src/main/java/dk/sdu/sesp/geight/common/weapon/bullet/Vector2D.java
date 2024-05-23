@@ -1,4 +1,4 @@
-package du.sdu.sesp.geight.common.bullet;
+package dk.sdu.sesp.geight.common.weapon.bullet;
 
 public class Vector2D {
     public float x;

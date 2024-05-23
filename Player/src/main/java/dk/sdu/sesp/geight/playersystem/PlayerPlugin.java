@@ -11,8 +11,6 @@ import dk.sdu.sesp.geight.common.services.IGamePluginService;
 
 public class PlayerPlugin implements IGamePluginService {
     private Entity player;
-    public PlayerPlugin(){
-    }
 
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
@@ -21,7 +19,7 @@ public class PlayerPlugin implements IGamePluginService {
     }
 
     public Entity createPlayer(GameData gameData, World world, SpriteBatch batch) {
-        Entity player = new Player();
+        player = new Player();
         float rotationSpeed = 1.5f  ;
         float x = 10;
         float y = 150;
@@ -33,10 +31,66 @@ public class PlayerPlugin implements IGamePluginService {
         player.add(new LifePart(1));
         player.setRadius(8);
 
-        world.addEntity(player);
+        float[] shapex = new float[9];
+        float[] shapey = new float[9];
+
+
+        shapex[0] = x;
+        shapey[0] = y;
+
+        shapex[1] = x + 40;
+        shapey[1] = y;
+
+        shapex[2] = x + 16;
+        shapey[2] = y - 16;
+
+        shapex[3] = x - 16;
+        shapey[3] = y - 16;
+
+        shapex[4] = x - 24;
+        shapey[4] = y;
+
+        shapex[5] = x - 16;
+        shapey[5] = y;
+
+        shapex[6] = x - 16;
+        shapey[6] = y + 16;
+
+        shapex[7] = x;
+        shapey[7] = y + 16;
+
+        shapex[8] = x;
+        shapey[8] = y;
+
+        player.setShapeX(shapex);
+        player.setShapeY(shapey);
+
+        float[] originalX = {0, 0, 20, 20, 0, 0};
+        float[] originalY = {0, 3, 3, -3, -3, 0};
+
+
+        CanonPart canonPart = player.getPart(CanonPart.class);
+        float CanonX = canonPart.getX();
+        float CanonY = canonPart.getY();
+        float radiansCanon = canonPart.getRadian(); // This starts at 0, with the cannon facing right
+
+        float[] shapeCanonX = new float[6];
+        float[] shapeCanonY = new float[6];
+
+
+        // Calculate rotated coordinates
+        for (int i = 0; i < 6; i++) {
+            shapeCanonX[i] = (float) (CanonX + originalX[i] * Math.cos(radiansCanon) - originalY[i] * Math.sin(radiansCanon));
+            shapeCanonY[i] = (float) (CanonY + originalX[i] * Math.sin(radiansCanon) + originalY[i] * Math.cos(radiansCanon));
+        }
+
+        canonPart.setShapeX(shapeCanonX);
+        canonPart.setShapeY(shapeCanonY);
 
         return player;
     }
+
+
 
 
     @Override

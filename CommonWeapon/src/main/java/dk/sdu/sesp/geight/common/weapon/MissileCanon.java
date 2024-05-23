@@ -3,7 +3,7 @@ package dk.sdu.sesp.geight.common.weapon;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
-import du.sdu.sesp.geight.common.bullet.BulletSPI;
+import dk.sdu.sesp.geight.common.weapon.bullet.BulletSPI;
 
 import java.util.Collection;
 import java.util.ServiceLoader;

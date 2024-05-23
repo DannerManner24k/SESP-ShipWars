@@ -5,7 +5,6 @@ module Weapon {
     exports dk.sdu.sesp.geight.weaponsystem;
     requires Common;
     requires com.badlogic.gdx;
-    requires CommonBullet;
     requires CommonWeapon;
     requires Character;
     requires Player;
