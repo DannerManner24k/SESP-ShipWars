@@ -34,9 +34,9 @@ public class MapPlugin implements IGamePluginService {
     public void start(GameData gameData, World world, SpriteBatch batch) {
         this.shapeRenderer = new ShapeRenderer();
         this.map = createMap(gameData, world);  // Create the map when the plugin starts
-        this.water = createWater(gameData, world); // Create the water
-        List<Double> xCoordinates = findWaterTallerThanMountain((Map) map, (Water) water);
-        System.out.println("X-coordinates where water is taller than the mountain: " + xCoordinates);
+        //this.water = createWater(gameData, world); // Create the water
+        //List<Double> xCoordinates = findWaterTallerThanMountain((Map) map, (Water) water);
+        //System.out.println("X-coordinates where water is taller than the mountain: " + xCoordinates);
     }
 
     private double[][] generateExtremaPoints(int numExtrema, int minX, int maxX, int minY, int maxY, double waterLevel, int poolWidth, int poolDepth) {

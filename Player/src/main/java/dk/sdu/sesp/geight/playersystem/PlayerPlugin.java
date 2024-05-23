@@ -21,8 +21,8 @@ public class PlayerPlugin implements IGamePluginService {
     public Entity createPlayer(GameData gameData, World world, SpriteBatch batch) {
         player = new Player();
         float rotationSpeed = 1.5f;
-        float x = 10;
-        float y = 150;
+        float x = 150;
+        float y = 300;
         float radians = 3.1415f / 2;
 
         player.add(new PositionPart(x, y,radians));
