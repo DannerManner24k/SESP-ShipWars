@@ -30,7 +30,7 @@ class PlayerControlSystemTest {
         world = new World();
         player = new Player();
 
-        canonPart = new CanonPart(0, 0, 0);
+        canonPart = new CanonPart(10, 150, 0);
         movingPart = new MovingPart(1.5f);
         positionPart = new PositionPart(10, 150, 3.1415f / 2);
         lifePart = new LifePart(100, 100);
@@ -45,9 +45,9 @@ class PlayerControlSystemTest {
 
     @Test
     void testProcess() {
+        gameData.getKeys().update();
         gameData.getKeys().setKey(GameKeys.LEFT, true);
         gameData.getKeys().setKey(GameKeys.RIGHT, false);
-        gameData.getKeys().update();
 
         playerControlSystem.process(gameData, world);
 
@@ -58,44 +58,38 @@ class PlayerControlSystemTest {
     @Test
     void testWeaponChange() {
         gameData.getKeys().update();
-        gameData.getKeys().setKey(GameKeys.NUM2, true);
-        gameData.getKeys().update();
+        gameData.getKeys().setKey(GameKeys.NUM1, true);
         playerControlSystem.process(gameData, world);
-        assertEquals(1, canonPart.getCurrentWeaponIndex());
-        /*
-        gameData.getKeys().setKey(GameKeys.NUM1, false);
-        gameData.getKeys().setKey(GameKeys.NUM2, true);
+
+        assertEquals(0, canonPart.getCurrentWeaponIndex());
+
         gameData.getKeys().update();
+        gameData.getKeys().setKey(GameKeys.NUM2, true);
         playerControlSystem.process(gameData, world);
 
         assertEquals(1, canonPart.getCurrentWeaponIndex());
 
-        gameData.getKeys().setKey(GameKeys.NUM2, false);
+        gameData.getKeys().update();
         gameData.getKeys().setKey(GameKeys.NUM3, true);
-        gameData.getKeys().update();
         playerControlSystem.process(gameData, world);
 
         assertEquals(2, canonPart.getCurrentWeaponIndex());
-
-         */
     }
 
     @Test
     void testChargingWeapon() {
-        gameData.getKeys().setKey(GameKeys.SPACE, true);
         gameData.getKeys().update();
+        gameData.getKeys().setKey(GameKeys.SPACE, true);
         playerControlSystem.process(gameData, world);
 
         assertTrue(canonPart.isCharging());
-        /*
-        gameData.getKeys().setKey(GameKeys.SPACE, false);
+
         gameData.getKeys().update();
+        gameData.getKeys().setKey(GameKeys.SPACE, false);
         playerControlSystem.process(gameData, world);
 
         assertFalse(canonPart.isCharging());
         assertEquals(0, canonPart.getCharge());
-
-         */
     }
 
     // Add more tests to cover different scenarios and methods
