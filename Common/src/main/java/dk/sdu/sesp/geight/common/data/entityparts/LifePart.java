@@ -3,10 +3,6 @@ package dk.sdu.sesp.geight.common.data.entityparts;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 
-/**
- *
- * @author Someone
- */
 public class LifePart implements EntityPart {
 
     private boolean dead = false;
@@ -15,9 +11,10 @@ public class LifePart implements EntityPart {
     private boolean isHit = false;
     private int damage;
 
-    public LifePart(int life, int maxLife) {
+    public LifePart(int life, int maxLife, int damage) {
         this.life = life;
         this.maxLife = maxLife;
+        this.damage = damage;
     }
 
     public int getLife() {
@@ -54,7 +51,7 @@ public class LifePart implements EntityPart {
     @Override
     public void process(GameData gameData, Entity entity) {
         if (isHit) {
-            life = - damage;
+            life -= damage;
             isHit = false;
         }
         if (life <= 0) {
