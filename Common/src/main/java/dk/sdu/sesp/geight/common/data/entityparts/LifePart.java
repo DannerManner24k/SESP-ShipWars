@@ -11,10 +11,10 @@ public class LifePart implements EntityPart {
     private boolean isHit = false;
     private int damage;
 
-    public LifePart(int life, int maxLife, int damage) {
+    public LifePart(int life, int maxLife) {
         this.life = life;
         this.maxLife = maxLife;
-        this.damage = damage;
+        this.damage = 1;
     }
 
     public int getLife() {
