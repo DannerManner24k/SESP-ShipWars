@@ -18,7 +18,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
     private Weapon[] weapons;
     private EnemyAI enemyAI;
     private static final long COOLDOWN_PERIOD = 5000; // 5 seconds cooldown
-    private int accuracyLevel = 4; // Default accuracy level (0: least accurate, 4: most accurate)
+    private int accuracyLevel = 2; // Default accuracy level (0: least accurate, 4: most accurate)
 
     public EnemyControlSystem() {
         weapons = new Weapon[]{new DefaultCanon(), new BurstCanon(), new MissileCanon()};
