@@ -51,7 +51,7 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         float by = (float) sin(radians) * bullet.getRadius() * 8;
 
         bullet.add(new PositionPart(bx + x, by + y, radians));
-        bullet.add(new LifePart(1));
+        bullet.add(new LifePart(1,1));
         bullet.add(new TimerPart(3));
 
 
