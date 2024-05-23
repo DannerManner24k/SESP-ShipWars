@@ -102,6 +102,7 @@ public class MapPlugin implements IGamePluginService {
         Map map = new Map(coefficients);
         generateMap(gameData, map, gameData.getDisplayWidth());
         world.addEntity(map);
+
         return map;
     }
 

@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
+
 import static java.util.stream.Collectors.toList;
 
 public class GameScreen implements ApplicationListener {
@@ -109,104 +111,11 @@ public class GameScreen implements ApplicationListener {
         cam.update();
         batch.setProjectionMatrix(cam.combined);
 
-            for (IDrawService drawable : getDrawServices()) {
-                drawable.draw(sr, world);
-            }
+        for (IDrawService drawable : getDrawServices()) {
+            drawable.draw(sr, world);
         }
+    }
 
-        /*
-        for (Entity entity : world.getEntities()) {
-            if (entity instanceof Water) {
-                sr.begin(ShapeRenderer.ShapeType.Filled);
-                sr.setColor(Color.BLUE);
-                double[] waterHeight = ((Water) entity).getHeights();
-                for (int x = 1; x < waterHeight.length; x++) {
-                    float baseY = 0; // Assuming the bottom of the screen or base of the terrain
-                    sr.triangle((float) x - 1, (float) waterHeight[x - 1], (float) x, (float) waterHeight[x], (float) x - 1, baseY);
-                    sr.triangle((float) x, (float) waterHeight[x], (float) x, baseY, (float) x - 1, baseY);
-                }
-                sr.end();
-            }
-        }
-
-        for (Entity entity : world.getEntities()) {
-            if (entity instanceof Map) {
-                sr.begin(ShapeRenderer.ShapeType.Filled); // Use filled type for filling areas
-                sr.setColor(Color.BROWN); // Set to a suitable ground color
-                double[] heights = ((Map) entity).getHeights();
-                for (int x = 1; x < heights.length; x++) {
-                    float baseY = 0; // Assuming the bottom of the screen or base of the terrain
-                    sr.triangle((float) x - 1, (float) heights[x - 1], (float) x, (float) heights[x], (float) x - 1, baseY);
-                    sr.triangle((float) x, (float) heights[x], (float) x, baseY, (float) x - 1, baseY);
-                }
-                sr.end();
-            }
-        }
-
-        // Draw entities like Enemy and Player after the map
-        for (Entity entity : world.getEntities()) {
-            if (entity instanceof Enemy || entity instanceof Player) {
-                sr.begin(ShapeRenderer.ShapeType.Filled);
-                Color entityColor = entity instanceof Enemy ? Color.RED : Color.GREEN;
-                sr.setColor(entityColor);
-
-                float[] shapeX = entity.getShapeX();
-                float[] shapeY = entity.getShapeY();
-
-                for (int i = 1; i < shapeX.length - 1; i++) {
-                    float x1 = shapeX[0], y1 = shapeY[0]; // always the first vertex
-                    float x2 = shapeX[i], y2 = shapeY[i]; // current vertex
-                    float x3 = shapeX[i + 1], y3 = shapeY[i + 1]; // next vertex
-
-                    sr.triangle(x1, y1, x2, y2, x3, y3);
-                }
-                sr.line(shapeX[shapeX.length - 1], shapeY[shapeY.length - 1], shapeX[0], shapeY[0]);
-
-
-                CanonPart canonPart = entity.getPart(CanonPart.class);
-                float[] shapeCanonX = canonPart.getShapeX();
-                float[] shapeCanonY = canonPart.getShapeY();
-
-                for (int i = 1; i < shapeCanonX.length - 1; i++) {
-                    float x1 = shapeCanonX[0], y1 = shapeCanonY[0]; // always the first vertex
-                    float x2 = shapeCanonX[i], y2 = shapeCanonY[i]; // current vertex
-                    float x3 = shapeCanonX[i + 1], y3 = shapeCanonY[i + 1]; // next vertex
-
-                    sr.triangle(x1, y1, x2, y2, x3, y3);
-                }
-
-                float[] chargingX = canonPart.getChargingShapeX();
-                float[] chargingY = canonPart.getChargingShapeY();
-
-                if(chargingX != null) {
-                    for (int i = 1; i < chargingY.length - 1; i++) {
-                        float x1 = chargingX[0], y1 = chargingY[0]; // always the first vertex
-                        float x2 = chargingX[i], y2 = chargingY[i]; // current vertex
-                        float x3 = chargingX[i + 1], y3 = chargingY[i + 1]; // next vertex
-
-                        sr.triangle(x1, y1, x2, y2, x3, y3);
-                    }
-                }
-
-
-
-                sr.line(canonPart.getCurrentShotX(0), canonPart.getCurrentShotY(0), canonPart.getCurrentShotX(1), canonPart.getCurrentShotY(1));
-
-                drawDottedLine(sr, canonPart.getLastShotX(0), canonPart.getLastShotY(0), canonPart.getLastShotX(1), canonPart.getLastShotY(1), 2, 1);
-
-                sr.end();
-            }
-        }
-        for (Entity entity : world.getEntities()){
-            if (entity instanceof Bullet){
-                PositionPart positionPart = entity.getPart(PositionPart.class);
-                sr.begin(ShapeRenderer.ShapeType.Filled);
-                sr.setColor(Color.BLACK);
-                sr.circle(positionPart.getX(), positionPart.getY(), 3);
-                sr.end();
-            }
-        }
-         */
 
 
 
@@ -239,6 +148,10 @@ public class GameScreen implements ApplicationListener {
     }
 
     private Collection<? extends IDrawService> getDrawServices() {
-        return ServiceLoader.load(IDrawService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+        return ServiceLoader.load(IDrawService.class).stream().map(ServiceLoader.Provider::get).sorted((s1, s2) -> {
+                    int primaryComparison = Integer.compare(s1.getPriority(), s2.getPriority());
+                    return primaryComparison != 0 ? primaryComparison : s1.getPriority();
+                })
+                .collect(Collectors.toList());
     }
 }
