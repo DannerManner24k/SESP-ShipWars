@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
+import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
+import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 import dk.sdu.sesp.geight.common.services.IDrawService;
 
 public class EnemyDrawSystem implements IDrawService {
@@ -29,41 +31,8 @@ public class EnemyDrawSystem implements IDrawService {
             }
             sr.line(shapeX[shapeX.length - 1], shapeY[shapeY.length - 1], shapeX[0], shapeY[0]);
 
-
-            CanonPart canonPart = entity.getPart(CanonPart.class);
-            float[] shapeCanonX = canonPart.getShapeX();
-            float[] shapeCanonY = canonPart.getShapeY();
-
-            for (int i = 1; i < shapeCanonX.length - 1; i++) {
-                float x1 = shapeCanonX[0], y1 = shapeCanonY[0]; // always the first vertex
-                float x2 = shapeCanonX[i], y2 = shapeCanonY[i]; // current vertex
-                float x3 = shapeCanonX[i + 1], y3 = shapeCanonY[i + 1]; // next vertex
-
-                sr.triangle(x1, y1, x2, y2, x3, y3);
-            }
-
-            float[] chargingX = canonPart.getChargingShapeX();
-            float[] chargingY = canonPart.getChargingShapeY();
-
-            if(chargingX != null) {
-                for (int i = 1; i < chargingY.length - 1; i++) {
-                    float x1 = chargingX[0], y1 = chargingY[0]; // always the first vertex
-                    float x2 = chargingX[i], y2 = chargingY[i]; // current vertex
-                    float x3 = chargingX[i + 1], y3 = chargingY[i + 1]; // next vertex
-
-                    sr.triangle(x1, y1, x2, y2, x3, y3);
-                }
-            }
-
-
-
-            sr.line(canonPart.getCurrentShotX(0), canonPart.getCurrentShotY(0), canonPart.getCurrentShotX(1), canonPart.getCurrentShotY(1));
-
-            drawDottedLine(sr, canonPart.getLastShotX(0), canonPart.getLastShotY(0), canonPart.getLastShotX(1), canonPart.getLastShotY(1), 2, 1);
-
-
-
-
+            drawCanon(sr, world, entity);
+            drawHealthBar(sr, world, entity);
 
             sr.end();
         }
@@ -88,6 +57,56 @@ public class EnemyDrawSystem implements IDrawService {
             float endY = startY + dy;
 
             renderer.line(startX, startY, endX, endY);
+        }
+    }
+    private void drawCanon (ShapeRenderer sr, World world, Entity entity) {
+        CanonPart canonPart = entity.getPart(CanonPart.class);
+        float[] shapeCanonX = canonPart.getShapeX();
+        float[] shapeCanonY = canonPart.getShapeY();
+
+        for (int i = 1; i < shapeCanonX.length - 1; i++) {
+            float x1 = shapeCanonX[0], y1 = shapeCanonY[0]; // always the first vertex
+            float x2 = shapeCanonX[i], y2 = shapeCanonY[i]; // current vertex
+            float x3 = shapeCanonX[i + 1], y3 = shapeCanonY[i + 1]; // next vertex
+
+            sr.triangle(x1, y1, x2, y2, x3, y3);
+        }
+
+        float[] chargingX = canonPart.getChargingShapeX();
+        float[] chargingY = canonPart.getChargingShapeY();
+
+        if(chargingX != null) {
+            for (int i = 1; i < chargingY.length - 1; i++) {
+                float x1 = chargingX[0], y1 = chargingY[0]; // always the first vertex
+                float x2 = chargingX[i], y2 = chargingY[i]; // current vertex
+                float x3 = chargingX[i + 1], y3 = chargingY[i + 1]; // next vertex
+
+                sr.triangle(x1, y1, x2, y2, x3, y3);
+            }
+        }
+
+        drawHealthBar(sr, world, entity);
+
+        sr.line(canonPart.getCurrentShotX(0), canonPart.getCurrentShotY(0), canonPart.getCurrentShotX(1), canonPart.getCurrentShotY(1));
+
+        drawDottedLine(sr, canonPart.getLastShotX(0), canonPart.getLastShotY(0), canonPart.getLastShotX(1), canonPart.getLastShotY(1), 2, 1);
+
+    }
+
+    private void drawHealthBar(ShapeRenderer sr, World world, Entity entity) {
+        LifePart lifePart = entity.getPart(LifePart.class);
+        PositionPart positionPart = entity.getPart(PositionPart.class);
+        if (lifePart != null) {
+            float healthPercentage = (float) lifePart.getLife() / lifePart.getMaxLife();
+            float healthBarWidth = 50; // Set width of health bar
+            float healthBarHeight = 5; // Set height of health bar
+            float healthBarX = positionPart.getX() - healthBarWidth / 2;
+            float healthBarY = positionPart.getY() - 30; // Position above the entity
+
+            sr.setColor(Color.RED);
+            sr.rect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
+            sr.setColor(Color.GREEN);
+            sr.rect(healthBarX, healthBarY, healthBarWidth * healthPercentage, healthBarHeight);
         }
     }
 }

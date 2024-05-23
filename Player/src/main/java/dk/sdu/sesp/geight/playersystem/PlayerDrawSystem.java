@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
+import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
+import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
 import dk.sdu.sesp.geight.common.services.IDrawService;
 
 
@@ -29,7 +31,37 @@ public class PlayerDrawSystem implements IDrawService {
         }
         sr.line(shapeX[shapeX.length - 1], shapeY[shapeY.length - 1], shapeX[0], shapeY[0]);
 
+        drawCanon(sr, world, entity);
 
+        drawHealthBar(sr, world, entity);
+
+        sr.end();
+        }
+    }
+
+    @Override
+    public int getPriority() {
+        return 10;
+    }
+
+    private void drawDottedLine(ShapeRenderer renderer, float x1, float y1, float x2, float y2, float segmentLength, float gapLength) {
+        float totalLength = (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+        float numSegments = totalLength / (segmentLength + gapLength);
+
+        float dx = (x2 - x1) / numSegments;
+        float dy = (y2 - y1) / numSegments;
+
+        for (int i = 0; i < numSegments; i++) {
+            float startX = x1 + i * (dx + dx * gapLength / segmentLength);
+            float startY = y1 + i * (dy + dy * gapLength / segmentLength);
+            float endX = startX + dx;
+            float endY = startY + dy;
+
+            renderer.line(startX, startY, endX, endY);
+        }
+    }
+
+    private void drawCanon (ShapeRenderer sr, World world, Entity entity) {
         CanonPart canonPart = entity.getPart(CanonPart.class);
         float[] shapeCanonX = canonPart.getShapeX();
         float[] shapeCanonY = canonPart.getShapeY();
@@ -55,39 +87,28 @@ public class PlayerDrawSystem implements IDrawService {
             }
         }
 
-
+        drawHealthBar(sr, world, entity);
 
         sr.line(canonPart.getCurrentShotX(0), canonPart.getCurrentShotY(0), canonPart.getCurrentShotX(1), canonPart.getCurrentShotY(1));
 
         drawDottedLine(sr, canonPart.getLastShotX(0), canonPart.getLastShotY(0), canonPart.getLastShotX(1), canonPart.getLastShotY(1), 2, 1);
 
-
-
-
-
-        sr.end();
-        }
     }
 
-    @Override
-    public int getPriority() {
-        return 10;
-    }
+    private void drawHealthBar(ShapeRenderer sr, World world, Entity entity) {
+        LifePart lifePart = entity.getPart(LifePart.class);
+        PositionPart positionPart = entity.getPart(PositionPart.class);
+        if (lifePart != null) {
+            float healthPercentage = (float) lifePart.getLife() / lifePart.getMaxLife();
+            float healthBarWidth = 50; // Set width of health bar
+            float healthBarHeight = 5; // Set height of health bar
+            float healthBarX = positionPart.getX() - healthBarWidth / 2;
+            float healthBarY = positionPart.getY() - 30; // Position above the entity
 
-    private void drawDottedLine(ShapeRenderer renderer, float x1, float y1, float x2, float y2, float segmentLength, float gapLength) {
-        float totalLength = (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-        float numSegments = totalLength / (segmentLength + gapLength);
-
-        float dx = (x2 - x1) / numSegments;
-        float dy = (y2 - y1) / numSegments;
-
-        for (int i = 0; i < numSegments; i++) {
-            float startX = x1 + i * (dx + dx * gapLength / segmentLength);
-            float startY = y1 + i * (dy + dy * gapLength / segmentLength);
-            float endX = startX + dx;
-            float endY = startY + dy;
-
-            renderer.line(startX, startY, endX, endY);
+            sr.setColor(Color.RED);
+            sr.rect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
+            sr.setColor(Color.GREEN);
+            sr.rect(healthBarX, healthBarY, healthBarWidth * healthPercentage, healthBarHeight);
         }
     }
 
