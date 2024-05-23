@@ -1,4 +1,5 @@
 import dk.sdu.sesp.geight.common.services.IDrawService;
+import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 
 module Map {
