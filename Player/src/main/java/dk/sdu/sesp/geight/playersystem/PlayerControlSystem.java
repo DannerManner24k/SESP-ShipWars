@@ -65,16 +65,18 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 for (int i = 0; i < 2; i++) {
                     int length = i * 15;
                     lastShotX[i] = (float) (canonPart.getX() + (25 + length) * Math.cos(canonRadian));
-                    lastShotY[i] = (float) ( canonPart.getY() + (25 + length) * Math.sin(canonRadian));
+                    lastShotY[i] = (float) (canonPart.getY() + (25 + length) * Math.sin(canonRadian));
                 }
                 canonPart.setLastShotX(lastShotX);
                 canonPart.setLastShotY(lastShotY);
                 int strength = canonPart.getCharge();
-                System.out.println("SPACE released, charge: " + strength);
                 canonPart.setCharging(false);
                 weapons[canonPart.getCurrentWeaponIndex()].shoot(gameData, world, player, (float) strength);
                 canonPart.setCharge(0); // Reset charge for next cycle
                 canonPart.setChargingUp(true); // Reset direction for next cycle
+
+                // Record the time when the player fires
+                gameData.setLastPlayerFireTime(System.currentTimeMillis());
             }
             canonPart.updateCharge();
 
@@ -101,6 +103,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
             shapeCanonY[i] = (float) (CanonY + originalX[i] * Math.sin(radians) + originalY[i] * Math.cos(radians));
         }
 
+        // Assign calculated vertices back to the cannon part
         canonPart.setShapeX(shapeCanonX);
         canonPart.setShapeY(shapeCanonY);
 
@@ -135,6 +138,8 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
         canonPart.setCurrentShotX(currentX);
         canonPart.setCurrentShotY(currentY);
+
+
     }
 
 }

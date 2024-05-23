@@ -14,10 +14,6 @@ import java.util.Random;
 
 public class EnemyPlugin implements IGamePluginService {
     private Entity enemy;
-
-    public EnemyPlugin(){
-    }
-
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
         enemy = createEnemy(gameData, world, batch);
@@ -25,16 +21,16 @@ public class EnemyPlugin implements IGamePluginService {
     }
 
     private Entity createEnemy(GameData gameData, World world, SpriteBatch batch) {
-        enemy = new Enemy();
+        Entity enemy = new Enemy();
 
         float x = 200; //new Random().nextFloat() * gameData.getDisplayWidth();
         float y = 150; //new Random().nextFloat() * gameData.getDisplayHeight();
         float rotationSpeed = 1.5f;
         float radians = 3.1415f / 2;
 
-        enemy.add(new PositionPart(x, y,radians));
-        //enemy.add(new MovingPart(rotationSpeed));
-        enemy.add(new CanonPart(x-10,y, (float) Math.PI)); // -10 is to place the canon in front of the mast
+        enemy.add(new PositionPart(x, y, radians));
+        CanonPart canonPart = new CanonPart(x - 10, y, (float) Math.PI);
+        enemy.add(canonPart);
         enemy.add(new LifePart(1));
         enemy.setRadius(8);
 
