@@ -45,5 +45,22 @@ public class GameKeys {
         return !keys[k] && pkeys[k];
     }
 
+    public static boolean[] getKeys() {
+        return keys;
+    }
+
+    public static void setKeys(boolean[] keys) {
+        GameKeys.keys = keys;
+    }
+
+    public static boolean[] getPkeys() {
+        return pkeys;
+    }
+
+    public static void setPkeys(boolean[] pkeys) {
+        GameKeys.pkeys = pkeys;
+    }
+
+
 }
 

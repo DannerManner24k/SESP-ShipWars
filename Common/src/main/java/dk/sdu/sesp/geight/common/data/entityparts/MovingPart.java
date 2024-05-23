@@ -73,6 +73,17 @@ public class MovingPart
         this.up = up;
     }
 
+    public boolean isLeft() {
+        return left;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public boolean isUp() {
+        return up;
+    }
 
     @Override
     public void process(GameData gameData, Entity entity) {

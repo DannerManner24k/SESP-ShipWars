@@ -25,6 +25,7 @@ public class PlayerDrawSystem implements IDrawService {
             sr.setColor(entityColor);
 
             float[] shapeX = entity.getShapeX();
+
             float[] shapeY = entity.getShapeY();
 
             for (int i = 1; i < shapeX.length - 1; i++) {
