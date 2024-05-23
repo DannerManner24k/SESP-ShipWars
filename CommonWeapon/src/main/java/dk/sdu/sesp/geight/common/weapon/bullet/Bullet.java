@@ -4,6 +4,7 @@ package dk.sdu.sesp.geight.common.weapon.bullet;
 import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
+import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
 import dk.sdu.sesp.geight.common.services.ICollidable;
 import dk.sdu.sesp.geight.common.services.collision.IBullet;
 
@@ -23,8 +24,6 @@ public class Bullet extends Entity implements IBullet {
         setVelocityY(newVelocityY);
 
     }
-
-
 
     public int getDamage() {
         return damage;
@@ -61,7 +60,10 @@ public class Bullet extends Entity implements IBullet {
 
 
     @Override
-    public void onCollision(GameData gameData, World world, ICollidable other) {
-        System.out.println("Bullet collided with something");
+    public void onCollision(GameData gameData, World world, ICollidable entity) {
+        System.out.println("jaaaa bullet");
+        Bullet bullet = (Bullet) entity;
+        LifePart lifePart = bullet.getPart(LifePart.class);
+        lifePart.setIsHit(true);
     }
 }

@@ -31,17 +31,21 @@ public class Map extends Entity implements ITerrain {
 
     @Override
     public void onCollision(GameData gameData, World world, ICollidable other) {
-        System.out.println("Map collided with something");
+        System.out.println("Jaaaa map");
     }
 
     @Override
     public void createCrater(int x, int radius) {
+        /*
         for (int i = x - radius; i <= x + radius; i++) {
             if (i >= 0 && i < heights.length) {
                 heights[i] -= radius - Math.abs(i - x);
             }
         }
+         */
+        System.out.println("Creating crater at x: " + x + " with radius: " + radius);
     }
+
     @Override
     public double[] getHeights() {
         return heights;
