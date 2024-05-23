@@ -1,8 +1,11 @@
 package dk.sdu.sesp.geight.playersystem;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.sesp.geight.common.data.Entity;
+import com.badlogic.gdx.Gdx;
 import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
 import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
@@ -11,32 +14,36 @@ import dk.sdu.sesp.geight.common.services.IDrawService;
 
 
 public class PlayerDrawSystem implements IDrawService {
+    private BitmapFont font = new BitmapFont();
+    private SpriteBatch batch = new SpriteBatch();
     @Override
     public void draw(ShapeRenderer sr, World world) {
         for (Entity entity : world.getEntities(Player.class)) {
 
-        sr.begin(ShapeRenderer.ShapeType.Filled);
-        Color entityColor = Color.GREEN;
-        sr.setColor(entityColor);
+            sr.begin(ShapeRenderer.ShapeType.Filled);
+            Color entityColor = Color.GREEN;
+            sr.setColor(entityColor);
 
-        float[] shapeX = entity.getShapeX();
-        float[] shapeY = entity.getShapeY();
+            float[] shapeX = entity.getShapeX();
+            float[] shapeY = entity.getShapeY();
 
-        for (int i = 1; i < shapeX.length - 1; i++) {
-            float x1 = shapeX[0], y1 = shapeY[0]; // always the first vertex
-            float x2 = shapeX[i], y2 = shapeY[i]; // current vertex
-            float x3 = shapeX[i + 1], y3 = shapeY[i + 1]; // next vertex
+            for (int i = 1; i < shapeX.length - 1; i++) {
+                float x1 = shapeX[0], y1 = shapeY[0]; // always the first vertex
+                float x2 = shapeX[i], y2 = shapeY[i]; // current vertex
+                float x3 = shapeX[i + 1], y3 = shapeY[i + 1]; // next vertex
 
-            sr.triangle(x1, y1, x2, y2, x3, y3);
+                sr.triangle(x1, y1, x2, y2, x3, y3);
+            }
+            sr.line(shapeX[shapeX.length - 1], shapeY[shapeY.length - 1], shapeX[0], shapeY[0]);
+
+            drawCanon(sr, world, entity);
+
+            drawHealthBar(sr, world, entity);
+
+            sr.end();
+            drawInventoryUI(sr, world, entity);
         }
-        sr.line(shapeX[shapeX.length - 1], shapeY[shapeY.length - 1], shapeX[0], shapeY[0]);
 
-        drawCanon(sr, world, entity);
-
-        drawHealthBar(sr, world, entity);
-
-        sr.end();
-        }
     }
 
     @Override
@@ -112,4 +119,29 @@ public class PlayerDrawSystem implements IDrawService {
         }
     }
 
+    private void drawInventoryUI(ShapeRenderer sr, World world, Entity entity) {
+        CanonPart canonPart = entity.getPart(CanonPart.class);
+        batch.begin();
+        font.setColor(Color.WHITE);
+
+        float[][] coordinates = {{20, 30}, {60, 30}, {100, 30}};
+        for (int i = 0; i < coordinates.length; i++) {
+            font.draw(batch, String.valueOf(i + 1), coordinates[i][0], coordinates[i][1]);
+        }
+        batch.end();
+
+        Gdx.gl.glLineWidth(3);
+
+        sr.begin(ShapeRenderer.ShapeType.Line);
+        sr.setColor(Color.WHITE);
+        for (int i = 0; i < coordinates.length; i++) {
+            sr.rect(coordinates[i][0] - 10, coordinates[i][1] - 20, 30, 30);
+        }
+
+        sr.setColor(Color.GREEN);
+        sr.rect(coordinates[canonPart.getCurrentWeaponIndex()][0] - 10, coordinates[canonPart.getCurrentWeaponIndex()][1] - 20, 30, 30);
+        sr.end();
+
+        Gdx.gl.glLineWidth(1);
+    }
 }
