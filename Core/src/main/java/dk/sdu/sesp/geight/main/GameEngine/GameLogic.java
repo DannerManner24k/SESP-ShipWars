@@ -2,7 +2,6 @@ package dk.sdu.sesp.geight.main.GameEngine;
 
 import dk.sdu.sesp.geight.common.managers.DifficultyManager;
 import dk.sdu.sesp.geight.common.managers.TurnManager;
-import dk.sdu.sesp.geight.common.managers.*;
 
 public class GameLogic {
     private int currentLevel;
@@ -10,9 +9,8 @@ public class GameLogic {
     private DifficultyManager difficultyManager;
     private TurnManager turnManager;
 
-
     public GameLogic() {
-        this.difficultyManager = new DifficultyManager(1,2);
+        this.difficultyManager = DifficultyManager.getInstance(1, 4); // Initialize singleton instance
         this.turnManager = TurnManager.getInstance();
         System.out.println("ganmelogic");
         // Initialize other components as necessary
@@ -57,21 +55,19 @@ public class GameLogic {
         difficultyManager.adjustDifficulty(playerScore);
     }
 
-
     public void playerScored(int points) {
         playerScore += points;
     }
 
-    //Start game
+    // Start game
 
-    //Level handling
+    // Level handling
 
-    //How good is the player. the better the player is the more advanced should the enemy be.
+    // How good is the player. the better the player is the more advanced should the enemy be.
 
-    //Turnbased logic
+    // Turnbased logic
 
-    //Scoring
+    // Scoring
 
-    //Map and entity initialization
+    // Map and entity initialization
 }
-

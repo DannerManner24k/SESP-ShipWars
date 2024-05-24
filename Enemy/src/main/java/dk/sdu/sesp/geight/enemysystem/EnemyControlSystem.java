@@ -13,25 +13,30 @@ import dk.sdu.sesp.geight.common.weapon.MissileCanon;
 import dk.sdu.sesp.geight.common.weapon.Weapon;
 import dk.sdu.sesp.geight.enemysystem.ai.EnemyAI;
 import dk.sdu.sesp.geight.common.managers.TurnManager;
+import dk.sdu.sesp.geight.common.managers.DifficultyManager;
 
 public class EnemyControlSystem implements IEntityProcessingService {
 
     private Weapon[] weapons;
     private EnemyAI enemyAI;
     private static final long COOLDOWN_PERIOD = 5000; // 5 seconds cooldown
-    private int accuracyLevel = 2; // Default accuracy level (0: least accurate, 4: most accurate)
+    private int accuracyLevel; // Default accuracy level (0: least accurate, 4: most accurate)
     private TurnManager turnManager;
+    private DifficultyManager difficultyManager;
     private long lastShotTime;
 
     public EnemyControlSystem() {
         weapons = new Weapon[]{new DefaultCanon(), new BurstCanon(), new MissileCanon()};
         enemyAI = new EnemyAI();
         turnManager = TurnManager.getInstance();
+        difficultyManager = DifficultyManager.getInstance();
         lastShotTime = 0;
     }
 
     @Override
     public void process(GameData gameData, World world) {
+        accuracyLevel = difficultyManager.getCurrentDifficultyLevel();
+
         if (!turnManager.isAITurn()) {
             return; // Exit if it's not the AI's turn
         }
