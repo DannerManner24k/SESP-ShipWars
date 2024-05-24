@@ -1,6 +1,8 @@
 package dk.sdu.sesp.geight.main.GameEngine;
 
-import dk.sdu.sesp.geight.main.managers.*;
+import dk.sdu.sesp.geight.common.managers.DifficultyManager;
+import dk.sdu.sesp.geight.common.managers.TurnManager;
+import dk.sdu.sesp.geight.common.managers.*;
 
 public class GameLogic {
     private int currentLevel;
@@ -11,7 +13,7 @@ public class GameLogic {
 
     public GameLogic() {
         this.difficultyManager = new DifficultyManager(1,2);
-        this.turnManager = new TurnManager();
+        this.turnManager = TurnManager.getInstance();
         System.out.println("ganmelogic");
         // Initialize other components as necessary
     }

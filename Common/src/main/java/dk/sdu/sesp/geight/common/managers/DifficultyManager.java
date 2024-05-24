@@ -1,4 +1,4 @@
-package dk.sdu.sesp.geight.main.managers;
+package dk.sdu.sesp.geight.common.managers;
 
 
 public class DifficultyManager {

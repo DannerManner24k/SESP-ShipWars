@@ -12,6 +12,7 @@ import dk.sdu.sesp.geight.common.weapon.DefaultCanon;
 import dk.sdu.sesp.geight.common.weapon.MissileCanon;
 import dk.sdu.sesp.geight.common.weapon.Weapon;
 import dk.sdu.sesp.geight.enemysystem.ai.EnemyAI;
+import dk.sdu.sesp.geight.common.managers.TurnManager;
 
 public class EnemyControlSystem implements IEntityProcessingService {
 
@@ -19,14 +20,27 @@ public class EnemyControlSystem implements IEntityProcessingService {
     private EnemyAI enemyAI;
     private static final long COOLDOWN_PERIOD = 5000; // 5 seconds cooldown
     private int accuracyLevel = 2; // Default accuracy level (0: least accurate, 4: most accurate)
+    private TurnManager turnManager;
+    private long lastShotTime;
 
     public EnemyControlSystem() {
         weapons = new Weapon[]{new DefaultCanon(), new BurstCanon(), new MissileCanon()};
         enemyAI = new EnemyAI();
+        turnManager = TurnManager.getInstance();
+        lastShotTime = 0;
     }
 
     @Override
     public void process(GameData gameData, World world) {
+        if (!turnManager.isAITurn()) {
+            return; // Exit if it's not the AI's turn
+        }
+
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastShotTime < COOLDOWN_PERIOD) {
+            return; // Exit if cooldown period has not passed
+        }
+
         for (Entity enemy : world.getEntities(Enemy.class)) {
             PositionPart positionPart = enemy.getPart(PositionPart.class);
             LifePart lifePart = enemy.getPart(LifePart.class);
@@ -38,56 +52,18 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
             updateShape(enemy);
 
-            long currentTime = System.currentTimeMillis();
-            if (currentTime - canonPart.getLastShotTime() >= COOLDOWN_PERIOD) {
-                // Recalculate the best shot every time before firing
-                float[] aimData = enemyAI.calculateBestShot(enemy, gameData, world, accuracyLevel);
-                if (aimData != null) {
-                    handleFiring(gameData, world, enemy, canonPart, aimData);
-                    canonPart.setLastShotTime(currentTime); // Reset cooldown
-                }
+            float[] aimData = enemyAI.calculateBestShot(enemy, gameData, world, accuracyLevel);
+            if (aimData != null) {
+                handleFiring(gameData, world, enemy, canonPart, aimData);
+                lastShotTime = currentTime; // Reset cooldown
+
+                // End the AI's turn
+                turnManager.nextTurn();
             }
         }
     }
 
     private void updateShape(Entity entity) {
-        float[] shapex = new float[9];
-        float[] shapey = new float[9];
-
-        PositionPart positionPart = entity.getPart(PositionPart.class);
-        float x = positionPart.getX();
-        float y = positionPart.getY();
-
-        shapex[0] = x;
-        shapey[0] = y;
-
-        shapex[1] = x;
-        shapey[1] = y + 16;
-
-        shapex[2] = x + 16;
-        shapey[2] = y + 16;
-
-        shapex[3] = x + 16;
-        shapey[3] = y;
-
-        shapex[4] = x + 24;
-        shapey[4] = y;
-
-        shapex[5] = x + 16;
-        shapey[5] = y - 16;
-
-        shapex[6] = x - 16;
-        shapey[6] = y - 16;
-
-        shapex[7] = x - 40;
-        shapey[7] = y;
-
-        shapex[8] = x;
-        shapey[8] = y;
-
-        entity.setShapeX(shapex);
-        entity.setShapeY(shapey);
-
         // Shape of the Canon
         float[] originalX = {0, 0, 20, 20, 0, 0};
         float[] originalY = {0, 3, 3, -3, -3, 0};

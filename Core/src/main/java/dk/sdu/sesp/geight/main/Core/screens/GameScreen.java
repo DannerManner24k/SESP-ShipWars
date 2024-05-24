@@ -2,7 +2,6 @@ package dk.sdu.sesp.geight.main.Core.screens;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.services.IDrawService;
@@ -16,8 +15,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.sesp.geight.main.GameEngine.GameLogic;
-import dk.sdu.sesp.geight.main.managers.GameInputProcessor;
-import dk.sdu.sesp.geight.main.managers.TurnManager;
+import dk.sdu.sesp.geight.common.managers.GameInputProcessor;
+import dk.sdu.sesp.geight.common.managers.TurnManager;
 
 
 import java.util.ArrayList;
@@ -49,12 +48,13 @@ public class GameScreen implements ApplicationListener {
         System.out.println("hej");
         this.batch = new SpriteBatch();// Set the batch
         this.stage = new Stage();
+
         gameData.setDisplayWidth(Gdx.graphics.getWidth());
         gameData.setDisplayHeight(Gdx.graphics.getHeight());
         System.out.println(gameData.getDisplayWidth() + " " + gameData.getDisplayHeight());
 
         gameLogic = new GameLogic();
-        turnManager = new TurnManager();
+        turnManager = TurnManager.getInstance();
 
         cam = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         cam.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
