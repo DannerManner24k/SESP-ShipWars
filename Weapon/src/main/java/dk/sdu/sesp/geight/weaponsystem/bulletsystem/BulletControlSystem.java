@@ -4,6 +4,7 @@ import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.data.entityparts.*;
+import dk.sdu.sesp.geight.common.managers.TurnManager;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import dk.sdu.sesp.geight.common.weapon.bullet.Bullet;
 import dk.sdu.sesp.geight.common.weapon.bullet.BulletSPI;
@@ -17,14 +18,22 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
     private static final float GRAVITY = 9.81f;
     private static final float MAX_VELOCITY = 600 / 4.0f;
 
+    private TurnManager turnManager = TurnManager.getInstance();
+
     @Override
     public void process(GameData gameData, World world) {
         for (Entity entity : world.getEntities(Bullet.class)) {
             Bullet bullet = (Bullet) entity; // Casting Bullet entity to a Bullet
             PositionPart positionPart = bullet.getPart(PositionPart.class);
             LifePart lifePart = bullet.getPart(LifePart.class);
+            TimerPart timerPart = bullet.getPart(TimerPart.class);
 
+            if (timerPart.getExpiration() <= 0) {
+                turnManager.setSafeToShot(true);
+                world.removeEntity(bullet);
+            }
 
+            timerPart.process(gameData, bullet);
             lifePart.process(gameData, bullet);
             positionPart.process(gameData, bullet);
             updateBullet(bullet, gameData);
@@ -60,6 +69,7 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
 
         bullet.setShapeX(new float[2]);
         bullet.setShapeY(new float[2]);
+        bullet.add(new TimerPart(10));
 
         return bullet;
     }
