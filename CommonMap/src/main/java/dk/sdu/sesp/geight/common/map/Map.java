@@ -35,21 +35,21 @@ public class Map extends Entity implements ITerrain {
 
     @Override
     public void createCrater(int centerX, int radiusIn) {
-        int radius = radiusIn*2;
-        System.out.println("Jaaaa map");
-        System.out.println("Creating crater at x: " + centerX + " with radius: " + radius);
-        for (int x = -radius; x <= radius; x++) {
-            int craterX = centerX + x;
-            if (craterX >= 0 && craterX < heights.length) {
-                // Calculate the y depth adjustment based on the distance from the center of the crater
-                double distance = Math.abs(x); // Only considering horizontal distance for 1D height array
-                if (distance <= radius) {
-                    // Determine the height reduction using a parabolic curve for smoothness
-                    double depthReduction = (radius * radius - distance * distance) / (radius * radius) * (radius * 0.2);
-                    heights[craterX] -= depthReduction; // Apply the reduction
-                }
+        double radius = radiusIn*3;
+        int start = Math.max(0, (int)Math.floor(centerX - radius));
+        int end = Math.min(heights.length, (int)Math.ceil(centerX + radius + 1));
+
+        for (int i = start; i < end; i++) {
+            double distance = Math.abs(i - centerX);
+            if (distance <= radius) {
+                double reductionAmount = calculateReduction(distance, radius);
+                heights[i] = Math.max(0, heights[i] - reductionAmount);
             }
         }
+    }
+
+    private double calculateReduction(double distance, double radius) {
+        return radius - distance;
     }
 
     @Override
