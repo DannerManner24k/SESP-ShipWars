@@ -92,5 +92,15 @@ class PlayerControlSystemTest {
         assertEquals(0, canonPart.getCharge());
     }
 
-    // Add more tests to cover different scenarios and methods
+
+    @Test
+    void testPlayerTakesDamage() {
+        LifePart lifePart = player.getPart(LifePart.class);
+        assertNotNull(lifePart);
+        lifePart.setLife(50);
+
+        playerControlSystem.process(gameData, world);
+
+        assertEquals(50, lifePart.getLife());
+    }
 }
