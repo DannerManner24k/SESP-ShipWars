@@ -42,7 +42,7 @@ public class PlayerPlugin implements IGamePluginService {
 
         double spawnX = rn.nextDouble(spawnDifference - 1) + xMin;
         float x = (float) spawnX;
-        float y = 400;
+        float y = 160;
         float radians = 3.1415f / 2;
 
         player.add(new PositionPart(x, y,radians));

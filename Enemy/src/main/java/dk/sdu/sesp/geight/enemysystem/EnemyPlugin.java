@@ -43,7 +43,7 @@ public class EnemyPlugin implements IGamePluginService {
 
         double spawnX = rn.nextDouble(spawnDifference - 1) + xMin;
         float x = (float) spawnX;
-        float y = 350;
+        float y = 163;
 
         float rotationSpeed = 2;
         float radians = 3.1415f / 2;

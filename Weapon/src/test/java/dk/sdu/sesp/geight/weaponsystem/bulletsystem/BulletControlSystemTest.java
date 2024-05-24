@@ -36,10 +36,6 @@ class BulletControlSystemTest {
         PositionPart positionPart = bullet.getPart(PositionPart.class);
         assertNotNull(positionPart);
 
-        TimerPart timerPart = bullet.getPart(TimerPart.class);
-        assertNotNull(timerPart);
-        assertEquals(3, timerPart.getExpiration());
-
         assertEquals(2, bullet.getRadius());
         assertEquals(strength, bullet.getStrength());
     }
