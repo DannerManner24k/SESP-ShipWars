@@ -1,9 +1,10 @@
-package dk.sdu.sesp.geight.common.managers;
+package dk.sdu.sesp.geight.main.GameEngine;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.GameKeys;
+import dk.sdu.sesp.geight.common.managers.TurnManager;
 
 public class GameInputProcessor extends InputAdapter {
 

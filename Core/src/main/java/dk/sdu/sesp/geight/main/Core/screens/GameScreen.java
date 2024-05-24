@@ -17,7 +17,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.Screen;
 import dk.sdu.sesp.geight.common.managers.GameLogic;
-import dk.sdu.sesp.geight.common.managers.GameInputProcessor;
+import dk.sdu.sesp.geight.main.GameEngine.GameInputProcessor;
 import dk.sdu.sesp.geight.common.managers.TurnManager;
 
 import java.util.ArrayList;
