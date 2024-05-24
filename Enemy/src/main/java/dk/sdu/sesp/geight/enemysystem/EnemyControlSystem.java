@@ -47,26 +47,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
     public void process(GameData gameData, World world) {
         accuracyLevel = difficultyManager.getCurrentDifficultyLevel();
 
-        if (!turnManager.isAITurn()) {
-            // Reset turn start time if it's not the AI's turn
-            enemyTurnStartTime = -1;
-            return; // Exit if it's not the AI's turn
-        }
 
-        long currentTime = System.currentTimeMillis();
-
-        if (enemyTurnStartTime == -1) {
-            // Set the turn start time when it becomes the enemy's turn
-            enemyTurnStartTime = currentTime;
-        }
-
-        if (currentTime - enemyTurnStartTime < 4000) {
-            return; // Exit if 4 seconds delay has not passed
-        }
-
-        if (currentTime - lastShotTime < COOLDOWN_PERIOD) {
-            return; // Exit if cooldown period has not passed
-        }
 
         for (Entity enemy : world.getEntities(Enemy.class)) {
             PositionPart positionPart = enemy.getPart(PositionPart.class);
@@ -79,6 +60,28 @@ public class EnemyControlSystem implements IEntityProcessingService {
             positionPart.process(gameData, enemy);
             lifePart.process(gameData, enemy);
             canonPart.process(gameData, enemy);
+
+            if (!turnManager.isAITurn()) {
+                // Reset turn start time if it's not the AI's turn
+                enemyTurnStartTime = -1;
+                return; // Exit if it's not the AI's turn
+            }
+
+            long currentTime = System.currentTimeMillis();
+
+            if (enemyTurnStartTime == -1) {
+                // Set the turn start time when it becomes the enemy's turn
+                enemyTurnStartTime = currentTime;
+            }
+
+            if (currentTime - enemyTurnStartTime < 500) {
+                return; // Exit if 4 seconds delay has not passed
+            }
+
+            if (currentTime - lastShotTime < COOLDOWN_PERIOD) {
+                return; // Exit if cooldown period has not passed
+            }
+
 
             updateShape(enemy);
 

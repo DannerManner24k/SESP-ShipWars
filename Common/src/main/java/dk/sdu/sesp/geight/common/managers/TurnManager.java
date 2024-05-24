@@ -3,9 +3,11 @@ package dk.sdu.sesp.geight.common.managers;
 public class TurnManager {
     private boolean playerTurn; // true if it's the player's turn, false if it's the AI's turn
     private static TurnManager instance;
+    private boolean safeToShot;
 
     private TurnManager() {
-        playerTurn = true; // Assuming the player starts the game
+        playerTurn = true;
+        safeToShot = true;// Assuming the player starts the game
     }
 
     public static TurnManager getInstance() {
@@ -29,6 +31,17 @@ public class TurnManager {
     }
 
     public boolean isAITurn() {
-        return !playerTurn;
+        return !playerTurn && safeToShot;
     }
+
+    // Method to set safeToShot to true when a bullet has collided with something
+    public void bulletCollided() {
+        safeToShot = true;
+    }
+
+
+    public void setSafeToShot(boolean b) {
+        safeToShot = b;
+    }
+
 }

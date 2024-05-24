@@ -48,8 +48,8 @@ public class PlayerPlugin implements IGamePluginService {
         player.add(new PositionPart(x, y,radians));
         player.add(new MovingPart(rotationSpeed));
         player.add(new CanonPart(x+10,y, 0)); // +10 is to place the canon in front of the mast
-        player.add(new LifePart(100,100));
-        player.setRadius(8);
+        player.add(new LifePart(3,3));
+        player.setRadius(17);
 
         float[] shapex = new float[9];
         float[] shapey = new float[9];

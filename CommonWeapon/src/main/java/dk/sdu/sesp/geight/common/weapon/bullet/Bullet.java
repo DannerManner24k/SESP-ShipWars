@@ -5,6 +5,7 @@ import dk.sdu.sesp.geight.common.data.Entity;
 import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
+import dk.sdu.sesp.geight.common.managers.TurnManager;
 import dk.sdu.sesp.geight.common.services.ICollidable;
 import dk.sdu.sesp.geight.common.services.collision.IBullet;
 
@@ -17,6 +18,7 @@ public class Bullet extends Entity implements IBullet {
     private float velocityY;
     private Vector2D velocity;
     private static final float GRAVITY = -9.81f; // Gravity effect
+    TurnManager turnManager = TurnManager.getInstance();
 
     public void update(float deltaTime) {
 
@@ -63,5 +65,8 @@ public class Bullet extends Entity implements IBullet {
     public void onCollision(GameData gameData, World world, ICollidable entity, ICollidable otherEntity) {
         Entity bullet = (Entity) entity;
         world.removeEntity(bullet);
+        System.out.println("Bullet collided");
+        // Method to set safeToShot to true when a bullet has collided with something
+        turnManager.bulletCollided();
     }
 }

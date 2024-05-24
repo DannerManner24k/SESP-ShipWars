@@ -17,7 +17,7 @@ public class EnemyAI {
     private final UtilityFunction utilityFunction = new UtilityFunction(0.4, 0.3, 0.3);
 
     // Static coordinates for the player
-    private static final float PLAYER_X = 10.0f;
+    private static final float PLAYER_X = 20.0f;
     private static final float PLAYER_Y = 150.0f;
 
     public float[] calculateBestShot(Entity enemy, GameData gameData, World world, int accuracyLevel) {
@@ -37,7 +37,7 @@ public class EnemyAI {
         // Check for valid velocity
         if (Float.isNaN(initialVelocity) || initialVelocity <= 0) {
             System.err.println("Invalid initial velocity calculated: " + initialVelocity);
-            return null;
+            initialVelocity = 100f;
         }
 
         // Introduce randomness based on accuracy level

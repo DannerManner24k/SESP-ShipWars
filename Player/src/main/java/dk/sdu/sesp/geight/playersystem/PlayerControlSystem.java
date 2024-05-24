@@ -38,10 +38,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
             movingPart.setRight(gameData.getKeys().isDown(GameKeys.RIGHT));
 
 
-            if(lifePart.isDead()){
+            if (lifePart.isDead()) {
                 world.removeEntity(player);
             }
-
 
 
             movingPart.process(gameData, player);
@@ -58,7 +57,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
             checkDeath(gameData, player);
 
         }
-
     }
 
 
@@ -156,6 +154,8 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             // Record the time when the player fires
             gameData.setLastPlayerFireTime(System.currentTimeMillis());
+            turnManager.setSafeToShot(false);
+            turnManager.nextTurn();
         }
     }
 

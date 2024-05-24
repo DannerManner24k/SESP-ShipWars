@@ -33,6 +33,7 @@ public class CollisionProcessor implements IPostEntityProcessingService {
                     if (collidable1 instanceof IBullet && collidable2 instanceof IBullet) {
                         continue;
                     }
+
                     collidable1.onCollision(gameData, world, collidable1, collidable2);
                     collidable2.onCollision(gameData, world, collidable2, collidable1);
 

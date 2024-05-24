@@ -64,19 +64,10 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         return bullet;
     }
 
-    private void setShape(Entity entity) {
-        PositionPart positionPart = entity.getPart(PositionPart.class);
-        float x = positionPart.getX();
-        float y = positionPart.getY();
-
-        CanonPart canonPart = entity.getPart(CanonPart.class);
-        float radians = canonPart.getRadian();
-
-    }
 
     // Update each bullet's position and remove inactive ones
     public void updateBullet(Bullet bullet, GameData gameData) {
-        float dt = gameData.getDelta()*2;
+        float dt = gameData.getDelta()*4;
         PositionPart positionPart = bullet.getPart(PositionPart.class);
         Vector2D velocity = bullet.getVelocity();
 

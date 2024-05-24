@@ -43,15 +43,15 @@ public class EnemyPlugin implements IGamePluginService {
 
         double spawnX = rn.nextDouble(spawnDifference - 1) + xMin;
         float x = (float) spawnX;
-        float y = 163;
+        float y = 300;
 
         float rotationSpeed = 2;
         float radians = 3.1415f / 2;
 
         enemy.add(new PositionPart(x, y, radians));
         enemy.add(new CanonPart(x - 10, y, (float) Math.PI));
-        enemy.add(new LifePart(1,1));
-        enemy.setRadius(8);
+        enemy.add(new LifePart(3,3));
+        enemy.setRadius(17);
 
         float[] shapex = new float[9];
         float[] shapey = new float[9];
