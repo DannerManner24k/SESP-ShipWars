@@ -22,17 +22,11 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
         for (Entity entity : world.getEntities(Bullet.class)) {
             Bullet bullet = (Bullet) entity; // Casting Bullet entity to a Bullet
             PositionPart positionPart = bullet.getPart(PositionPart.class);
-
-            TimerPart timerPart = bullet.getPart(TimerPart.class);
-            if (timerPart.getExpiration() < 0) {
-                world.removeEntity(bullet);
-            }
-            timerPart.process(gameData, bullet);
+            LifePart lifePart = bullet.getPart(LifePart.class);
 
 
-
+            lifePart.process(gameData, bullet);
             positionPart.process(gameData, bullet);
-
             updateBullet(bullet, gameData);
         }
     }
@@ -52,7 +46,6 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
 
         bullet.add(new PositionPart(bx + x, by + y, radians));
         bullet.add(new LifePart(1,1));
-        bullet.add(new TimerPart(3));
 
 
         bullet.setStrength(strength);

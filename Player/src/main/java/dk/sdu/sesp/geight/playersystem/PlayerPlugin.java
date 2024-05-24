@@ -9,9 +9,16 @@ import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.data.entityparts.*;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 
+import java.util.Random;
+
 public class PlayerPlugin implements IGamePluginService {
     private Entity player;
+    private final Random rn = new Random();
 
+    @Override
+    public int getPriority() {
+        return 10;
+    }
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
         player = createPlayer(gameData, world, batch);
@@ -21,8 +28,21 @@ public class PlayerPlugin implements IGamePluginService {
     public Entity createPlayer(GameData gameData, World world, SpriteBatch batch) {
         player = new Player();
         float rotationSpeed = 1.5f;
-        float x = 10;
-        float y = 150;
+
+        int index = 0;
+        double xMin = world.getSpawnPointsX1(index) + 10;
+        double xMax = world.getSpawnPointsX2(index) + 10;
+        double spawnDifference = xMax - xMin;
+        if (spawnDifference <= 20) {
+            index += 1;
+            xMin = world.getSpawnPointsX1(index) + 10;
+            xMax = world.getSpawnPointsX2(index) - 10;
+            spawnDifference = xMax - xMin;
+        }
+
+        double spawnX = rn.nextDouble(spawnDifference - 1) + xMin;
+        float x = (float) spawnX;
+        float y = 400;
         float radians = 3.1415f / 2;
 
         player.add(new PositionPart(x, y,radians));

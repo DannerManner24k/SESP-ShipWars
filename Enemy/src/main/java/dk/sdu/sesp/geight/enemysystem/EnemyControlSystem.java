@@ -73,6 +73,9 @@ public class EnemyControlSystem implements IEntityProcessingService {
             LifePart lifePart = enemy.getPart(LifePart.class);
             CanonPart canonPart = enemy.getPart(CanonPart.class);
 
+            if (lifePart.isDead()){
+                world.removeEntity(enemy);
+            }
             positionPart.process(gameData, enemy);
             lifePart.process(gameData, enemy);
             canonPart.process(gameData, enemy);
@@ -89,8 +92,6 @@ public class EnemyControlSystem implements IEntityProcessingService {
             }
         }
     }
-
-
 
     private void updateShape(Entity entity) {
         // Shape of the Canon

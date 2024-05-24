@@ -13,6 +13,10 @@ public class BulletPlugin implements IGamePluginService {
     private Entity bullet;
 
     @Override
+    public int getPriority() {
+        return 10;
+    }
+    @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
 
     }

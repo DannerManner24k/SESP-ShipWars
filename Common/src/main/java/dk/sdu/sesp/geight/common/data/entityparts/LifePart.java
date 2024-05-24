@@ -10,6 +10,7 @@ public class LifePart implements EntityPart {
     private int maxLife;
     private boolean isHit = false;
     private int damage;
+    private int damageTaken;
 
     public LifePart(int life, int maxLife) {
         this.life = life;
@@ -32,7 +33,8 @@ public class LifePart implements EntityPart {
         return isHit;
     }
 
-    public void setIsHit(boolean isHit) {
+    public void setIsHit(boolean isHit, int damageTaken) {
+        this.damageTaken = damageTaken;
         this.isHit = isHit;
     }
 
@@ -48,11 +50,21 @@ public class LifePart implements EntityPart {
         return damage;
     }
 
+    public int getDamageTaken() {
+        return damageTaken;
+    }
+
+    public void setDamageTaken(int damageTaken) {
+        this.damageTaken = damageTaken;
+    }
+
     @Override
     public void process(GameData gameData, Entity entity) {
         if (isHit) {
-            life -= damage;
+            life -= damageTaken;
+            System.out.println("damage taken: " + damageTaken);
             isHit = false;
+            System.out.println("life: " + life + " for entity: " + entity.getID());
         }
         if (life <= 0) {
             dead = true;
