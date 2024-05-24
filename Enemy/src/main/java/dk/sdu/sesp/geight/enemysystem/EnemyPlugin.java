@@ -7,6 +7,8 @@ import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
 import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
 import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
+import dk.sdu.sesp.geight.common.managers.DifficultyManager;
+import dk.sdu.sesp.geight.common.managers.GameLogic;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 
 import java.util.Random;
@@ -15,6 +17,7 @@ import java.util.Random;
 public class EnemyPlugin implements IGamePluginService {
     private Entity enemy;
     private final Random rn = new Random();
+    private DifficultyManager difficultyManager = DifficultyManager.getInstance();
     @Override
     public int getPriority() {
         return 10;
@@ -22,11 +25,12 @@ public class EnemyPlugin implements IGamePluginService {
 
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
-        enemy = createEnemy(gameData, world, batch);
+        int enemyHealth = difficultyManager.getEnemyLife();
+        enemy = createEnemy(gameData, world, enemyHealth);
         world.addEntity(enemy);
     }
 
-    private Entity createEnemy(GameData gameData, World world, SpriteBatch batch) {
+    private Entity createEnemy(GameData gameData, World world, int enemyHealth) {
         Entity enemy = new Enemy();
 
         int index = world.getSpawnPointsX1().size() - 1;
@@ -42,15 +46,15 @@ public class EnemyPlugin implements IGamePluginService {
 
 
         double spawnX = rn.nextDouble(spawnDifference - 1) + xMin;
-        float x = (float) spawnX;
-        float y = 165;
+        float x = 350; //(float) spawnX;
+        float y = 250;
 
         float rotationSpeed = 2;
         float radians = 3.1415f / 2;
 
         enemy.add(new PositionPart(x, y, radians));
         enemy.add(new CanonPart(x - 10, y, (float) Math.PI));
-        enemy.add(new LifePart(3,3));
+        enemy.add(new LifePart(enemyHealth,enemyHealth));
         enemy.setRadius(17);
 
         float[] shapex = new float[9];

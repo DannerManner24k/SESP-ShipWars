@@ -6,6 +6,7 @@ import dk.sdu.sesp.geight.common.data.World;
 import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
 import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
 import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
+import dk.sdu.sesp.geight.common.managers.GameLogic;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import dk.sdu.sesp.geight.common.weapon.BurstCanon;
 import dk.sdu.sesp.geight.common.weapon.DefaultCanon;
@@ -23,6 +24,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
     private int accuracyLevel; // Default accuracy level (0: least accurate, 4: most accurate)
     private TurnManager turnManager;
     private DifficultyManager difficultyManager;
+    private GameLogic gameLogic;
     private long lastShotTime;
 
     public EnemyControlSystem() {
@@ -31,6 +33,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
         turnManager = TurnManager.getInstance();
         difficultyManager = DifficultyManager.getInstance();
         lastShotTime = 0;
+        gameLogic = GameLogic.getInstance();
     }
 
     private static long enemyTurnStartTime = -1;
@@ -56,6 +59,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
             if (lifePart.isDead()){
                 world.removeEntity(enemy);
+                gameLogic.setEnemyDead(true);
             }
             positionPart.process(gameData, enemy);
             lifePart.process(gameData, enemy);

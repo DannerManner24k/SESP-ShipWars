@@ -1,84 +1,69 @@
 package dk.sdu.sesp.geight.common.managers;
 
 
+import dk.sdu.sesp.geight.common.data.Entity;
+import dk.sdu.sesp.geight.common.data.World;
+
 public class GameLogic {
 
     private DifficultyManager difficultyManager;
     private TurnManager turnManager;
     private static GameLogic instance;
+    private World world;
+
+
+    public static synchronized GameLogic getInstance(World world) {
+        if (instance == null) {
+            instance = new GameLogic(world);
+        }
+        return instance;
+    }
     public static synchronized GameLogic getInstance() {
         if (instance == null) {
-            instance = new GameLogic();
+            throw new IllegalStateException("DifficultyManager is not initialized. Call getInstance(int, int) first.");
         }
         return instance;
     }
 
-    private GameLogic() {
-        this.difficultyManager = DifficultyManager.getInstance(1, 4); // Initialize singleton instance
+
+    private GameLogic(World world) {
+        this.world = world;
+        this.difficultyManager = DifficultyManager.getInstance(1, 5); // Initialize singleton instance
         this.turnManager = TurnManager.getInstance();
+
         System.out.println("ganmelogic");
-        // Initialize other components as necessary
     }
-
-
 
     private int currentLevel;
-    private int playerScore;
-    private boolean isGameOver = false;
-    private int life;
-
-
 
     public void startGame() {
-        loadLevel(1); // Start with the first level
+        loadLevel(); // Start with the first level
     }
 
-    private void loadLevel(int level) {
-        this.currentLevel = level;
-        // Load the level data (map, entities, etc.)
-        //this.currentMap = loadMapForLevel(level);
-        //this.entities = loadEntitiesForLevel(level);
-        //initializeEntities();
-        playerScore = 0; // Reset or update score depending on game design
+    private void loadLevel() {
+       difficultyManager.initializeEntities();
+       currentLevel = difficultyManager.getCurrentDifficultyLevel();
     }
 
-    public void updateGame() {
-        if (isPlayerTurn()) {
-            handlePlayerTurn();
-        } else {
-            handleEnemyTurns();
+    public void levelUp() {
+        difficultyManager.increaseDifficulty();
+        loadLevel();
+        for (Entity i : world.getEntities()) {
+            world.removeEntity(i);
         }
-        updateDifficulty();
     }
 
-    private void handlePlayerTurn() {
-        // Player turn logic
+    public boolean isEnemyDead() {
+        return enemyDead;
     }
 
-    private void handleEnemyTurns() {
-        // Enemy turn logic
+    public void setEnemyDead(boolean enemyDead) {
+        this.enemyDead = enemyDead;
     }
 
-    private boolean isPlayerTurn() {
-        // Determine if it is the player's turn
-        return turnManager.isPlayerTurn();
-    }
+    private boolean enemyDead = false;
 
-    private void updateDifficulty() {
-        difficultyManager.adjustDifficulty(playerScore);
-    }
-
-    public void playerScored(int points) {
-        playerScore += points;
-    }
-
-    // Start game
-
-    // Level handling
-
-
-    // Game over
-
+    private boolean isGameOver = false;
     public boolean isGameOver() {
         return isGameOver;
     }
@@ -87,5 +72,12 @@ public class GameLogic {
         this.isGameOver = isGameOver;
     }
 
-    // Map and entity initialization
+    public void updateGame() {
+        if (enemyDead) {
+            System.out.println("Enemy is dead");
+            levelUp();
+        }
+    }
+
+
 }

@@ -80,19 +80,19 @@ public class EnemyAI {
     private float applyAccuracy(float value, int accuracyLevel) {
         float variance;
         switch (accuracyLevel) {
-            case 0:
+            case 1:
                 variance = 1.0f; // Least accurate
                 break;
-            case 1:
+            case 2:
                 variance = 0.5f; // More accurate
                 break;
-            case 2:
+            case 3:
                 variance = 0.2f; // Even more accurate
                 break;
-            case 3:
+            case 4:
                 variance = 0.05f; // Highly accurate
                 break;
-            case 4:
+            case 5:
                 variance = 0.01f; // Most accurate, 99% accuracy
                 break;
             default:

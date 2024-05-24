@@ -54,8 +54,9 @@ public class GameScreen implements Screen {
         gameData.setDisplayWidth(Gdx.graphics.getWidth());
         gameData.setDisplayHeight(Gdx.graphics.getHeight());
 
-        gameLogic = GameLogic.getInstance();
+        gameLogic = GameLogic.getInstance(world);
         turnManager = TurnManager.getInstance();
+        gameLogic.startGame();
 
         cam = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         cam.translate(gameData.getDisplayWidth() / 2, gameData.getDisplayHeight() / 2);
