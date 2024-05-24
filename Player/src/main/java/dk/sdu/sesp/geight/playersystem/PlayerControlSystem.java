@@ -13,15 +13,17 @@ import dk.sdu.sesp.geight.common.weapon.BurstCanon;
 import dk.sdu.sesp.geight.common.weapon.DefaultCanon;
 import dk.sdu.sesp.geight.common.weapon.MissileCanon;
 import dk.sdu.sesp.geight.common.weapon.Weapon;
+import dk.sdu.sesp.geight.common.managers.TurnManager;
 
 
 public class PlayerControlSystem implements IEntityProcessingService {
 
     private Weapon[] weapons;
+    private TurnManager turnManager;
 
-
-    public PlayerControlSystem(){
+    public PlayerControlSystem() {
         weapons = new Weapon[]{new DefaultCanon(), new BurstCanon(), new MissileCanon()};
+        turnManager = TurnManager.getInstance();
     }
 
     @Override
@@ -40,7 +42,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
             lifePart.process(gameData, player);
             canonPart.process(gameData, player);
 
-            updateShape(player,canonPart);
+            updateShape(player, canonPart);
 
             if (gameData.getKeys().isPressed(GameKeys.NUM1)) {
                 System.out.println("NUM1");
@@ -52,7 +54,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 System.out.println("NUM3");
                 canonPart.setCurrentWeaponIndex(2);
             }
-
 
             if (gameData.getKeys().isPressed(GameKeys.SPACE)) {
                 canonPart.setCharging(true);
@@ -78,11 +79,12 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
                 // Record the time when the player fires
                 gameData.setLastPlayerFireTime(System.currentTimeMillis());
+
+                // End the player's turn
+                turnManager.nextTurn();
             }
             canonPart.updateCharge();
-
         }
-
     }
 
 
