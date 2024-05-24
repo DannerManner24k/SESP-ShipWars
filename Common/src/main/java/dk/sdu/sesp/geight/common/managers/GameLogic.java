@@ -2,17 +2,32 @@ package dk.sdu.sesp.geight.common.managers;
 
 
 public class GameLogic {
-    private int currentLevel;
-    private int playerScore;
+
     private DifficultyManager difficultyManager;
     private TurnManager turnManager;
+    private static GameLogic instance;
+    public static synchronized GameLogic getInstance() {
+        if (instance == null) {
+            instance = new GameLogic();
+        }
+        return instance;
+    }
 
-    public GameLogic() {
+    private GameLogic() {
         this.difficultyManager = DifficultyManager.getInstance(1, 4); // Initialize singleton instance
         this.turnManager = TurnManager.getInstance();
         System.out.println("ganmelogic");
         // Initialize other components as necessary
     }
+
+
+
+    private int currentLevel;
+    private int playerScore;
+    private boolean isGameOver = false;
+    private int life;
+
+
 
     public void startGame() {
         loadLevel(1); // Start with the first level
@@ -61,11 +76,16 @@ public class GameLogic {
 
     // Level handling
 
-    // How good is the player. the better the player is the more advanced should the enemy be.
 
-    // Turnbased logic
+    // Game over
 
-    // Scoring
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public void setGameOver(boolean isGameOver) {
+        this.isGameOver = isGameOver;
+    }
 
     // Map and entity initialization
 }

@@ -5,6 +5,7 @@ public class TurnManager {
     private static TurnManager instance;
     private boolean safeToShot;
 
+
     private TurnManager() {
         playerTurn = true;
         safeToShot = true;// Assuming the player starts the game

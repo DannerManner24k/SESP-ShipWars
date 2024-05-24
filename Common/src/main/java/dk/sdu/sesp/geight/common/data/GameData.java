@@ -5,7 +5,7 @@ public class GameData {
     private int displayWidth;
     private int displayHeight;
     private long lastPlayerFireTime = 0;
-    private boolean isGameOver = false;
+
     private final GameKeys keys = new GameKeys();
 
     public GameKeys getKeys() {
@@ -44,11 +44,4 @@ public class GameData {
         this.lastPlayerFireTime = lastPlayerFireTime;
     }
 
-    public boolean isGameOver() {
-        return isGameOver;
-    }
-
-    public void setGameOver(boolean isGameOver) {
-        this.isGameOver = isGameOver;
-    }
 }

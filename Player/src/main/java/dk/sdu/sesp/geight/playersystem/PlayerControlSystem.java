@@ -8,6 +8,7 @@ import dk.sdu.sesp.geight.common.data.entityparts.CanonPart;
 import dk.sdu.sesp.geight.common.data.entityparts.LifePart;
 import dk.sdu.sesp.geight.common.data.entityparts.MovingPart;
 import dk.sdu.sesp.geight.common.data.entityparts.PositionPart;
+import dk.sdu.sesp.geight.common.managers.GameLogic;
 import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import dk.sdu.sesp.geight.common.weapon.BurstCanon;
 import dk.sdu.sesp.geight.common.weapon.DefaultCanon;
@@ -20,10 +21,12 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     private Weapon[] weapons;
     private TurnManager turnManager;
+    private GameLogic gameLogic;
 
     public PlayerControlSystem() {
         weapons = new Weapon[]{new DefaultCanon(), new BurstCanon(), new MissileCanon()};
         turnManager = TurnManager.getInstance();
+        gameLogic = GameLogic.getInstance();
     }
 
     @Override
@@ -54,7 +57,7 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             canonPart.updateCharge();
 
-            checkDeath(gameData, player);
+            checkDeath(player);
 
         }
     }
@@ -159,10 +162,10 @@ public class PlayerControlSystem implements IEntityProcessingService {
         }
     }
 
-    private void checkDeath(GameData gameData, Entity entity) {
+    private void checkDeath(Entity entity) {
         LifePart lifePart = entity.getPart(LifePart.class);
         if (lifePart.isDead()) {
-            gameData.setGameOver(true);
+            gameLogic.setGameOver(true);
         }
     }
 }

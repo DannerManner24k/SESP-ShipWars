@@ -54,7 +54,7 @@ public class GameScreen implements Screen {
         gameData.setDisplayWidth(Gdx.graphics.getWidth());
         gameData.setDisplayHeight(Gdx.graphics.getHeight());
 
-        gameLogic = new GameLogic();
+        gameLogic = GameLogic.getInstance();
         turnManager = TurnManager.getInstance();
 
         cam = new OrthographicCamera(gameData.getDisplayWidth(), gameData.getDisplayHeight());
@@ -91,7 +91,7 @@ public class GameScreen implements Screen {
         draw();
         gameData.getKeys().update();
 
-        gameOver(gameData);
+        gameOver();
 
     }
 
@@ -115,8 +115,8 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void gameOver(GameData gameData) {
-        if (gameData.isGameOver()){
+    private void gameOver() {
+        if (gameLogic.isGameOver()){
             game.setScreen(new GameOverScreen(game));
         }
     }
