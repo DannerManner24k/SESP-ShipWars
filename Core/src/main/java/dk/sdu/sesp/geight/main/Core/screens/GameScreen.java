@@ -10,15 +10,14 @@ import dk.sdu.sesp.geight.common.services.IEntityProcessingService;
 import dk.sdu.sesp.geight.common.services.IGamePluginService;
 import dk.sdu.sesp.geight.common.services.IPostEntityProcessingService;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.Screen;
 import dk.sdu.sesp.geight.main.GameEngine.GameLogic;
 import dk.sdu.sesp.geight.main.managers.GameInputProcessor;
 import dk.sdu.sesp.geight.main.managers.TurnManager;
-
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,10 +27,8 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
-public class GameScreen implements ApplicationListener {
-
+public class GameScreen implements Screen {
     private static OrthographicCamera cam;
-
     private final GameData gameData = new GameData();
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     private List<IPostEntityProcessingService> postEntityProcessors = new ArrayList<>();
@@ -42,16 +39,12 @@ public class GameScreen implements ApplicationListener {
     private Stage stage;
     private ShapeRenderer sr;
 
-
-
     @Override
-    public void create() {
-        System.out.println("hej");
-        this.batch = new SpriteBatch();// Set the batch
+    public void show() {
+        this.batch = new SpriteBatch();
         this.stage = new Stage();
         gameData.setDisplayWidth(Gdx.graphics.getWidth());
         gameData.setDisplayHeight(Gdx.graphics.getHeight());
-        System.out.println(gameData.getDisplayWidth() + " " + gameData.getDisplayHeight());
 
         gameLogic = new GameLogic();
         turnManager = new TurnManager();
@@ -65,25 +58,17 @@ public class GameScreen implements ApplicationListener {
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(gameData, turnManager)
         );
-        System.out.println("Before loading entities");
-        // Lookup all Game Plugins using ServiceLoader
+
         for (IGamePluginService iGamePlugin : getPluginServices()) {
             if (iGamePlugin != null) {
                 iGamePlugin.start(gameData, world, batch);
-            } else if (iGamePlugin == null) {
-                System.out.println("Plugin is null");
             }
         }
-        System.out.println("After loading entities");
     }
 
-
-
     @Override
-    public void render() {
-
-        // clear screen to black
-        Gdx.gl.glClearColor(255,255,255, 1);
+    public void render(float delta) {
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         gameData.setDelta(Gdx.graphics.getDeltaTime());
@@ -96,7 +81,6 @@ public class GameScreen implements ApplicationListener {
     }
 
     private void update() {
-        // Update
         gameLogic.updateGame();
 
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
@@ -116,9 +100,6 @@ public class GameScreen implements ApplicationListener {
         }
     }
 
-
-
-
     @Override
     public void resize(int width, int height) {
     }
@@ -129,6 +110,10 @@ public class GameScreen implements ApplicationListener {
 
     @Override
     public void resume() {
+    }
+
+    @Override
+    public void hide() {
     }
 
     @Override
