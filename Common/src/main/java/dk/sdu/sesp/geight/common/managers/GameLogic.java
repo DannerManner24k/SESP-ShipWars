@@ -1,7 +1,5 @@
-package dk.sdu.sesp.geight.main.GameEngine;
+package dk.sdu.sesp.geight.common.managers;
 
-import dk.sdu.sesp.geight.common.managers.DifficultyManager;
-import dk.sdu.sesp.geight.common.managers.TurnManager;
 
 public class GameLogic {
     private int currentLevel;
