@@ -157,6 +157,9 @@ public class GameScreen implements Screen {
     }
 
     private Collection<? extends IDrawService> getDrawServices() {
-        return ServiceLoader.load(IDrawService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
+        return ServiceLoader.load(IDrawService.class).stream().map(ServiceLoader.Provider::get).sorted((s1, s2) -> {
+            int primaryComparison = Integer.compare(s1.getDrawPriority(), s2.getDrawPriority());
+            return primaryComparison != 0 ? primaryComparison : s1.getDrawPriority();
+        }).collect(toList());
     }
 }

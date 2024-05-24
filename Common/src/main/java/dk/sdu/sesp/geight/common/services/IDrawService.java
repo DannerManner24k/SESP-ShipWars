@@ -5,4 +5,5 @@ import dk.sdu.sesp.geight.common.data.World;
 
 public interface IDrawService{
     void draw(ShapeRenderer sr, World world);
+    int getDrawPriority();
 }

@@ -38,6 +38,11 @@ public class EnemyDrawSystem implements IDrawService {
         }
     }
 
+    @Override
+    public int getDrawPriority() {
+        return 10;
+    }
+
 
     private void drawDottedLine(ShapeRenderer renderer, float x1, float y1, float x2, float y2, float segmentLength, float gapLength) {
         float totalLength = (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));

@@ -47,6 +47,11 @@ public class PlayerDrawSystem implements IDrawService {
 
     }
 
+    @Override
+    public int getDrawPriority() {
+        return 10;
+    }
+
 
     private void drawDottedLine(ShapeRenderer renderer, float x1, float y1, float x2, float y2, float segmentLength, float gapLength) {
         renderer.setColor(Color.GREEN);
