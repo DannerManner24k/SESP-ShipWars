@@ -1,5 +1,6 @@
 package dk.sdu.sesp.geight.main.Core.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 public class GameScreen implements Screen {
+    private Game game;
     private static OrthographicCamera cam;
     private final GameData gameData = new GameData();
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
@@ -39,6 +41,10 @@ public class GameScreen implements Screen {
     private Texture background;
     private Stage stage;
     private ShapeRenderer sr;
+
+    public GameScreen(Game game) {
+        this.game = game;
+    }
 
     @Override
     public void show() {
@@ -82,10 +88,11 @@ public class GameScreen implements Screen {
         gameData.setDelta(Gdx.graphics.getDeltaTime());
 
         update();
-
         draw();
-
         gameData.getKeys().update();
+
+        gameOver(gameData);
+
     }
 
     private void update() {
@@ -105,6 +112,12 @@ public class GameScreen implements Screen {
 
         for (IDrawService drawable : getDrawServices()) {
             drawable.draw(sr, world);
+        }
+    }
+
+    private void gameOver(GameData gameData) {
+        if (gameData.isGameOver()){
+            game.setScreen(new GameOverScreen(game));
         }
     }
 

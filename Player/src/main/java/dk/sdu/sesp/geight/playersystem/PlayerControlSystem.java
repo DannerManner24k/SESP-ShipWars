@@ -44,47 +44,14 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
             updateShape(player, canonPart);
 
-            if (gameData.getKeys().isPressed(GameKeys.NUM1)) {
-                System.out.println("NUM1");
-                canonPart.setCurrentWeaponIndex(0);
-            } else if (gameData.getKeys().isPressed(GameKeys.NUM2)) {
-                System.out.println("NUM2");
-                canonPart.setCurrentWeaponIndex(1);
-            } else if (gameData.getKeys().isPressed(GameKeys.NUM3)) {
-                System.out.println("NUM3");
-                canonPart.setCurrentWeaponIndex(2);
-            }
+            canonControl(gameData, world, player, canonPart);
 
-            if (gameData.getKeys().isPressed(GameKeys.SPACE)) {
-                canonPart.setCharging(true);
-                System.out.println("SPACE pressed, isCharging: " + canonPart.isCharging());
-            }
-            if (gameData.getKeys().isReleased(GameKeys.SPACE)) {
-                float canonRadian = canonPart.getRadian();
-                float[] lastShotX = new float[2];
-                float[] lastShotY = new float[2];
-                for (int i = 0; i < 2; i++) {
-                    int length = i * 15;
-                    lastShotX[i] = (float) (canonPart.getX() + (25 + length) * Math.cos(canonRadian));
-                    lastShotY[i] = (float) (canonPart.getY() + (25 + length) * Math.sin(canonRadian));
-                }
-                canonPart.setLastShotX(lastShotX);
-                canonPart.setLastShotY(lastShotY);
-                int strength = canonPart.getCharge();
-                System.out.println("SPACE released, charge: " + strength);
-                canonPart.setCharging(false);
-                weapons[canonPart.getCurrentWeaponIndex()].shoot(gameData, world, player, (float) strength);
-                canonPart.setCharge(0); // Reset charge for next cycle
-                canonPart.setChargingUp(true); // Reset direction for next cycle
-
-                // Record the time when the player fires
-                gameData.setLastPlayerFireTime(System.currentTimeMillis());
-
-                // End the player's turn
-                turnManager.nextTurn();
-            }
             canonPart.updateCharge();
+
+            checkDeath(gameData, player);
+
         }
+
     }
 
 
@@ -145,4 +112,50 @@ public class PlayerControlSystem implements IEntityProcessingService {
 
     }
 
+    private void canonControl(GameData gameData, World world, Entity entity, CanonPart canonPart) {
+        if (gameData.getKeys().isPressed(GameKeys.NUM1)) {
+            System.out.println("NUM1");
+            canonPart.setCurrentWeaponIndex(0);
+        } else if (gameData.getKeys().isPressed(GameKeys.NUM2)) {
+            System.out.println("NUM2");
+            canonPart.setCurrentWeaponIndex(1);
+        } else if (gameData.getKeys().isPressed(GameKeys.NUM3)) {
+            System.out.println("NUM3");
+            canonPart.setCurrentWeaponIndex(2);
+        }
+
+
+        if (gameData.getKeys().isPressed(GameKeys.SPACE)) {
+            canonPart.setCharging(true);
+            System.out.println("SPACE pressed, isCharging: " + canonPart.isCharging());
+        }
+        if (gameData.getKeys().isReleased(GameKeys.SPACE)) {
+            float canonRadian = canonPart.getRadian();
+            float[] lastShotX = new float[2];
+            float[] lastShotY = new float[2];
+            for (int i = 0; i < 2; i++) {
+                int length = i * 15;
+                lastShotX[i] = (float) (canonPart.getX() + (25 + length) * Math.cos(canonRadian));
+                lastShotY[i] = (float) (canonPart.getY() + (25 + length) * Math.sin(canonRadian));
+            }
+            canonPart.setLastShotX(lastShotX);
+            canonPart.setLastShotY(lastShotY);
+            int strength = canonPart.getCharge();
+            System.out.println("SPACE released, charge: " + strength);
+            canonPart.setCharging(false);
+            weapons[canonPart.getCurrentWeaponIndex()].shoot(gameData, world, entity, (float) strength);
+            canonPart.setCharge(0); // Reset charge for next cycle
+            canonPart.setChargingUp(true); // Reset direction for next cycle
+
+            // Record the time when the player fires
+            gameData.setLastPlayerFireTime(System.currentTimeMillis());
+        }
+    }
+
+    private void checkDeath(GameData gameData, Entity entity) {
+        LifePart lifePart = entity.getPart(LifePart.class);
+        if (lifePart.isDead()) {
+            gameData.setGameOver(true);
+        }
+    }
 }
