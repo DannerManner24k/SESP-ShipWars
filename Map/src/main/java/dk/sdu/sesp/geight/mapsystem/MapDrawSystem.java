@@ -25,7 +25,7 @@ public class MapDrawSystem implements IDrawService {
 
         for (Entity entity : world.getEntities(Map.class)) {
             sr.begin(ShapeRenderer.ShapeType.Filled); // Use filled type for filling areas
-            sr.setColor(Color.BROWN); // Set to a suitable ground color
+            sr.setColor(255 / 255f, 188 / 255f, 80 / 255f, 1); // Set to a suitable ground color
             double[] heights = ((Map) entity).getHeights();
             for (int x = 1; x < heights.length; x++) {
                 float baseY = 0; // Assuming the bottom of the screen or base of the terrain
@@ -34,6 +34,7 @@ public class MapDrawSystem implements IDrawService {
             }
             sr.end();
         }
+
     }
 
     @Override
