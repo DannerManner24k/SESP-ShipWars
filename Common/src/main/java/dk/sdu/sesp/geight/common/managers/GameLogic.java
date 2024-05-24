@@ -35,35 +35,26 @@ public class GameLogic {
     }
 
     private int currentLevel;
+    private boolean enemyDead = false;
+    private boolean isGameOver = false;
 
     public void startGame() {
-        loadLevel(); // Start with the first level
+        loadLevel(1);
     }
 
-    private void loadLevel() {
-       difficultyManager.initializeEntities();
-       currentLevel = difficultyManager.getCurrentDifficultyLevel();
+    public void loadLevel(int level) {
+        this.currentLevel = level;
+        initializeEntities();
     }
 
-    public void levelUp() {
-        difficultyManager.increaseDifficulty();
-        loadLevel();
-        for (Entity i : world.getEntities()) {
-            world.removeEntity(i);
-        }
+    public int getCurrentLevel() {
+        return currentLevel;
     }
 
-    public boolean isEnemyDead() {
-        return enemyDead;
+    private void initializeEntities() {
+        difficultyManager.initializeEntities();
     }
 
-    public void setEnemyDead(boolean enemyDead) {
-        this.enemyDead = enemyDead;
-    }
-
-    private boolean enemyDead = false;
-
-    private boolean isGameOver = false;
     public boolean isGameOver() {
         return isGameOver;
     }
@@ -74,10 +65,21 @@ public class GameLogic {
 
     public void updateGame() {
         if (enemyDead) {
-            System.out.println("Enemy is dead");
             levelUp();
         }
     }
 
+    public void levelUp() {
+        difficultyManager.increaseDifficulty();
+        loadLevel(difficultyManager.getCurrentDifficultyLevel());
+    }
 
+    public boolean isEnemyDead() {
+        return enemyDead;
+    }
+
+    public void setEnemyDead(boolean enemyDead) {
+        this.enemyDead = enemyDead;
+    }
 }
+

@@ -70,11 +70,7 @@ public class GameScreen implements Screen {
                 new GameInputProcessor(gameData, turnManager)
         );
 
-        for (IGamePluginService iGamePlugin : getPluginServices()) {
-            if (iGamePlugin != null) {
-                iGamePlugin.start(gameData, world, batch);
-            }
-        }
+        startPlugins();
     }
 
     @Override
@@ -93,7 +89,7 @@ public class GameScreen implements Screen {
         gameData.getKeys().update();
 
         gameOver();
-
+        checkLevelUp();
     }
 
     private void update() {
@@ -116,9 +112,29 @@ public class GameScreen implements Screen {
         }
     }
 
+    private void checkLevelUp() {
+        if (gameLogic.isEnemyDead()) {
+            resetWorld();
+            gameLogic.loadLevel(gameLogic.getCurrentLevel());
+            startPlugins();
+        }
+    }
+
+    private void resetWorld() {
+        world = new World();
+    }
+
     private void gameOver() {
         if (gameLogic.isGameOver()){
             game.setScreen(new GameOverScreen(game));
+        }
+    }
+
+    private void startPlugins() {
+        for (IGamePluginService iGamePlugin : getPluginServices()) {
+            if (iGamePlugin != null) {
+                iGamePlugin.start(gameData, world, batch);
+            }
         }
     }
 
