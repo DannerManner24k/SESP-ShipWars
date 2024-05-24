@@ -33,15 +33,37 @@ public class EnemyControlSystem implements IEntityProcessingService {
         lastShotTime = 0;
     }
 
+    private static long enemyTurnStartTime = -1;
+
+
+
+
+    public static void setEnemyTurnStartTime() {
+        enemyTurnStartTime = System.currentTimeMillis();
+    }
+
+
     @Override
     public void process(GameData gameData, World world) {
         accuracyLevel = difficultyManager.getCurrentDifficultyLevel();
 
         if (!turnManager.isAITurn()) {
+            // Reset turn start time if it's not the AI's turn
+            enemyTurnStartTime = -1;
             return; // Exit if it's not the AI's turn
         }
 
         long currentTime = System.currentTimeMillis();
+
+        if (enemyTurnStartTime == -1) {
+            // Set the turn start time when it becomes the enemy's turn
+            enemyTurnStartTime = currentTime;
+        }
+
+        if (currentTime - enemyTurnStartTime < 4000) {
+            return; // Exit if 4 seconds delay has not passed
+        }
+
         if (currentTime - lastShotTime < COOLDOWN_PERIOD) {
             return; // Exit if cooldown period has not passed
         }
@@ -67,6 +89,8 @@ public class EnemyControlSystem implements IEntityProcessingService {
             }
         }
     }
+
+
 
     private void updateShape(Entity entity) {
         // Shape of the Canon
