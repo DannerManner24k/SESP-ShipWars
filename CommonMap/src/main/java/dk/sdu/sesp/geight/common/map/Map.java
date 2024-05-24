@@ -30,7 +30,7 @@ public class Map extends Entity implements ITerrain {
     }
 
     @Override
-    public void onCollision(GameData gameData, World world, ICollidable other) {
+    public void onCollision(GameData gameData, World world, ICollidable entity, ICollidable otherEntity) {
     }
 
     @Override

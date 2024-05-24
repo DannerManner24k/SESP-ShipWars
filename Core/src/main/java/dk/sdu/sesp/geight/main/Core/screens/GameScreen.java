@@ -136,7 +136,10 @@ public class GameScreen implements ApplicationListener {
     }
 
     private Collection<? extends IGamePluginService> getPluginServices() {
-        return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+        return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).sorted((s1, s2) -> {
+            int primaryComparison = Integer.compare(s1.getPriority(), s2.getPriority());
+            return primaryComparison != 0 ? primaryComparison : s1.getPriority();
+        }).collect(toList());
     }
 
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
@@ -148,10 +151,6 @@ public class GameScreen implements ApplicationListener {
     }
 
     private Collection<? extends IDrawService> getDrawServices() {
-        return ServiceLoader.load(IDrawService.class).stream().map(ServiceLoader.Provider::get).sorted((s1, s2) -> {
-                    int primaryComparison = Integer.compare(s1.getPriority(), s2.getPriority());
-                    return primaryComparison != 0 ? primaryComparison : s1.getPriority();
-                })
-                .collect(Collectors.toList());
+        return ServiceLoader.load(IDrawService.class).stream().map(ServiceLoader.Provider::get).collect(Collectors.toList());
     }
 }

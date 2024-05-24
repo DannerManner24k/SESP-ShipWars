@@ -4,6 +4,6 @@ import dk.sdu.sesp.geight.common.data.GameData;
 import dk.sdu.sesp.geight.common.data.World;
 
 public interface ICollidable {
-    void onCollision(GameData gameData, World world, ICollidable other);
+    void onCollision(GameData gameData, World world, ICollidable entity, ICollidable otherEntity);
 }
 

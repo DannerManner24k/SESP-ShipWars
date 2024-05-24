@@ -38,10 +38,6 @@ public class EnemyDrawSystem implements IDrawService {
         }
     }
 
-    @Override
-    public int getPriority() {
-        return 10;
-    }
 
     private void drawDottedLine(ShapeRenderer renderer, float x1, float y1, float x2, float y2, float segmentLength, float gapLength) {
         float totalLength = (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
@@ -85,7 +81,6 @@ public class EnemyDrawSystem implements IDrawService {
             }
         }
 
-        drawHealthBar(sr, world, entity);
 
         sr.line(canonPart.getCurrentShotX(0), canonPart.getCurrentShotY(0), canonPart.getCurrentShotX(1), canonPart.getCurrentShotY(1));
 

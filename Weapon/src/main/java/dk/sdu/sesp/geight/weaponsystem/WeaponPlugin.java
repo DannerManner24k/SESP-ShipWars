@@ -9,6 +9,10 @@ import dk.sdu.sesp.geight.common.services.IGamePluginService;
 public class WeaponPlugin implements IGamePluginService {
 
     @Override
+    public int getPriority() {
+        return 10;
+    }
+    @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
 
     }

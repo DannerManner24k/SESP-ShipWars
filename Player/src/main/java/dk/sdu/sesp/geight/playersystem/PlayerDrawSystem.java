@@ -39,12 +39,9 @@ public class PlayerDrawSystem implements IDrawService {
         }
     }
 
-    @Override
-    public int getPriority() {
-        return 10;
-    }
 
     private void drawDottedLine(ShapeRenderer renderer, float x1, float y1, float x2, float y2, float segmentLength, float gapLength) {
+        renderer.setColor(Color.GREEN);
         float totalLength = (float) Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         float numSegments = totalLength / (segmentLength + gapLength);
 
@@ -62,6 +59,7 @@ public class PlayerDrawSystem implements IDrawService {
     }
 
     private void drawCanon (ShapeRenderer sr, World world, Entity entity) {
+        sr.setColor(Color.GREEN);
         CanonPart canonPart = entity.getPart(CanonPart.class);
         float[] shapeCanonX = canonPart.getShapeX();
         float[] shapeCanonY = canonPart.getShapeY();
@@ -87,7 +85,6 @@ public class PlayerDrawSystem implements IDrawService {
             }
         }
 
-        drawHealthBar(sr, world, entity);
 
         sr.line(canonPart.getCurrentShotX(0), canonPart.getCurrentShotY(0), canonPart.getCurrentShotX(1), canonPart.getCurrentShotY(1));
 

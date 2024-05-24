@@ -25,10 +25,6 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
             LifePart lifePart = bullet.getPart(LifePart.class);
 
 
-            if (lifePart.isDead()) {
-                world.removeEntity(bullet);
-            }
-;
             lifePart.process(gameData, bullet);
             positionPart.process(gameData, bullet);
             updateBullet(bullet, gameData);

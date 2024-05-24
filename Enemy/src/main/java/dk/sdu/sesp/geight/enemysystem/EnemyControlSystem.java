@@ -32,6 +32,12 @@ public class EnemyControlSystem implements IEntityProcessingService {
             LifePart lifePart = enemy.getPart(LifePart.class);
             CanonPart canonPart = enemy.getPart(CanonPart.class);
 
+
+            if (lifePart.isDead()){
+                world.removeEntity(enemy);
+            }
+
+
             positionPart.process(gameData, enemy);
             lifePart.process(gameData, enemy);
             canonPart.process(gameData, enemy);
@@ -43,7 +49,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
                 // Recalculate the best shot every time before firing
                 float[] aimData = enemyAI.calculateBestShot(enemy, gameData, world, accuracyLevel);
                 if (aimData != null) {
-                    handleFiring(gameData, world, enemy, canonPart, aimData);
+                    //handleFiring(gameData, world, enemy, canonPart, aimData);
                     canonPart.setLastShotTime(currentTime); // Reset cooldown
                 }
             }

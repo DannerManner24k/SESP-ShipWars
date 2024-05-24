@@ -36,8 +36,4 @@ public class MapDrawSystem implements IDrawService {
         }
     }
 
-    @Override
-    public int getPriority() {
-        return 1;
-    }
 }

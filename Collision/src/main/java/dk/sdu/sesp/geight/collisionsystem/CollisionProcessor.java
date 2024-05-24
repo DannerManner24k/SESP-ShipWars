@@ -30,8 +30,8 @@ public class CollisionProcessor implements IPostEntityProcessingService {
             for (int j = i + 1; j < collidableEntities.size(); j++) {
                 ICollidable collidable2 = collidableEntities.get(j);
                 if (collides((Entity) collidable1, (Entity) collidable2)) {
-                    collidable1.onCollision(gameData, world, collidable1);
-                    collidable2.onCollision(gameData, world, collidable2);
+                    collidable1.onCollision(gameData, world, collidable1, collidable2);
+                    collidable2.onCollision(gameData, world, collidable2, collidable1);
 
 
                     // Handle specific collision case for bullet and terrain
@@ -88,7 +88,6 @@ public class CollisionProcessor implements IPostEntityProcessingService {
         }
         return false;
     }
-
 
     private void handleBulletTerrainCollision(IBullet bullet, ITerrain terrain, World world) {
         PositionPart pos = ((Entity) bullet).getPart(PositionPart.class);

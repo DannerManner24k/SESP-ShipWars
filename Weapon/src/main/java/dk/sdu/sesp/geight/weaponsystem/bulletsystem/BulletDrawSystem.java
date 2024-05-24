@@ -20,9 +20,4 @@ public class BulletDrawSystem implements IDrawService {
             sr.end();
         }
     }
-
-    @Override
-    public int getPriority() {
-        return 10;
-    }
 }

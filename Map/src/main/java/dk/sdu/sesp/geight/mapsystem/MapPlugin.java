@@ -24,12 +24,17 @@ public class MapPlugin implements IGamePluginService {
     private static final int MIN_X = 0; // Minimum x coordinate
     private static int MAX_X; // Maximum x coordinate
     private static final int MIN_Y = 100; // Minimum y coordinate
-    private static final int MAX_Y = 500; // Maximum y coordinate
+    private static final int MAX_Y = 350; // Maximum y coordinate
     private static final double WATER_LEVEL = 150; // Water level
     private static final int POOL_WIDTH = 100; // Minimum width of the pools
-    private static final int POOL_DEPTH = 70; // Minimum depth of the pools
-    private static final int NUM_EXTREMA = 10; // Number of extrema points
+    private static final int POOL_DEPTH = 100; // Minimum depth of the pools
+    private static final int NUM_EXTREMA = 8; // Number of extrema points
     private static final int POOL_REGION_WIDTH = 200; // Width of the region for each pool
+
+    @Override
+    public int getPriority() {
+        return 0;
+    }
 
     @Override
     public void start(GameData gameData, World world, SpriteBatch batch) {
@@ -37,10 +42,41 @@ public class MapPlugin implements IGamePluginService {
         MAX_X = gameData.getDisplayWidth(); // Maximum x coordinate
         this.shapeRenderer = new ShapeRenderer();
         this.map = createMap(gameData, world);  // Create the map when the plugin starts
-        //this.water = createWater(gameData, world); // Create the water
-        //List<Double> xCoordinates = findWaterTallerThanMountain((Map) map, (Water) water);
-        //System.out.println("X-coordinates where water is taller than the mountain: " + xCoordinates);
+        this.water = createWater(gameData, world); // Create the water
+        List<Double> xCoordinates = findWaterTallerThanMountain((Map) map, (Water) water);
+        System.out.println("X-coordinates where water is taller than the mountain: " + xCoordinates);
+        List<Double> spawnPointsX1 = new ArrayList<>();
+        List<Double> spawnPointsX2 = new ArrayList<>();
+        sortCoordinates(xCoordinates, spawnPointsX1, spawnPointsX2);
+        System.out.println("Spawn points 1: " + spawnPointsX1);
+        System.out.println("Spawn points 2: " + spawnPointsX2);
+        world.setSpawnPoints(spawnPointsX1, spawnPointsX2);
     }
+
+    private void sortCoordinates(List<Double> xCoordinates, List<Double> spawnPointsX1, List<Double> spawnPointsX2) {
+        if (xCoordinates == null || xCoordinates.isEmpty()) {
+            return;
+        }
+
+        double start = xCoordinates.get(0);
+        double end = start;
+
+        for (int i = 1; i < xCoordinates.size(); i++) {
+            if (xCoordinates.get(i) == xCoordinates.get(i - 1) + 1.0) {
+                end = xCoordinates.get(i);
+            } else {
+                spawnPointsX1.add(start);
+                spawnPointsX2.add(end);
+                start = xCoordinates.get(i);
+                end = start;
+            }
+        }
+
+        // Add the last range
+        spawnPointsX1.add(start);
+        spawnPointsX2.add(end);
+    }
+
 
     private double[][] generateExtremaPoints(int numExtrema, int minX, int maxX, int minY, int maxY, double waterLevel, int poolWidth, int poolDepth) {
         double[][] extremaPoints = new double[numExtrema][2];
