@@ -16,12 +16,15 @@ public class StartScreen implements Screen {
     private Game game;
     private Texture img;
     private BitmapFont font;
+    private BitmapFont titleFont;
     private float time;
 
     public StartScreen(Game game) {
         this.game = game;
         batch = new SpriteBatch();
-        img = new Texture(Gdx.files.internal("Core/assets/StartScreen.png"));
+        img = new Texture(Gdx.files.internal("Core/assets/Background.png"));
+        titleFont = new BitmapFont();
+        titleFont.getData().setScale(4);
         font = new BitmapFont();
         font.getData().setScale(2); // Scale the font size
         time = 0;
@@ -40,6 +43,9 @@ public class StartScreen implements Screen {
 
         batch.begin();
         batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        titleFont.setColor(Color.RED);
+        titleFont.draw(batch, "ShipWars", Gdx.graphics.getWidth() / 2 - 150, Gdx.graphics.getHeight() / 2 + 100);
 
         float alpha = (float)(Math.sin(time * 2) / 2 + 0.5);
         font.setColor(1, 0, 0, alpha);
